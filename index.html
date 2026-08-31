@@ -512,6 +512,11 @@ main,.app-shell,.app{
 .shopping-row.shop-filter-hidden{display:none !important}
 </style>
 
+
+<style id="six-day-overview-scroll-style">
+#dayHeadline{scroll-margin-top:18px;}
+</style>
+
 </head>
 <body>
 <div class="app-shell">
@@ -2149,6 +2154,33 @@ document.addEventListener("click", function(e){
   const route=document.querySelector("#todayRouteCard") || document.querySelector(".route-section-title");
   if(route) route.scrollIntoView({behavior:"smooth",block:"start"});
 }, true);
+</script>
+
+
+<script id="six-day-overview-scroll-fix">
+(function(){
+  document.addEventListener("click", function(e){
+    const overview=document.getElementById("dayOverview");
+    if(!overview || !overview.contains(e.target)) return;
+
+    let item=e.target;
+    while(item && item.parentElement!==overview) item=item.parentElement;
+    if(!item) return;
+
+    const items=[...overview.children].filter(x=>x.offsetParent!==null);
+    const dayIndex=items.indexOf(item);
+    if(dayIndex<0 || dayIndex>5) return;
+
+    const tabs=[...document.querySelectorAll("#dayTabs button, #dayTabs [role='button'], #dayTabs > *")];
+    const tab=tabs[dayIndex];
+    if(tab && typeof tab.click==="function") tab.click();
+
+    setTimeout(function(){
+      const target=document.getElementById("dayHeadline") || document.getElementById("timeline");
+      if(target) target.scrollIntoView({behavior:"smooth",block:"start"});
+    },80);
+  }, true);
+})();
 </script>
 
 </body>
