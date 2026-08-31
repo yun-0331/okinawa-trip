@@ -15,6 +15,42 @@
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="stylesheet" href="style.css">
+
+<style id="okinawa-weather-style">
+.weather-section-title{margin-top:18px}
+.weather-card{
+  background:linear-gradient(145deg,rgba(119,200,233,.22),rgba(247,198,217,.30));
+  border:1px solid rgba(119,200,233,.34);
+  border-radius:24px;
+  padding:18px;
+  box-shadow:0 10px 28px rgba(84,111,132,.10);
+}
+.weather-loading,.weather-error{text-align:center;padding:18px 8px;color:#756b76}
+.weather-current{display:flex;align-items:center;justify-content:space-between;gap:14px}
+.weather-main{display:flex;align-items:center;gap:12px}
+.weather-icon{font-size:48px;line-height:1}
+.weather-temp{font-size:34px;font-weight:900;line-height:1;color:#4e5360}
+.weather-desc{font-weight:800;margin-top:5px}
+.weather-place{text-align:right}
+.weather-place b{display:block;font-size:15px}
+.weather-place small{color:#8c8290}
+.weather-meta{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:15px}
+.weather-meta div{background:rgba(255,255,255,.68);border-radius:15px;padding:10px 6px;text-align:center}
+.weather-meta small{display:block;color:#8d8390;font-size:11px}
+.weather-meta b{display:block;margin-top:3px;font-size:14px}
+.weather-forecast{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.weather-day{background:rgba(255,255,255,.78);border-radius:16px;padding:10px 5px;text-align:center}
+.weather-day small{display:block;color:#8d8390}
+.weather-day span{display:block;font-size:24px;margin:4px 0}
+.weather-day b{font-size:13px}
+.weather-note{font-size:11px;color:#8d8390;text-align:right;margin-top:9px}
+@media(max-width:420px){
+  .weather-temp{font-size:30px}
+  .weather-icon{font-size:42px}
+  .weather-card{padding:15px}
+}
+</style>
+
 </head>
 <body>
 <div class="app-shell">
@@ -46,6 +82,16 @@
         </div>
       </div>
 
+
+      <!-- Okinawa live weather -->
+      <div class="section-title weather-section-title">
+        <div><small>OKINAWA WEATHER</small><h2>沖繩即時天氣</h2></div>
+        <button class="soft-btn" id="weatherRefresh" type="button">↻ 更新</button>
+      </div>
+      <div class="weather-card" id="weatherCard">
+        <div class="weather-loading">🌤️ 正在讀取沖繩天氣…</div>
+      </div>
+
       <div class="flight-strip">
         <div><span>去程</span><b>CI120</b><small>08:10 TPE → 10:50 OKA</small></div>
         <div class="plane">✈</div>
@@ -65,7 +111,7 @@
         <button class="quick" data-nav="favorites"><span>❤️</span><b>我的收藏</b><small>想去・想買・想吃</small></button>
         <button class="quick" data-nav="shopping"><span>🛍</span><b>購物清單</b><small>分類採買更好找</small></button>
         <button class="quick" data-nav="converter"><span>🧮</span><b>日幣換算</b><small>JPY ⇄ TWD</small></button>
-        <button class="quick" data-nav="handbook"><span>📖</span><b>完整手冊</b><small>60頁隨身瀏覽</small></button>
+        <button class="quick" data-nav="handbook"><span>📖</span><b>完整手冊</b><small>59頁隨身瀏覽</small></button>
       </div>
 
       <div class="section-title">
@@ -1032,6 +1078,73 @@
   }
 
   render();
+})();
+</script>
+
+
+<script id="okinawa-weather-script">
+(function(){
+  const card = document.getElementById("weatherCard");
+  const refresh = document.getElementById("weatherRefresh");
+  if (!card) return;
+
+  const API = "https://api.open-meteo.com/v1/forecast?latitude=26.2124&longitude=127.6809&current=temperature_2m,apparent_temperature,relative_humidity_2m,precipitation,weather_code,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=Asia%2FTokyo&forecast_days=3";
+
+  const weatherMap = {
+    0:["☀️","晴朗"],1:["🌤️","大致晴朗"],2:["⛅","局部多雲"],3:["☁️","陰天"],
+    45:["🌫️","有霧"],48:["🌫️","霧"],
+    51:["🌦️","毛毛雨"],53:["🌦️","毛毛雨"],55:["🌧️","較強毛毛雨"],
+    61:["🌦️","小雨"],63:["🌧️","下雨"],65:["🌧️","大雨"],
+    80:["🌦️","陣雨"],81:["🌧️","陣雨"],82:["⛈️","強陣雨"],
+    95:["⛈️","雷雨"],96:["⛈️","雷雨"],99:["⛈️","強雷雨"]
+  };
+  function info(code){ return weatherMap[code] || ["🌤️","天氣變化"]; }
+  function dayLabel(dateStr, i){
+    if(i===0) return "今天";
+    if(i===1) return "明天";
+    const d = new Date(dateStr+"T12:00:00");
+    return ["日","一","二","三","四","五","六"][d.getDay()]+"曜日";
+  }
+  function n(v, suffix=""){
+    return (v===null || v===undefined || Number.isNaN(Number(v))) ? "—" : Math.round(Number(v))+suffix;
+  }
+
+  async function loadWeather(){
+    card.innerHTML = '<div class="weather-loading">🌤️ 正在讀取沖繩天氣…</div>';
+    if(refresh) refresh.disabled = true;
+    try{
+      const res = await fetch(API, {cache:"no-store"});
+      if(!res.ok) throw new Error("weather");
+      const data = await res.json();
+      const c = data.current || {};
+      const d = data.daily || {};
+      const wi = info(c.weather_code);
+      let forecast = "";
+      (d.time || []).slice(0,3).forEach((date, i)=>{
+        const di = info((d.weather_code || [])[i]);
+        forecast += '<div class="weather-day"><small>'+dayLabel(date,i)+'</small><span>'+di[0]+'</span><b>'+n((d.temperature_2m_min||[])[i],"°")+' / '+n((d.temperature_2m_max||[])[i],"°")+'</b><small>降雨 '+n((d.precipitation_probability_max||[])[i],"%")+'</small></div>';
+      });
+      card.innerHTML =
+        '<div class="weather-current">'+
+          '<div class="weather-main"><div class="weather-icon">'+wi[0]+'</div><div><div class="weather-temp">'+n(c.temperature_2m,"°C")+'</div><div class="weather-desc">'+wi[1]+'</div></div></div>'+
+          '<div class="weather-place"><b>📍 那霸・沖繩</b><small>體感 '+n(c.apparent_temperature,"°C")+'</small></div>'+
+        '</div>'+
+        '<div class="weather-meta">'+
+          '<div><small>降雨</small><b>'+n(c.precipitation," mm")+'</b></div>'+
+          '<div><small>濕度</small><b>'+n(c.relative_humidity_2m,"%")+'</b></div>'+
+          '<div><small>風速</small><b>'+n(c.wind_speed_10m," km/h")+'</b></div>'+
+        '</div>'+
+        '<div class="weather-forecast">'+forecast+'</div>'+
+        '<div class="weather-note">資料：Open-Meteo・日本時間 '+new Date().toLocaleTimeString("zh-TW",{hour:"2-digit",minute:"2-digit",timeZone:"Asia/Tokyo"})+' 更新</div>';
+    }catch(e){
+      card.innerHTML = '<div class="weather-error">🌺 目前無法取得即時天氣<br><small>請確認網路後按「更新」再試一次。</small></div>';
+    }finally{
+      if(refresh) refresh.disabled = false;
+    }
+  }
+
+  if(refresh) refresh.addEventListener("click", loadWeather);
+  loadWeather();
 })();
 </script>
 
