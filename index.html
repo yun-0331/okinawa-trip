@@ -126,6 +126,20 @@
 .jp-copy{border:0;border-radius:999px;padding:11px 18px;background:#77C8E9;color:white;font-weight:900;cursor:pointer}
 </style>
 
+
+<style id="today-flight-upgrade-style">
+.today-flight-mini{
+  margin-top:12px;padding:13px 14px;border-radius:17px;
+  background:linear-gradient(135deg,rgba(119,200,233,.16),rgba(247,198,217,.18));
+  border:1px solid rgba(119,200,233,.22)
+}
+.today-flight-label{font-size:11px;font-weight:900;color:#9a7182;letter-spacing:.06em;margin-bottom:7px}
+.today-flight-row{display:flex;align-items:center;gap:10px}
+.today-flight-no{font-size:16px;font-weight:900;color:#4f5360;white-space:nowrap}
+.today-flight-route{font-size:14px;font-weight:900;color:#57515a;line-height:1.45}
+.today-flight-route small{display:block;font-size:11px;font-weight:600;color:#938992;margin-top:2px}
+</style>
+
 </head>
 <body>
 <div class="app-shell">
@@ -1452,6 +1466,62 @@
     catch(e){}
   });
   render(current);
+})();
+</script>
+
+
+<script id="today-flight-upgrade-script">
+(function(){
+  function jpDate(){
+    const parts=new Intl.DateTimeFormat("en-CA",{timeZone:"Asia/Tokyo",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(new Date());
+    const o={}; parts.forEach(p=>o[p.type]=p.value);
+    return `${o.year}-${o.month}-${o.day}`;
+  }
+  function flightBox(type){
+    if(type==="out"){
+      return `<div class="today-flight-mini">
+        <div class="today-flight-label">✈️ 出發當天航班</div>
+        <div class="today-flight-row">
+          <div class="today-flight-no">CI120</div>
+          <div class="today-flight-route">台北 TPE 08:10 → 沖繩 OKA 10:50
+            <small>抵達後前往 OTS 租車，再開始 Day 1 行程</small>
+          </div>
+        </div>
+      </div>`;
+    }
+    return `<div class="today-flight-mini">
+      <div class="today-flight-label">✈️ 今天回程航班</div>
+      <div class="today-flight-row">
+        <div class="today-flight-no">CI123</div>
+        <div class="today-flight-route">沖繩 OKA 20:25 → 台北 TPE 21:05
+          <small>今天最後一天，記得預留前往機場與報到時間</small>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  function addFlight(){
+    /* Find the TODAY card by its heading text, without changing the existing app logic. */
+    const headings=[...document.querySelectorAll("h1,h2,h3,h4")];
+    const h=headings.find(x=>x.textContent.includes("準備出發沖繩") || x.textContent.includes("沖繩最後一天"));
+    if(!h) return;
+    const card=h.closest(".today-card,.hero-card,.card,section,div");
+    if(!card || card.querySelector(".today-flight-mini")) return;
+
+    const d=jpDate();
+    let type=null;
+    if(d==="2026-10-26") type="out";
+    else if(d==="2026-10-31") type="back";
+    else if(d<"2026-10-26") type="out";  // 出發前先顯示去程航班方便確認
+    if(!type) return;
+
+    const summary=[...card.querySelectorAll("div")].find(x=>x.textContent.includes("那霸機場") && x.textContent.includes("OTS"));
+    if(summary) summary.insertAdjacentHTML("afterend",flightBox(type));
+    else h.insertAdjacentHTML("afterend",flightBox(type));
+  }
+
+  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",()=>setTimeout(addFlight,250));
+  else setTimeout(addFlight,250);
 })();
 </script>
 
