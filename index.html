@@ -467,6 +467,51 @@ main,.app-shell,.app{
 }
 </style>
 
+
+<style id="stay-reminder-shopping-filter-style">
+/* 入住／退房提醒 */
+.stay-reminder-card{
+  margin:14px 0 8px;padding:16px;
+  border-radius:24px;
+  background:linear-gradient(145deg,rgba(255,255,255,.95),rgba(247,198,217,.18),rgba(207,193,244,.18));
+  border:1px solid rgba(242,140,154,.20);
+  box-shadow:0 10px 26px rgba(81,88,105,.08)
+}
+.stay-reminder-title{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:8px}
+.stay-reminder-title small{font-size:9px;letter-spacing:.14em;font-weight:900;color:#b77c93}
+.stay-reminder-title h3{margin:3px 0 0;font-size:17px;color:#514b54}
+#stayReminderCount{
+  padding:6px 9px;border-radius:999px;background:rgba(119,200,233,.18);
+  color:#627783;font-size:11px;font-weight:900;white-space:nowrap
+}
+.stay-reminder-group{padding:10px 0;border-top:1px dashed rgba(128,111,126,.16)}
+.stay-reminder-group:first-of-type{border-top:0}
+.stay-reminder-date{font-size:11px;font-weight:900;color:#766a75;margin-bottom:7px}
+.stay-check{
+  display:flex;align-items:flex-start;gap:8px;padding:6px 7px;margin:2px 0;
+  border-radius:12px;font-size:12px;color:#716871;line-height:1.45
+}
+.stay-check input{width:17px;height:17px;margin-top:0;accent-color:#F28C9A;flex:0 0 auto}
+.stay-check.done{background:rgba(119,200,233,.10)}
+.stay-check.done span{text-decoration:line-through;opacity:.58}
+.stay-reminder-foot{text-align:right;margin-top:6px;font-size:10px;color:#9b9099}
+
+/* 購物：全部／未買／已買 */
+.shopping-status-filter{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  margin:10px 0 12px;padding:10px 11px;border-radius:16px;
+  background:rgba(255,255,255,.78);border:1px solid rgba(207,193,244,.28)
+}
+.shopping-status-filter>span{font-size:11px;font-weight:900;color:#897d87;white-space:nowrap}
+.shopping-status-filter>div{display:flex;gap:5px;overflow-x:auto}
+.shopping-status-filter button{
+  border:0;border-radius:999px;padding:7px 9px;background:rgba(207,193,244,.22);
+  color:#796e78;font-size:11px;font-weight:900;white-space:nowrap
+}
+.shopping-status-filter button.active{background:#F28C9A;color:white}
+.shopping-row.shop-filter-hidden{display:none !important}
+</style>
+
 </head>
 <body>
 <div class="app-shell">
@@ -650,7 +695,39 @@ main,.app-shell,.app{
         <span>🧳</span>
         <div><b>住宿小提醒</b><p>Day 3 是換飯店日，早上退房後記得確認所有行李都已上車。</p></div>
       </div>
-    </section>
+    
+
+      <div class="stay-reminder-card">
+        <div class="stay-reminder-title">
+          <div><small>CHECK IN / CHECK OUT</small><h3>🔑 入住・退房提醒</h3></div>
+          <span id="stayReminderCount">0 / 6</span>
+        </div>
+
+        <div class="stay-reminder-group">
+          <div class="stay-reminder-date">🏝️ 10/26　Sunset Resort Canphou 入住</div>
+          <label class="stay-check"><input type="checkbox" data-stay-check="north-in-booking"><span>確認訂房姓名與住宿資料</span></label>
+        </div>
+
+        <div class="stay-reminder-group">
+          <div class="stay-reminder-date">🧳 10/28　北部退房・移動那霸</div>
+          <label class="stay-check"><input type="checkbox" data-stay-check="north-out-room"><span>房卡、充電器、浴室、冰箱再檢查一次</span></label>
+          <label class="stay-check"><input type="checkbox" data-stay-check="north-out-luggage"><span>確認全部行李都已上車</span></label>
+        </div>
+
+        <div class="stay-reminder-group">
+          <div class="stay-reminder-date">🌺 10/28　HOTEL GRACERY NAHA 入住</div>
+          <label class="stay-check"><input type="checkbox" data-stay-check="naha-in-booking"><span>確認訂房姓名與住宿資料</span></label>
+        </div>
+
+        <div class="stay-reminder-group">
+          <div class="stay-reminder-date">✈️ 10/31　那霸退房・回台灣</div>
+          <label class="stay-check"><input type="checkbox" data-stay-check="naha-out-room"><span>房卡、證件、充電器、浴室與冰箱確認</span></label>
+          <label class="stay-check"><input type="checkbox" data-stay-check="naha-out-luggage"><span>確認所有行李與戰利品都帶走</span></label>
+        </div>
+
+        <div class="stay-reminder-foot">✓ 勾選狀態會保存在這支手機裡</div>
+      </div>
+</section>
 
 
     <section id="favorites" class="view">
@@ -673,6 +750,16 @@ main,.app-shell,.app{
         <button data-shop="kids">孩子</button>
         <button data-shop="other">其他</button>
       </div>
+
+      <div class="shopping-status-filter" id="shoppingStatusFilter">
+        <span>購買狀態</span>
+        <div>
+          <button type="button" class="active" data-shop-status="all">全部</button>
+          <button type="button" data-shop-status="todo">🛒 未買</button>
+          <button type="button" data-shop-status="done">✓ 已買</button>
+        </div>
+      </div>
+
       <form id="shoppingForm" class="card shopping-form">
         <input id="shoppingText" placeholder="例如：30週年皮卡丘" required>
         <select id="shoppingCategory">
@@ -1974,6 +2061,81 @@ main,.app-shell,.app{
     if(item) setTimeout(keepActiveVisible,100);
   },true);
   window.addEventListener("load",()=>setTimeout(keepActiveVisible,250));
+})();
+</script>
+
+
+<script id="stay-reminder-shopping-filter-script">
+(function(){
+  /* 住宿提醒勾選 */
+  const STAY_KEY="okinawa_stay_reminders_v1";
+  let stayState={};
+  try{stayState=JSON.parse(localStorage.getItem(STAY_KEY)||"{}");}catch(e){stayState={};}
+
+  function updateStayReminder(){
+    const boxes=[...document.querySelectorAll("[data-stay-check]")];
+    let done=0;
+    boxes.forEach(box=>{
+      const key=box.dataset.stayCheck;
+      box.checked=!!stayState[key];
+      const label=box.closest(".stay-check");
+      if(label) label.classList.toggle("done",box.checked);
+      if(box.checked) done++;
+    });
+    const c=document.getElementById("stayReminderCount");
+    if(c) c.textContent=done+" / "+boxes.length;
+  }
+  document.querySelectorAll("[data-stay-check]").forEach(box=>{
+    box.addEventListener("change",()=>{
+      stayState[box.dataset.stayCheck]=box.checked;
+      localStorage.setItem(STAY_KEY,JSON.stringify(stayState));
+      updateStayReminder();
+    });
+  });
+  updateStayReminder();
+
+  /* 購物狀態篩選：保留原本分類功能，再疊加 全部／未買／已買 */
+  let statusFilter="all";
+  const statusButtons=[...document.querySelectorAll("[data-shop-status]")];
+
+  function applyShoppingStatus(){
+    document.querySelectorAll("#shoppingList .shopping-row").forEach(row=>{
+      const cb=row.querySelector('input[type="checkbox"]');
+      const isDone=!!(cb && cb.checked);
+      const show=statusFilter==="all" || (statusFilter==="done" && isDone) || (statusFilter==="todo" && !isDone);
+      row.classList.toggle("shop-filter-hidden",!show);
+    });
+
+    const list=document.getElementById("shoppingList");
+    if(!list) return;
+    let msg=list.querySelector(".shopping-status-empty");
+    const rows=[...list.querySelectorAll(".shopping-row")];
+    const visible=rows.filter(r=>!r.classList.contains("shop-filter-hidden"));
+    if(rows.length && !visible.length){
+      if(!msg){
+        msg=document.createElement("div");
+        msg.className="empty-state shopping-status-empty";
+        list.appendChild(msg);
+      }
+      msg.textContent=statusFilter==="done" ? "目前還沒有已買的項目。" : "太好了，這個分類目前沒有未買項目。";
+    }else if(msg){msg.remove();}
+  }
+
+  statusButtons.forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      statusFilter=btn.dataset.shopStatus;
+      statusButtons.forEach(x=>x.classList.toggle("active",x===btn));
+      applyShoppingStatus();
+    });
+  });
+
+  const shoppingList=document.getElementById("shoppingList");
+  if(shoppingList){
+    new MutationObserver(()=>setTimeout(applyShoppingStatus,0))
+      .observe(shoppingList,{childList:true,subtree:true,attributes:true,attributeFilter:["checked","class"]});
+    shoppingList.addEventListener("change",()=>setTimeout(applyShoppingStatus,20));
+  }
+  applyShoppingStatus();
 })();
 </script>
 
