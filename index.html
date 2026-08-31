@@ -140,6 +140,20 @@
 .today-flight-route small{display:block;font-size:11px;font-weight:600;color:#938992;margin-top:2px}
 </style>
 
+
+<style id="japanese-page-nav-style">
+.jp-page{display:none;padding:18px 16px 110px}
+.jp-page.active{display:block}
+.jp-page-head{padding:8px 3px 13px}
+.jp-page-head small{font-size:10px;letter-spacing:.18em;font-weight:900;color:#b87d96}
+.jp-page-head h2{margin:4px 0 3px;font-size:24px}
+.jp-page-head p{margin:0;color:#948a94;font-size:12px}
+.jp-nav-item .nav-ico{font-size:19px}
+@media(max-width:430px){
+  .bottom-nav .nav-item,.bottom-nav button{min-width:0}
+}
+</style>
+
 </head>
 <body>
 <div class="app-shell">
@@ -191,30 +205,6 @@
         <div class="route-loading">🌺 正在整理今日行程…</div>
       </div>
 
-
-      <!-- Japanese quick phrases -->
-      <div class="section-title jp-section-title">
-        <div><small>JAPANESE QUICK PHRASES</small><h2>🇯🇵 常用日文快捷卡</h2></div>
-      </div>
-      <div class="jp-card-wrap">
-        <div class="jp-tabs">
-          <button class="jp-tab active" type="button" data-jpcat="restaurant">🍴 餐廳版</button>
-          <button class="jp-tab" type="button" data-jpcat="daily">🛍️ 平常版</button>
-          <button class="jp-tab" type="button" data-jpcat="extra">✨ 其他常用</button>
-        </div>
-        <div id="jpPhraseList"></div>
-        <div class="jp-hint">點一下卡片，可放大日文直接給店員看。</div>
-      </div>
-
-      <div class="jp-modal" id="jpPhraseModal" aria-hidden="true">
-        <div class="jp-modal-box">
-          <button type="button" class="jp-close" id="jpPhraseClose">×</button>
-          <div class="jp-modal-cn" id="jpModalCn"></div>
-          <div class="jp-modal-jp" id="jpModalJp"></div>
-          <div class="jp-modal-read" id="jpModalRead"></div>
-          <button type="button" class="jp-copy" id="jpPhraseCopy">複製日文</button>
-        </div>
-      </div>
 
       <div class="flight-strip">
         <div><span>去程</span><b>CI120</b><small>08:10 TPE → 10:50 OKA</small></div>
@@ -428,13 +418,48 @@
     </section>
   </main>
 
-  <nav class="bottom-nav">
+  
+    <section class="page jp-page" id="page-japanese" data-page="japanese">
+      <div class="jp-page-head">
+        <small>JAPANESE QUICK PHRASES</small>
+        <h2>🇯🇵 常用日文快捷卡</h2>
+        <p>點選句子即可放大，直接給店員看。</p>
+      </div>
+      <!-- Japanese quick phrases -->
+            <div class="jp-card-wrap">
+        <div class="jp-tabs">
+          <button class="jp-tab active" type="button" data-jpcat="restaurant">🍴 餐廳版</button>
+          <button class="jp-tab" type="button" data-jpcat="daily">🛍️ 平常版</button>
+          <button class="jp-tab" type="button" data-jpcat="extra">✨ 其他常用</button>
+        </div>
+        <div id="jpPhraseList"></div>
+        <div class="jp-hint">點一下卡片，可放大日文直接給店員看。</div>
+      </div>
+
+      <div class="jp-modal" id="jpPhraseModal" aria-hidden="true">
+        <div class="jp-modal-box">
+          <button type="button" class="jp-close" id="jpPhraseClose">×</button>
+          <div class="jp-modal-cn" id="jpModalCn"></div>
+          <div class="jp-modal-jp" id="jpModalJp"></div>
+          <div class="jp-modal-read" id="jpModalRead"></div>
+          <button type="button" class="jp-copy" id="jpPhraseCopy">複製日文</button>
+        </div>
+      </div>
+
+
+    </section>
+
+<nav class="bottom-nav">
     <button class="active" data-nav="home"><span>🏠</span>今天</button>
     <button data-nav="itinerary"><span>📅</span>行程</button>
     <button data-nav="shopping"><span>🛍</span>購物</button>
     <button data-nav="expenses"><span>💴</span>花費</button>
     <button data-nav="handbook"><span>📖</span>手冊</button>
-  </nav>
+  
+      <button class="nav-item jp-nav-item" type="button" data-target-page="japanese" aria-label="日文">
+        <span class="nav-ico">🇯🇵</span><span>日文</span>
+      </button>
+</nav>
 </div>
 
 
@@ -1522,6 +1547,48 @@
 
   if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",()=>setTimeout(addFlight,250));
   else setTimeout(addFlight,250);
+})();
+</script>
+
+
+<script id="japanese-page-nav-script">
+(function(){
+  function init(){
+    const jpPage=document.getElementById("page-japanese");
+    const jpBtn=document.querySelector('[data-target-page="japanese"]');
+    if(!jpPage || !jpBtn) return;
+
+    const allMainPages=()=>[...document.querySelectorAll('[data-page], .page, main > section')].filter(x=>x!==jpPage);
+    function showJapanese(){
+      allMainPages().forEach(p=>{
+        if(p!==jpPage){
+          p.dataset.jpWasDisplay=p.style.display||"";
+          p.style.display="none";
+          p.classList.remove("active");
+        }
+      });
+      jpPage.style.display="block";
+      jpPage.classList.add("active");
+      document.querySelectorAll(".bottom-nav .active, nav .active").forEach(x=>x.classList.remove("active"));
+      jpBtn.classList.add("active");
+      window.scrollTo({top:0,behavior:"smooth"});
+    }
+    function hideJapanese(){
+      if(!jpPage.classList.contains("active")) return;
+      jpPage.style.display="none"; jpPage.classList.remove("active");
+      allMainPages().forEach(p=>{
+        if(p.dataset.jpWasDisplay!==undefined){
+          p.style.display=p.dataset.jpWasDisplay;
+          delete p.dataset.jpWasDisplay;
+        }
+      });
+    }
+    jpBtn.addEventListener("click",function(e){e.preventDefault();e.stopImmediatePropagation();showJapanese();},true);
+    document.querySelectorAll("nav button, nav a").forEach(el=>{
+      if(el!==jpBtn) el.addEventListener("click",hideJapanese,true);
+    });
+  }
+  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",init); else init();
 })();
 </script>
 
