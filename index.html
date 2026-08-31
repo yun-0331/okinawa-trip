@@ -100,6 +100,32 @@
 }
 </style>
 
+
+<style id="okinawa-japanese-style">
+.jp-section-title{margin-top:18px}
+.jp-card-wrap{
+  background:linear-gradient(145deg,rgba(247,198,217,.20),rgba(255,255,255,.96));
+  border:1px solid rgba(242,140,154,.25);border-radius:24px;padding:14px;
+  box-shadow:0 10px 28px rgba(84,111,132,.08)
+}
+.jp-tabs{display:flex;gap:7px;overflow-x:auto;padding-bottom:8px}
+.jp-tab{border:0;border-radius:999px;padding:8px 11px;background:rgba(207,193,244,.26);font-weight:900;font-size:12px;color:#746a78;white-space:nowrap;cursor:pointer}
+.jp-tab.active{background:#F28C9A;color:white}
+.jp-phrase{width:100%;text-align:left;border:0;background:rgba(255,255,255,.86);border-radius:16px;padding:12px 13px;margin:7px 0;box-shadow:0 4px 14px rgba(90,80,95,.05);cursor:pointer}
+.jp-cn{font-size:12px;color:#8a7f89;margin-bottom:4px}
+.jp-jp{font-size:16px;font-weight:900;color:#4f4b52;line-height:1.45}
+.jp-read{font-size:11px;color:#9a8f98;margin-top:4px}
+.jp-hint{text-align:center;color:#9b9099;font-size:11px;margin-top:9px}
+.jp-modal{display:none;position:fixed;inset:0;background:rgba(45,42,47,.66);z-index:99999;align-items:center;justify-content:center;padding:20px}
+.jp-modal.show{display:flex}
+.jp-modal-box{width:min(92vw,520px);background:white;border-radius:28px;padding:28px 20px 20px;text-align:center;position:relative;box-shadow:0 20px 70px rgba(0,0,0,.25)}
+.jp-close{position:absolute;right:12px;top:10px;border:0;background:#f4eef3;width:34px;height:34px;border-radius:50%;font-size:22px;cursor:pointer}
+.jp-modal-cn{color:#8a7f89;font-size:14px;margin-bottom:12px}
+.jp-modal-jp{font-size:clamp(25px,7vw,38px);font-weight:900;line-height:1.45;color:#3f3b41;word-break:keep-all}
+.jp-modal-read{font-size:13px;color:#9a8f98;margin:12px 0 18px}
+.jp-copy{border:0;border-radius:999px;padding:11px 18px;background:#77C8E9;color:white;font-weight:900;cursor:pointer}
+</style>
+
 </head>
 <body>
 <div class="app-shell">
@@ -149,6 +175,31 @@
       </div>
       <div class="route-card" id="todayRouteCard">
         <div class="route-loading">🌺 正在整理今日行程…</div>
+      </div>
+
+
+      <!-- Japanese quick phrases -->
+      <div class="section-title jp-section-title">
+        <div><small>JAPANESE QUICK PHRASES</small><h2>🇯🇵 常用日文快捷卡</h2></div>
+      </div>
+      <div class="jp-card-wrap">
+        <div class="jp-tabs">
+          <button class="jp-tab active" type="button" data-jpcat="restaurant">🍴 餐廳版</button>
+          <button class="jp-tab" type="button" data-jpcat="daily">🛍️ 平常版</button>
+          <button class="jp-tab" type="button" data-jpcat="extra">✨ 其他常用</button>
+        </div>
+        <div id="jpPhraseList"></div>
+        <div class="jp-hint">點一下卡片，可放大日文直接給店員看。</div>
+      </div>
+
+      <div class="jp-modal" id="jpPhraseModal" aria-hidden="true">
+        <div class="jp-modal-box">
+          <button type="button" class="jp-close" id="jpPhraseClose">×</button>
+          <div class="jp-modal-cn" id="jpModalCn"></div>
+          <div class="jp-modal-jp" id="jpModalJp"></div>
+          <div class="jp-modal-read" id="jpModalRead"></div>
+          <button type="button" class="jp-copy" id="jpPhraseCopy">複製日文</button>
+        </div>
       </div>
 
       <div class="flight-strip">
@@ -1323,6 +1374,84 @@
     const note=card.querySelector(".route-note");
     if(note) note.textContent="目前非旅遊日期，先顯示 Day 1 預覽；可切換 Day 1～6 查看。";
   }
+})();
+</script>
+
+
+<script id="okinawa-japanese-script">
+(function(){
+  const data={
+    restaurant:[
+      ["請問還有位置嗎？","今、席は空いていますか？","Ima, seki wa aite imasu ka?"],
+      ["4位大人、3位小朋友（11、7、3歲）","大人4人、子ども3人です。子どもは11歳、7歳、3歳です。","Otona yonin, kodomo sannin desu. Kodomo wa juuissai, nanasai, sansai desu."],
+      ["我們有預約","予約しています。","Yoyaku shite imasu."],
+      ["請幫我打包","残った料理を持ち帰りできますか？","Nokotta ryouri o mochikaeri dekimasu ka?"],
+      ["有兒童餐嗎？","お子様メニューはありますか？","Okosama menyuu wa arimasu ka?"],
+      ["有兒童椅嗎？","子ども用の椅子はありますか？","Kodomo-you no isu wa arimasu ka?"],
+      ["請給我兒童餐具","子ども用の食器をお願いします。","Kodomo-you no shokki o onegai shimasu."],
+      ["這個會辣嗎？","これは辛いですか？","Kore wa karai desu ka?"],
+      ["請不要辣","辛くしないでください。","Karaku shinaide kudasai."],
+      ["請給我水","お水をお願いします。","Omizu o onegai shimasu."],
+      ["我們要結帳","お会計をお願いします。","Okaikei o onegai shimasu."],
+      ["可以分開結帳嗎？","別々に会計できますか？","Betsubetsu ni kaikei dekimasu ka?"]
+    ],
+    daily:[
+      ["可以刷卡嗎？","クレジットカードは使えますか？","Kurejitto kaado wa tsukaemasu ka?"],
+      ["這個有兒童尺寸嗎？","これは子ども用のサイズがありますか？","Kore wa kodomo-you no saizu ga arimasu ka?"],
+      ["可以拍照嗎？","写真を撮ってもいいですか？","Shashin o totte mo ii desu ka?"],
+      ["可以退稅嗎？","免税できますか？","Menzei dekimasu ka?"],
+      ["請問廁所在哪裡？","トイレはどこですか？","Toire wa doko desu ka?"],
+      ["這個多少錢？","これはいくらですか？","Kore wa ikura desu ka?"],
+      ["有其他顏色嗎？","他の色はありますか？","Hoka no iro wa arimasu ka?"],
+      ["有其他尺寸嗎？","他のサイズはありますか？","Hoka no saizu wa arimasu ka?"],
+      ["可以試穿嗎？","試着してもいいですか？","Shichaku shite mo ii desu ka?"],
+      ["有庫存嗎？","在庫はありますか？","Zaiko wa arimasu ka?"],
+      ["我要這個","これをお願いします。","Kore o onegai shimasu."],
+      ["請給我袋子","袋をお願いします。","Fukuro o onegai shimasu."]
+    ],
+    extra:[
+      ["不好意思／請問一下","すみません。","Sumimasen."],
+      ["謝謝","ありがとうございます。","Arigatou gozaimasu."],
+      ["我不太會說日文","日本語があまり話せません。","Nihongo ga amari hanasemasen."],
+      ["請說慢一點","もう少しゆっくり話してください。","Mou sukoshi yukkuri hanashite kudasai."],
+      ["可以再說一次嗎？","もう一度お願いします。","Mou ichido onegai shimasu."],
+      ["可以用翻譯軟體嗎？","翻訳アプリを使ってもいいですか？","Honyaku apuri o tsukatte mo ii desu ka?"],
+      ["這裡可以停車嗎？","ここに駐車してもいいですか？","Koko ni chuusha shite mo ii desu ka?"],
+      ["停車場在哪裡？","駐車場はどこですか？","Chuusha-jou wa doko desu ka?"],
+      ["請問入口在哪裡？","入口はどこですか？","Iriguchi wa doko desu ka?"],
+      ["請問出口在哪裡？","出口はどこですか？","Deguchi wa doko desu ka?"],
+      ["請問有電梯嗎？","エレベーターはありますか？","Erebeetaa wa arimasu ka?"],
+      ["請問可以使用嬰兒車嗎？","ベビーカーは使えますか？","Bebiikaa wa tsukaemasu ka?"]
+    ]
+  };
+  const list=document.getElementById("jpPhraseList");
+  const modal=document.getElementById("jpPhraseModal");
+  const cn=document.getElementById("jpModalCn"), jp=document.getElementById("jpModalJp"), read=document.getElementById("jpModalRead");
+  const close=document.getElementById("jpPhraseClose"), copy=document.getElementById("jpPhraseCopy");
+  if(!list) return;
+  let current="restaurant", currentJP="";
+
+  function render(cat){
+    current=cat;
+    document.querySelectorAll(".jp-tab").forEach(b=>b.classList.toggle("active",b.dataset.jpcat===cat));
+    list.innerHTML=data[cat].map((p,i)=>`<button class="jp-phrase" type="button" data-i="${i}">
+      <div class="jp-cn">${p[0]}</div><div class="jp-jp">${p[1]}</div><div class="jp-read">${p[2]}</div>
+    </button>`).join("");
+    list.querySelectorAll(".jp-phrase").forEach(btn=>btn.addEventListener("click",()=>{
+      const p=data[current][Number(btn.dataset.i)];
+      cn.textContent=p[0]; jp.textContent=p[1]; read.textContent=p[2]; currentJP=p[1];
+      modal.classList.add("show"); modal.setAttribute("aria-hidden","false");
+    }));
+  }
+  document.querySelectorAll(".jp-tab").forEach(b=>b.addEventListener("click",()=>render(b.dataset.jpcat)));
+  function hide(){modal.classList.remove("show");modal.setAttribute("aria-hidden","true");}
+  close&&close.addEventListener("click",hide);
+  modal&&modal.addEventListener("click",e=>{if(e.target===modal) hide();});
+  copy&&copy.addEventListener("click",async()=>{
+    try{await navigator.clipboard.writeText(currentJP); copy.textContent="✓ 已複製"; setTimeout(()=>copy.textContent="複製日文",1200);}
+    catch(e){}
+  });
+  render(current);
 })();
 </script>
 
