@@ -270,6 +270,87 @@ body{padding-bottom:0 !important}
 }
 </style>
 
+
+<style id="mobile-scroll-nav-fix">
+/* 手機版底部分頁修正：完整寬度、真正左右滑、不再被舊 transform 推歪 */
+.bottom-nav{
+  position:relative !important;
+  inset:auto !important;
+  top:auto !important;
+  right:auto !important;
+  bottom:auto !important;
+  left:auto !important;
+  transform:none !important;
+
+  display:flex !important;
+  flex-wrap:nowrap !important;
+  justify-content:flex-start !important;
+  align-items:stretch !important;
+  gap:8px !important;
+
+  width:calc(100% - 24px) !important;
+  max-width:680px !important;
+  min-width:0 !important;
+  box-sizing:border-box !important;
+
+  margin:18px auto 24px !important;
+  padding:9px 8px 11px !important;
+
+  overflow-x:auto !important;
+  overflow-y:hidden !important;
+  white-space:nowrap !important;
+  scroll-snap-type:x proximity;
+  scroll-padding-inline:8px;
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior-x:contain;
+  touch-action:pan-x;
+
+  background:rgba(255,255,255,.90) !important;
+  border:1px solid rgba(207,193,244,.30) !important;
+  border-radius:22px !important;
+  box-shadow:0 8px 24px rgba(75,82,96,.08) !important;
+  scrollbar-width:none;
+}
+.bottom-nav::-webkit-scrollbar{display:none !important}
+
+.bottom-nav > button,
+.bottom-nav > a{
+  position:relative !important;
+  transform:none !important;
+  flex:0 0 72px !important;
+  width:72px !important;
+  min-width:72px !important;
+  max-width:72px !important;
+  box-sizing:border-box !important;
+  scroll-snap-align:start;
+  margin:0 !important;
+  padding:8px 4px !important;
+  border-radius:15px !important;
+  text-align:center !important;
+}
+
+.bottom-nav > button span,
+.bottom-nav > a span{
+  display:block;
+}
+
+@media(max-width:430px){
+  .bottom-nav{
+    width:calc(100% - 16px) !important;
+    margin:16px auto 22px !important;
+    padding-left:7px !important;
+    padding-right:7px !important;
+  }
+  .bottom-nav > button,
+  .bottom-nav > a{
+    flex-basis:68px !important;
+    width:68px !important;
+    min-width:68px !important;
+    max-width:68px !important;
+  }
+}
+</style>
+
 </head>
 <body>
 <div class="app-shell">
