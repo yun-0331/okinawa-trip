@@ -154,6 +154,15 @@
 }
 </style>
 
+
+<style id="stay-tab-upgrade-style">
+#stay .stay-intro{margin:-2px 0 14px;color:#8e838d;font-size:12px;line-height:1.6}
+#stay .hotel-card{margin-bottom:11px}
+.bottom-nav{overflow-x:auto;justify-content:flex-start;scrollbar-width:none}
+.bottom-nav::-webkit-scrollbar{display:none}
+.bottom-nav>button{flex:0 0 auto;min-width:62px}
+</style>
+
 </head>
 <body>
 <div class="app-shell">
@@ -213,12 +222,6 @@
       </div>
 
       <div class="section-title">
-        <div><small>TRIP OVERVIEW</small><h2>六天行程</h2></div>
-        <button class="soft-btn" data-nav="itinerary">全部行程</button>
-      </div>
-      <div id="dayOverview" class="day-overview"></div>
-
-      <div class="section-title">
         <div><small>QUICK ACCESS</small><h2>旅行工具</h2></div>
       </div>
       <div class="quick-grid">
@@ -275,6 +278,11 @@
 
     <section id="itinerary" class="view">
       <div class="page-head"><div><small>ITINERARY</small><h2>每日行程</h2></div></div>
+
+      <div class="section-title">
+        <div><small>TRIP OVERVIEW</small><h2>六天行程</h2></div>
+      </div>
+      <div id="dayOverview" class="day-overview"></div>
       <div id="dayTabs" class="day-tabs"></div>
       <div id="dayHeadline" class="day-headline"></div>
       <div id="timeline" class="timeline"></div>
@@ -283,6 +291,13 @@
         <div class="note-title"><div><small>TRAVEL NOTE</small><h3>這一天的備忘</h3></div><span id="noteSaved">自動儲存</span></div>
         <textarea id="dayNote" placeholder="例如：想買的東西、臨時調整、停車位置、今天最好吃的餐廳…"></textarea>
       </div>
+    </section>
+
+
+    <section id="stay" class="view">
+      <div class="page-head"><div><small>STAY</small><h2>🏨 住宿</h2></div></div>
+      <div class="stay-intro">前半段住本部町，後半段住那霸市。點「導航」可直接開啟 Google Maps。</div>
+      
     </section>
 
     <section id="favorites" class="view">
@@ -456,6 +471,7 @@
     <button data-nav="expenses"><span>💴</span>花費</button>
     <button data-nav="handbook"><span>📖</span>手冊</button>
   
+      <button data-nav="stay"><span>🏨</span>住宿</button>
       <button class="nav-item jp-nav-item" type="button" data-target-page="japanese" aria-label="日文">
         <span class="nav-ico">🇯🇵</span><span>日文</span>
       </button>
