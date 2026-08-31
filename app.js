@@ -1,3 +1,4 @@
+/* Okinawa Trip app.js - handbook path fix v2 */
 
 const days = [
  {day:1,date:"10/26",dow:"一",title:"抵達沖繩・南部採買",summary:"那霸機場 → OTS租車 → 系滿漁市場 → 好市多 → 永旺夢樂城 → 塔普日落渡假村",
