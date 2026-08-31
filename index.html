@@ -536,7 +536,7 @@ main,.app-shell,.app{
         </div>
         <div id="todayNext" class="today-next"></div>
         <div class="today-actions">
-          <button id="todayItineraryBtn">📅 今日行程</button>
+          <button id="todayItineraryBtn" type="button" onclick="document.getElementById('todayRouteCard').scrollIntoView({behavior:'smooth',block:'start'});">📅 今日行程</button>
           <button data-nav="checklist">☑️ 行前清單</button>
           <button data-nav="expenses">💴 記一筆</button>
           <button onclick="openMaps('那覇空港')">📍 Maps</button>
@@ -2137,6 +2137,18 @@ main,.app-shell,.app{
   }
   applyShoppingStatus();
 })();
+</script>
+
+
+<script id="today-route-scroll-fix">
+document.addEventListener("click", function(e){
+  const btn=e.target.closest("#todayItineraryBtn");
+  if(!btn) return;
+  e.preventDefault();
+  e.stopImmediatePropagation();
+  const route=document.querySelector("#todayRouteCard") || document.querySelector(".route-section-title");
+  if(route) route.scrollIntoView({behavior:"smooth",block:"start"});
+}, true);
 </script>
 
 </body>
