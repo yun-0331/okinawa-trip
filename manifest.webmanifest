@@ -1,0 +1,25 @@
+{
+  "name": "沖繩親子自由行 2026",
+  "short_name": "沖繩之旅",
+  "description": "2026/10/26–10/31 沖繩親子自由行手機旅行手冊",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#fffafc",
+  "theme_color": "#F7C6D9",
+  "icons": [
+    {
+      "src": "assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

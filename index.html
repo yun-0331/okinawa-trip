@@ -1,0 +1,930 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#F7C6D9">
+  <title>沖繩親子自由行｜2026</title>
+
+  <meta name="description" content="2026 沖繩親子自由行手機旅行手冊">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="沖繩之旅">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app-shell">
+  <header class="hero compact-hero">
+    <div class="hero-deco">🌺 ✈️ 🌊</div>
+    <img src="assets/family.jpg" alt="Q版一家口" class="family">
+    <div class="hero-copy">
+      <div class="eyebrow">OKINAWA FAMILY TRIP</div>
+      <h1>沖繩親子自由行</h1>
+      <p>2026/10/26 — 10/31 · 6天5夜</p>
+    </div>
+  </header>
+
+  <main>
+    <section id="home" class="view active">
+      <div id="tripStatus" class="trip-status"></div>
+
+      <div class="today-hero-card">
+        <div class="today-top">
+          <div><small>TODAY</small><h2 id="todayTitle">旅行首頁</h2><p id="todaySubtitle">行前準備模式</p></div>
+          <div class="today-badge" id="todayBadge">D-</div>
+        </div>
+        <div id="todayNext" class="today-next"></div>
+        <div class="today-actions">
+          <button id="todayItineraryBtn">📅 今日行程</button>
+          <button data-nav="checklist">☑️ 行前清單</button>
+          <button data-nav="expenses">💴 記一筆</button>
+          <button onclick="openMaps('那覇空港')">📍 Maps</button>
+        </div>
+      </div>
+
+      <div class="flight-strip">
+        <div><span>去程</span><b>CI120</b><small>08:10 TPE → 10:50 OKA</small></div>
+        <div class="plane">✈</div>
+        <div><span>回程</span><b>CI123</b><small>20:25 OKA → 21:05 TPE</small></div>
+      </div>
+
+      <div class="section-title">
+        <div><small>TRIP OVERVIEW</small><h2>六天行程</h2></div>
+        <button class="soft-btn" data-nav="itinerary">全部行程</button>
+      </div>
+      <div id="dayOverview" class="day-overview"></div>
+
+      <div class="section-title">
+        <div><small>QUICK ACCESS</small><h2>旅行工具</h2></div>
+      </div>
+      <div class="quick-grid">
+        <button class="quick" data-nav="favorites"><span>❤️</span><b>我的收藏</b><small>想去・想買・想吃</small></button>
+        <button class="quick" data-nav="shopping"><span>🛍</span><b>購物清單</b><small>分類採買更好找</small></button>
+        <button class="quick" data-nav="converter"><span>🧮</span><b>日幣換算</b><small>JPY ⇄ TWD</small></button>
+        <button class="quick" data-nav="handbook"><span>📖</span><b>完整手冊</b><small>60頁隨身瀏覽</small></button>
+      </div>
+
+      <div class="section-title">
+        <div><small>STAY</small><h2>住宿</h2></div>
+      </div>
+      <div class="hotel-card">
+        <div>
+          <small>10/26 — 10/28</small>
+          <h3>Sunset Resort Canphou</h3>
+          <p>本部町｜前半段住宿</p>
+        </div>
+        <button onclick="openMaps('Sunset Resort Canphou Okinawa')">導航</button>
+      </div>
+      <div class="hotel-card purple">
+        <div>
+          <small>10/28 — 10/31</small>
+          <h3>HOTEL GRACERY NAHA</h3>
+          <p>那霸市｜後半段住宿</p>
+        </div>
+        <button onclick="openMaps('HOTEL GRACERY NAHA')">導航</button>
+      </div>
+
+
+      <div class="section-title">
+        <div><small>ONLINE APP</small><h2>加入手機主畫面</h2></div>
+      </div>
+      <div class="install-card">
+        <div class="install-copy">
+          <span class="install-icon">📲</span>
+          <div><b>像 APP 一樣開啟</b><small>上線後可加入 iPhone / Android 主畫面，也能離線開啟已快取內容。</small></div>
+        </div>
+        <div class="install-actions">
+          <button id="installBtn" class="primary-mini">安裝 APP</button>
+          <button id="shareBtn" class="soft-mini">分享網址</button>
+        </div>
+        <details class="ios-help">
+          <summary>iPhone 怎麼加入主畫面？</summary>
+          <p>用 Safari 開啟網站 → 點「分享」→「加入主畫面」→「新增」。</p>
+        </details>
+      </div>
+
+      <div class="emergency-mini">
+        <div><span>🆘</span><div><b>緊急資訊</b><small>警察 110・救護／消防 119</small></div></div>
+        <button data-nav="emergency">查看</button>
+      </div>
+    </section>
+
+    <section id="itinerary" class="view">
+      <div class="page-head"><div><small>ITINERARY</small><h2>每日行程</h2></div></div>
+      <div id="dayTabs" class="day-tabs"></div>
+      <div id="dayHeadline" class="day-headline"></div>
+      <div id="timeline" class="timeline"></div>
+
+      <div class="card notes-card">
+        <div class="note-title"><div><small>TRAVEL NOTE</small><h3>這一天的備忘</h3></div><span id="noteSaved">自動儲存</span></div>
+        <textarea id="dayNote" placeholder="例如：想買的東西、臨時調整、停車位置、今天最好吃的餐廳…"></textarea>
+      </div>
+    </section>
+
+    <section id="favorites" class="view">
+      <div class="page-head"><div><small>FAVORITES</small><h2>我的收藏</h2></div><button id="clearFavorites" class="ghost-danger">清除</button></div>
+      <div class="favorites-filter">
+        <button class="active" data-fav-filter="all">全部</button>
+        <button data-fav-filter="spot">景點</button>
+        <button data-fav-filter="food">美食</button>
+        <button data-fav-filter="shop">購物</button>
+      </div>
+      <div id="favoritesList" class="favorite-list"></div>
+    </section>
+
+    <section id="shopping" class="view">
+      <div class="page-head"><div><small>SHOPPING</small><h2>購物清單</h2></div><button id="clearShopping" class="ghost-danger">清除</button></div>
+      <div class="shopping-cats">
+        <button class="active" data-shop="all">全部</button>
+        <button data-shop="souvenir">伴手禮</button>
+        <button data-shop="drug">藥妝</button>
+        <button data-shop="kids">孩子</button>
+        <button data-shop="other">其他</button>
+      </div>
+      <form id="shoppingForm" class="card shopping-form">
+        <input id="shoppingText" placeholder="例如：30週年皮卡丘" required>
+        <select id="shoppingCategory">
+          <option value="souvenir">伴手禮</option>
+          <option value="drug">藥妝</option>
+          <option value="kids">孩子</option>
+          <option value="other">其他</option>
+        </select>
+        <button type="submit">＋ 加入</button>
+      </form>
+      <div id="shoppingList" class="shopping-list"></div>
+    </section>
+
+    <section id="checklist" class="view">
+      <div class="page-head"><div><small>CHECKLIST</small><h2>旅行清單</h2></div><button id="resetChecklist" class="ghost-danger">重設</button></div>
+      <div class="list-tabs">
+        <button class="active" data-list="luggage">🧳 行李</button>
+        <button data-list="shopping">🛍 採買</button>
+        <button data-list="todo">📌 待辦</button>
+      </div>
+      <div class="progress-card"><div><span id="checkProgressText">0 / 0 完成</span><b id="checkPercent">0%</b></div><div class="progress-track"><i id="checkProgress"></i></div></div>
+      <div id="checkItems" class="check-items"></div>
+      <form id="addCheckForm" class="inline-add">
+        <input id="newCheckItem" placeholder="新增自己的項目">
+        <button type="submit">＋</button>
+      </form>
+    </section>
+
+    <section id="expenses" class="view">
+      <div class="page-head"><div><small>EXPENSES</small><h2>花費紀錄</h2></div><button id="clearExpenses" class="ghost-danger">清除</button></div>
+      <div class="expense-summary">
+        <span>目前合計</span>
+        <strong id="expenseTotal">¥0</strong>
+        <small id="expenseTwd">約 NT$0</small>
+      </div>
+      <div id="expenseCategorySummary" class="expense-category-summary"></div>
+      <form id="expenseForm" class="card form-card">
+        <div class="two">
+          <label>金額（日圓）<input id="expenseAmount" inputmode="numeric" type="number" min="0" placeholder="1500" required></label>
+          <label>分類
+            <select id="expenseCategory">
+              <option>餐飲</option><option>購物</option><option>交通</option><option>門票</option><option>住宿</option><option>其他</option>
+            </select>
+          </label>
+        </div>
+        <label>內容<input id="expenseNote" placeholder="例如：蝦蝦飯"></label>
+        <button class="primary" type="submit">＋ 新增花費</button>
+      </form>
+      <div id="expenseList" class="expense-list"></div>
+    </section>
+
+    <section id="converter" class="view">
+      <div class="page-head"><div><small>CONVERTER</small><h2>日幣換算</h2></div></div>
+      <div class="card converter-card">
+        <label>目前匯率 <span>1 JPY =</span><input id="rate" type="number" step="0.001" value="0.205"><span>TWD</span></label>
+        <div class="convert-row">
+          <div><small>日本円 JPY</small><input id="jpy" type="number" inputmode="decimal" value="1000"></div>
+          <div class="swap">⇄</div>
+          <div><small>新台幣 TWD</small><input id="twd" type="number" inputmode="decimal"></div>
+        </div>
+        <div class="preset-money">
+          <button data-jpy="1000">¥1,000</button><button data-jpy="3000">¥3,000</button><button data-jpy="5000">¥5,000</button><button data-jpy="10000">¥10,000</button>
+        </div>
+        <p class="hint">匯率可自行修改；網站會記住你最後輸入的數字。</p>
+      </div>
+    </section>
+
+    <section id="emergency" class="view">
+      <div class="page-head"><div><small>EMERGENCY</small><h2>緊急資訊</h2></div></div>
+      <div class="emergency-grid">
+        <a href="tel:110" class="emergency-card red"><span>🚓</span><b>警察</b><strong>110</strong></a>
+        <a href="tel:119" class="emergency-card blue"><span>🚑</span><b>救護／消防</b><strong>119</strong></a>
+      </div>
+      <div class="card emergency-info">
+        <h3>旅行中快速處理</h3>
+        <p>需要報警時撥 110；需要救護車或消防時撥 119。若只是迷路、遺失物、飯店協助等，也可以先請飯店櫃台協助。</p>
+      </div>
+      <div class="handbook-shortcuts one-col">
+        <a href="#page-56" class="handbook-link">🆘 緊急聯絡資訊<span>P56</span></a>
+        <a href="#page-57" class="handbook-link">📞 Wi‑Fi Calling<span>P57</span></a>
+        <a href="#page-58" class="handbook-link">📶 災害 Wi‑Fi<span>P58</span></a>
+      </div>
+    </section>
+
+    <section id="handbook" class="view">
+      <div class="page-head">
+        <div><small>HANDBOOK</small><h2>旅行手冊 01—60</h2></div>
+        <span class="reader-note">點頁面即可放大</span>
+      </div>
+
+      <div class="handbook-shortcuts">
+        <a href="#page-04" class="handbook-link">🧳 行李清單<span>P04</span></a>
+        <a href="#page-09" class="handbook-link">✈️ 那霸機場<span>P09</span></a>
+        <a href="#page-10" class="handbook-link">🚗 自駕提醒<span>P10</span></a>
+        <a href="#page-12" class="handbook-link">🎫 去程航班<span>P12</span></a>
+        <a href="#page-14" class="handbook-link">🏨 前段住宿<span>P14</span></a>
+        <a href="#page-16" class="handbook-link">🗺 六日總表<span>P16</span></a>
+        <a href="#page-18" class="handbook-link">1️⃣ Day 1<span>P18</span></a>
+        <a href="#page-25" class="handbook-link">2️⃣ Day 2<span>P25</span></a>
+        <a href="#page-35" class="handbook-link">3️⃣ Day 3<span>P35</span></a>
+        <a href="#page-41" class="handbook-link">4️⃣ Day 4<span>P41</span></a>
+        <a href="#page-47" class="handbook-link">5️⃣ Day 5<span>P47</span></a>
+        <a href="#page-52" class="handbook-link">6️⃣ Day 6<span>P52</span></a>
+        <a href="#page-56" class="handbook-link">🆘 緊急聯絡<span>P56</span></a>
+        <a href="#page-57" class="handbook-link">📞 Wi‑Fi Calling<span>P57</span></a>
+        <a href="#page-58" class="handbook-link">📶 災害 Wi‑Fi<span>P58</span></a>
+        <a href="#page-60" class="handbook-link">🚝 單軌紀念章<span>P60</span></a>
+      </div>
+
+      <div id="bookGrid" class="book-grid"><a class="book-page" href="#page-01" aria-label="開啟手冊第 01 頁"><img loading="lazy" src="assets/thumbs/01.webp" alt="手冊第01頁"><span>01</span></a><a class="book-page" href="#page-02" aria-label="開啟手冊第 02 頁"><img loading="lazy" src="assets/thumbs/02.webp" alt="手冊第02頁"><span>02</span></a><a class="book-page" href="#page-03" aria-label="開啟手冊第 03 頁"><img loading="lazy" src="assets/thumbs/03.webp" alt="手冊第03頁"><span>03</span></a><a class="book-page" href="#page-04" aria-label="開啟手冊第 04 頁"><img loading="lazy" src="assets/thumbs/04.webp" alt="手冊第04頁"><span>04</span></a><a class="book-page" href="#page-05" aria-label="開啟手冊第 05 頁"><img loading="lazy" src="assets/thumbs/05.webp" alt="手冊第05頁"><span>05</span></a><a class="book-page" href="#page-06" aria-label="開啟手冊第 06 頁"><img loading="lazy" src="assets/thumbs/06.webp" alt="手冊第06頁"><span>06</span></a><a class="book-page" href="#page-07" aria-label="開啟手冊第 07 頁"><img loading="lazy" src="assets/thumbs/07.webp" alt="手冊第07頁"><span>07</span></a><a class="book-page" href="#page-08" aria-label="開啟手冊第 08 頁"><img loading="lazy" src="assets/thumbs/08.webp" alt="手冊第08頁"><span>08</span></a><a class="book-page" href="#page-09" aria-label="開啟手冊第 09 頁"><img loading="lazy" src="assets/thumbs/09.webp" alt="手冊第09頁"><span>09</span></a><a class="book-page" href="#page-10" aria-label="開啟手冊第 10 頁"><img loading="lazy" src="assets/thumbs/10.webp" alt="手冊第10頁"><span>10</span></a><a class="book-page" href="#page-11" aria-label="開啟手冊第 11 頁"><img loading="lazy" src="assets/thumbs/11.webp" alt="手冊第11頁"><span>11</span></a><a class="book-page" href="#page-12" aria-label="開啟手冊第 12 頁"><img loading="lazy" src="assets/thumbs/12.webp" alt="手冊第12頁"><span>12</span></a><a class="book-page" href="#page-13" aria-label="開啟手冊第 13 頁"><img loading="lazy" src="assets/thumbs/13.webp" alt="手冊第13頁"><span>13</span></a><a class="book-page" href="#page-14" aria-label="開啟手冊第 14 頁"><img loading="lazy" src="assets/thumbs/14.webp" alt="手冊第14頁"><span>14</span></a><a class="book-page" href="#page-15" aria-label="開啟手冊第 15 頁"><img loading="lazy" src="assets/thumbs/15.webp" alt="手冊第15頁"><span>15</span></a><a class="book-page" href="#page-16" aria-label="開啟手冊第 16 頁"><img loading="lazy" src="assets/thumbs/16.webp" alt="手冊第16頁"><span>16</span></a><a class="book-page" href="#page-17" aria-label="開啟手冊第 17 頁"><img loading="lazy" src="assets/thumbs/17.webp" alt="手冊第17頁"><span>17</span></a><a class="book-page" href="#page-18" aria-label="開啟手冊第 18 頁"><img loading="lazy" src="assets/thumbs/18.webp" alt="手冊第18頁"><span>18</span></a><a class="book-page" href="#page-19" aria-label="開啟手冊第 19 頁"><img loading="lazy" src="assets/thumbs/19.webp" alt="手冊第19頁"><span>19</span></a><a class="book-page" href="#page-20" aria-label="開啟手冊第 20 頁"><img loading="lazy" src="assets/thumbs/20.webp" alt="手冊第20頁"><span>20</span></a><a class="book-page" href="#page-21" aria-label="開啟手冊第 21 頁"><img loading="lazy" src="assets/thumbs/21.webp" alt="手冊第21頁"><span>21</span></a><a class="book-page" href="#page-22" aria-label="開啟手冊第 22 頁"><img loading="lazy" src="assets/thumbs/22.webp" alt="手冊第22頁"><span>22</span></a><a class="book-page" href="#page-23" aria-label="開啟手冊第 23 頁"><img loading="lazy" src="assets/thumbs/23.webp" alt="手冊第23頁"><span>23</span></a><a class="book-page" href="#page-24" aria-label="開啟手冊第 24 頁"><img loading="lazy" src="assets/thumbs/24.webp" alt="手冊第24頁"><span>24</span></a><a class="book-page" href="#page-25" aria-label="開啟手冊第 25 頁"><img loading="lazy" src="assets/thumbs/25.webp" alt="手冊第25頁"><span>25</span></a><a class="book-page" href="#page-26" aria-label="開啟手冊第 26 頁"><img loading="lazy" src="assets/thumbs/26.webp" alt="手冊第26頁"><span>26</span></a><a class="book-page" href="#page-27" aria-label="開啟手冊第 27 頁"><img loading="lazy" src="assets/thumbs/27.webp" alt="手冊第27頁"><span>27</span></a><a class="book-page" href="#page-28" aria-label="開啟手冊第 28 頁"><img loading="lazy" src="assets/thumbs/28.webp" alt="手冊第28頁"><span>28</span></a><a class="book-page" href="#page-29" aria-label="開啟手冊第 29 頁"><img loading="lazy" src="assets/thumbs/29.webp" alt="手冊第29頁"><span>29</span></a><a class="book-page" href="#page-30" aria-label="開啟手冊第 30 頁"><img loading="lazy" src="assets/thumbs/30.webp" alt="手冊第30頁"><span>30</span></a><a class="book-page" href="#page-31" aria-label="開啟手冊第 31 頁"><img loading="lazy" src="assets/thumbs/31.webp" alt="手冊第31頁"><span>31</span></a><a class="book-page" href="#page-32" aria-label="開啟手冊第 32 頁"><img loading="lazy" src="assets/thumbs/32.webp" alt="手冊第32頁"><span>32</span></a><a class="book-page" href="#page-33" aria-label="開啟手冊第 33 頁"><img loading="lazy" src="assets/thumbs/33.webp" alt="手冊第33頁"><span>33</span></a><a class="book-page" href="#page-34" aria-label="開啟手冊第 34 頁"><img loading="lazy" src="assets/thumbs/34.webp" alt="手冊第34頁"><span>34</span></a><a class="book-page" href="#page-35" aria-label="開啟手冊第 35 頁"><img loading="lazy" src="assets/thumbs/35.webp" alt="手冊第35頁"><span>35</span></a><a class="book-page" href="#page-36" aria-label="開啟手冊第 36 頁"><img loading="lazy" src="assets/thumbs/36.webp" alt="手冊第36頁"><span>36</span></a><a class="book-page" href="#page-37" aria-label="開啟手冊第 37 頁"><img loading="lazy" src="assets/thumbs/37.webp" alt="手冊第37頁"><span>37</span></a><a class="book-page" href="#page-38" aria-label="開啟手冊第 38 頁"><img loading="lazy" src="assets/thumbs/38.webp" alt="手冊第38頁"><span>38</span></a><a class="book-page" href="#page-39" aria-label="開啟手冊第 39 頁"><img loading="lazy" src="assets/thumbs/39.webp" alt="手冊第39頁"><span>39</span></a><a class="book-page" href="#page-40" aria-label="開啟手冊第 40 頁"><img loading="lazy" src="assets/thumbs/40.webp" alt="手冊第40頁"><span>40</span></a><a class="book-page" href="#page-41" aria-label="開啟手冊第 41 頁"><img loading="lazy" src="assets/thumbs/41.webp" alt="手冊第41頁"><span>41</span></a><a class="book-page" href="#page-42" aria-label="開啟手冊第 42 頁"><img loading="lazy" src="assets/thumbs/42.webp" alt="手冊第42頁"><span>42</span></a><a class="book-page" href="#page-43" aria-label="開啟手冊第 43 頁"><img loading="lazy" src="assets/thumbs/43.webp" alt="手冊第43頁"><span>43</span></a><a class="book-page" href="#page-44" aria-label="開啟手冊第 44 頁"><img loading="lazy" src="assets/thumbs/44.webp" alt="手冊第44頁"><span>44</span></a><a class="book-page" href="#page-45" aria-label="開啟手冊第 45 頁"><img loading="lazy" src="assets/thumbs/45.webp" alt="手冊第45頁"><span>45</span></a><a class="book-page" href="#page-46" aria-label="開啟手冊第 46 頁"><img loading="lazy" src="assets/thumbs/46.webp" alt="手冊第46頁"><span>46</span></a><a class="book-page" href="#page-47" aria-label="開啟手冊第 47 頁"><img loading="lazy" src="assets/thumbs/47.webp" alt="手冊第47頁"><span>47</span></a><a class="book-page" href="#page-48" aria-label="開啟手冊第 48 頁"><img loading="lazy" src="assets/thumbs/48.webp" alt="手冊第48頁"><span>48</span></a><a class="book-page" href="#page-49" aria-label="開啟手冊第 49 頁"><img loading="lazy" src="assets/thumbs/49.webp" alt="手冊第49頁"><span>49</span></a><a class="book-page" href="#page-50" aria-label="開啟手冊第 50 頁"><img loading="lazy" src="assets/thumbs/50.webp" alt="手冊第50頁"><span>50</span></a><a class="book-page" href="#page-51" aria-label="開啟手冊第 51 頁"><img loading="lazy" src="assets/thumbs/51.webp" alt="手冊第51頁"><span>51</span></a><a class="book-page" href="#page-52" aria-label="開啟手冊第 52 頁"><img loading="lazy" src="assets/thumbs/52.webp" alt="手冊第52頁"><span>52</span></a><a class="book-page" href="#page-53" aria-label="開啟手冊第 53 頁"><img loading="lazy" src="assets/thumbs/53.webp" alt="手冊第53頁"><span>53</span></a><a class="book-page" href="#page-54" aria-label="開啟手冊第 54 頁"><img loading="lazy" src="assets/thumbs/54.webp" alt="手冊第54頁"><span>54</span></a><a class="book-page" href="#page-55" aria-label="開啟手冊第 55 頁"><img loading="lazy" src="assets/thumbs/55.webp" alt="手冊第55頁"><span>55</span></a><a class="book-page" href="#page-56" aria-label="開啟手冊第 56 頁"><img loading="lazy" src="assets/thumbs/56.webp" alt="手冊第56頁"><span>56</span></a><a class="book-page" href="#page-57" aria-label="開啟手冊第 57 頁"><img loading="lazy" src="assets/thumbs/57.webp" alt="手冊第57頁"><span>57</span></a><a class="book-page" href="#page-58" aria-label="開啟手冊第 58 頁"><img loading="lazy" src="assets/thumbs/58.webp" alt="手冊第58頁"><span>58</span></a><a class="book-page" href="#page-59" aria-label="開啟手冊第 59 頁"><img loading="lazy" src="assets/thumbs/59.webp" alt="手冊第59頁"><span>59</span></a><a class="book-page" href="#page-60" aria-label="開啟手冊第 60 頁"><img loading="lazy" src="assets/thumbs/60.webp" alt="手冊第60頁"><span>60</span></a></div>
+    </section>
+  </main>
+
+  <nav class="bottom-nav">
+    <button class="active" data-nav="home"><span>🏠</span>今天</button>
+    <button data-nav="itinerary"><span>📅</span>行程</button>
+    <button data-nav="shopping"><span>🛍</span>購物</button>
+    <button data-nav="expenses"><span>💴</span>花費</button>
+    <button data-nav="handbook"><span>📖</span>手冊</button>
+  </nav>
+</div>
+
+
+    <div id="page-01" class="book-modal">
+      <a class="book-modal-bg" href="#handbook" aria-label="關閉"></a>
+      <div class="book-modal-inner">
+        <a class="book-close" href="#handbook" aria-label="關閉">×</a>
+        <a class="book-prev disabled" href="#page-01" aria-label="上一頁">‹</a>
+        <img src="assets/pages/01.webp" alt="旅行手冊第 01 頁">
+        <div class="book-label">第 01 頁</div>
+        <a class="book-next " href="#page-02" aria-label="下一頁">›</a>
+      </div>
+    </div>
+
+    <div id="page-02" class="book-modal">
+      <a class="book-modal-bg" href="#handbook" aria-label="關閉"></a>
+      <div class="book-modal-inner">
+        <a class="book-close" href="#handbook" aria-label="關閉">×</a>
+        <a class="book-prev " href="#page-01" aria-label="上一頁">‹</a>
+        <img src="assets/pages/02.webp" alt="旅行手冊第 02 頁">
+        <div class="book-label">第 02 頁</div>
+        <a class="book-next " href="#page-03" aria-label="下一頁">›</a>
+      </div>
+    </div>
+
+    <div id="page-03" class="book-modal">
+      <a class="book-modal-bg" href="#handbook" aria-label="關閉"></a>
+      <div class="book-modal-inner">
+        <a class="book-close" href="#handbook" aria-label="關閉">×</a>
+        <a class="book-prev " href="#page-02" aria-label="上一頁">‹</a>
+        <img src="assets/pages/03.webp" alt="旅行手冊第 03 頁">
+        <div class="book-label">第 03 頁</div>
+        <a class="book-next " href="#page-04" aria-label="下一頁">›</a>
+      </div>
+    </div>
+
+    <div id="page-04" class="book-modal">
+      <a class="book-modal-bg" href="#handbook" aria-label="關閉"></a>
+      <div class="book-modal-inner">
+        <a class="book-close" href="#handbook" aria-label="關閉">×</a>
+        <a class="book-prev " href="#page-03" aria-label="上一頁">‹</a>
+        <img src="assets/pages/04.webp" alt="旅行手冊第 04 頁">
+        <div class="book-label">第 04 頁</div>
+        <a class="book-next " href="#page-05" aria-label="下一頁">›</a>
+      </div>
+    </div>
+
+    <div id="page-05" class="book-modal">
+      <a class="book-modal-bg" href="#handbook" aria-label="關閉"></a>
+      <div class="book-modal-inner">
+        <a class="book-close" href="#handbook" aria-label="關閉">×</a>
+        <a class="book-prev " href="#page-04" aria-label="上一頁">‹</a>
+        <img src="assets/pages/05.webp" alt="旅行手冊第 05 頁">
+        <div class="book-label">第 05 頁</div>
+        <a class="book-next " href="#page-06" aria-label="下一頁">›</a>
+      </div>
+    </div>
+
+    <div id="page-06" class="book-modal">
+      <a class="book-modal-bg" href="#handbook" aria-label="關閉"></a>
+      <div class="book-modal-inner">
+        <a class="book-close" href="#handbook" aria-label="關閉">×</a>
+        <a class="book-prev " href="#page-05" aria-label="上一頁">‹</a>
+        <img src="assets/pages/06.webp" alt="旅行手冊第 06 頁">
+        <div class="book-label">第 06 頁</div>
+        <a class="book-next " href="#page-07" aria-label="下一頁">›</a>
+      </div>
+    </div>
+
+    <div id="page-07" class="book-modal">
+      <a class="book-modal-bg" href="#handbook" aria-label="關閉"></a>
+      <div class="book-modal-inner">
+        <a class="book-close" href="#handbook" aria-label="關閉">×</a>
+        <a class="book-prev " href="#page-06" aria-label="上一頁">‹</a>
+        <img src="assets/pages/07.webp" alt="旅行手冊第 07 頁">
+        <div class="book-label">第 07 頁</div>
+        <a class="book-next " href="#page-08" aria-label="下一頁">›</a>
+      </div>
+    </div>
+
+    <div id="page-08" class="book-modal">
+      <a class="book-modal-bg" href="#handbook" aria-label="關閉"></a>
+      <div class="book-modal-inner">
+        <a class="book-close" href="#handbook" aria-label="關閉">×</a>
+        <a class="book-prev " href="#page-07" aria-label="上一頁">‹</a>
+        <img src="assets/pages/08.webp" alt="旅行手冊第 08 頁">
+        <div class="book-label">第 08 頁</div>
+        <a class="book-next " href="#page-09" aria-label="下一頁">›</a>
+      </div>
+    </div>
+
+    <div id="page-09" class="book-modal">
+      <a class="book-modal-bg" href="#handbook" aria-label="關閉"></a>
+      <div class="book-modal-inner">
+        <a class="book-close" href="#handbook" aria-label="關閉">×</a>
+        <a class="book-prev " href="#page-08" aria-label="上一頁">‹</a>
+        <img src="assets/pages/09.webp" alt="旅行手冊第 09 頁">
+        <div class="book-label">第 09 頁</div>
+        <a class="book-next " href="#page-10" aria-label="下一頁">›</a>
+      </div>
+    </div>
+
+    <div id="page-10" class="book-modal">
+      <a class="book-modal-bg" href="#handbook" aria-label="關閉"></a>
+      <div class="book-modal-inner">
+        <a class="book-close" href="#handbook" aria-label="關閉">×</a>
+        <a class="book-prev " href="#page-09" aria-label="上一頁">‹</a>
+        <img src="assets/pages/10.webp" alt="旅行手冊第 10 頁">
+        <div class="book-label">第 10 頁</div>
+        <a class="book-next " href="#page-11" aria-label="下一頁">›</a>
+      </div>
+    </div>
+
+    <div id="page-11" class="book-modal">
+      <a class="book-modal-bg" href="#handbook" aria-label="關閉"></a>
+      <div class="book-modal-inner">
+        <a class="book-close" href="#handbook" aria-label="關閉">×</a>
+        <a class="book-prev " href="#page-10" aria-label="上一頁">‹</a>
+        <img src="assets/pages/11.webp" alt="旅行手冊第 11 頁">
+        <div class="book-label">第 11 頁</div>
+        <a class="book-next " href="#page-12" aria-label="下一頁">›</a>
+      </div>
+    </div>
+
+    <div id="page-12" class="book-modal">
+      <a class="book-modal-bg" href="#handbook" aria-label="關閉"></a>
+      <div class="book-modal-inner">
+        <a class="book-close" href="#handbook" aria-label="關閉">×</a>
+        <a class="book-prev " href="#page-11" aria-label="上一頁">‹</a>
+        <img src="assets/pages/12.webp" alt="旅行手冊第 12 頁">
+        <div class="book-label">第 12 頁</div>
+        <a class="book-next " href="#page-13" aria-label="下一頁">›</a>
+      </div>
+    </div>
+
+    <div id="page-13" class="book-modal">
+      <a class="book-modal-bg" href="#handbook" aria-label="關閉"></a>
+      <div class="book-modal-inner">
+        <a class="book-close" href="#handbook" aria-label="關閉">×</a>
+        <a class="book-prev " href="#page-12" aria-label="上一頁">‹</a>
+        <img src="assets/pages/13.webp" alt="旅行手冊第 13 頁">
+        <div class="book-label">第 13 頁</div>
+        <a class="book-next " href="#page-14" aria-label="下一頁">›</a>
+      </div>
+    </div>
+
+    <div id="page-14" class="book-modal">
+      <a class="book-modal-bg" href="#handbook" aria-label="關閉"></a>
+      <div class="book-modal-inner">
+        <a class="book-close" href="#handbook" aria-label="關閉">×</a>
+        <a class="book-prev " href="#page-13" aria-label="上一頁">‹</a>
+        <img src="assets/pages/14.webp" alt="旅行手冊第 14 頁">
+        <div class="book-label">第 14 頁</div>
+        <a class="book-next " href="#page-15" aria-label="下一頁">›</a>
+      </div>
+    </div>
+
+    <div id="page-15" class="book-modal">
+      <a class="book-modal-bg" href="#handbook" aria-label="關閉"></a>
+      <div class="book-modal-inner">
+        <a class="book-close" href="#handbook" aria-label="關閉">×</a>
+        <a class="book-prev " href="#page-14" aria-label="上一頁">‹</a>
+        <img src="assets/pages/15.webp" alt="旅行手冊第 15 頁">
+        <div class="book-label">第 15 頁</div>
+        <a class="book-next " href="#page-16" aria-label="下一頁">›</a>
+      </div>
+    </div>
+
+    <div id="page-16" class="book-modal">
+      <a class="book-modal-bg" href="#handbook" aria-label="關閉"></a>
+      <div class="book-modal-inner">
+        <a class="book-close" href="#handbook" aria-label="關閉">×</a>
+        <a class="book-prev " href="#page-15" aria-label="上一頁">‹</a>
+        <img src="assets/pages/16.webp" alt="旅行手冊第 16 頁">
+        <div class="book-label">第 16 頁</div>
+        <a class="book-next " href="#page-17" aria-label="下一頁">›</a>
+      </div>
+    </div>
+
+    <div id="page-17" class="book-modal">
+      <a class="book-modal-bg" href="#handbook" aria-label="關閉"></a>
+      <div class="book-modal-inner">
+        <a class="book-close" href="#handbook" aria-label="關閉">×</a>
+        <a class="book-prev " href="#page-16" aria-label="上一頁">‹</a>
+        <img src="assets/pages/17.webp" alt="旅行手冊第 17 頁">
+        <div class="book-label">第 17 頁</div>
+        <a class="book-next " href="#page-18" aria-label="下一頁">›</a>
+      </div>
+    </div>
+
+    <div id="page-18" class="book-modal">
+      <a class="book-modal-bg" href="#handbook" aria-label="關閉"></a>
+      <div class="book-modal-inner">
+        <a class="book-close" href="#handbook" aria-label="關閉">×</a>
+        <a class="book-prev " href="#page-17" aria-label="上一頁">‹</a>
+        <img src="assets/pages/18.webp" alt="旅行手冊第 18 頁">
+        <div class="book-label">第 18 頁</div>
+        <a class="book-next " href="#page-19" aria-label="下一頁">›</a>
+      </div>
+    </div>
+
+    <div id="page-19" class="book-modal">
+      <a class="book-modal-bg" href="#handbook" aria-label="關閉"></a>
+      <div class="book-modal-inner">
+        <a class="book-close" href="#handbook" aria-label="關閉">×</a>
+        <a class="book-prev " href="#page-18" aria-label="上一頁">‹</a>
+        <img src="assets/pages/19.webp" alt="旅行手冊第 19 頁">
+        <div class="book-label">第 19 頁</div>
+        <a class="book-next " href="#page-20" aria-label="下一頁">›</a>
+      </div>
+    </div>
+
+    <div id="page-20" class="book-modal">
+      <a class="book-modal-bg" href="#handbook" aria-label="關閉"></a>
+      <div class="book-modal-inner">
+        <a class="book-close" href="#handbook" aria-label="關閉">×</a>
+        <a class="book-prev " href="#page-19" aria-label="上一頁">‹</a>
+        <img src="assets/pages/20.webp" alt="旅行手冊第 20 頁">
+        <div class="book-label">第 20 頁</div>
+        <a class="book-next " href="#page-21" aria-label="下一頁">›</a>
+      </div>
+    </div>
+
+    <div id="page-21" class="book-modal">
+      <a class="book-modal-bg" href="#handbook" aria-label="關閉"></a>
+      <div class="book-modal-inner">
+        <a class="book-close" href="#handbook" aria-label="關閉">×</a>
+        <a class="book-prev " href="#page-20" aria-label="上一頁">‹</a>
+        <img src="assets/pages/21.webp" alt="旅行手冊第 21 頁">
+        <div class="book-label">第 21 頁</div>
+        <a class="book-next " href="#page-22" aria-label="下一頁">›</a>
+      </div>
+    </div>
+
+    <div id="page-22" class="book-modal">
+      <a class="book-modal-bg" href="#handbook" aria-label="關閉"></a>
+      <div class="book-modal-inner">
+        <a class="book-close" href="#handbook" aria-label="關閉">×</a>
+        <a class="book-prev " href="#page-21" aria-label="上一頁">‹</a>
+        <img src="assets/pages/22.webp" alt="旅行手冊第 22 頁">
+        <div class="book-label">第 22 頁</div>
+        <a class="book-next " href="#page-23" aria-label="下一頁">›</a>
+      </div>
+    </div>
+
+    <div id="page-23" class="book-modal">
+      <a class="book-modal-bg" href="#handbook" aria-label="關閉"></a>
+      <div class="book-modal-inner">
+        <a class="book-close" href="#handbook" aria-label="關閉">×</a>
+        <a class="book-prev " href="#page-22" aria-label="上一頁">‹</a>
+        <img src="assets/pages/23.webp" alt="旅行手冊第 23 頁">
+        <div class="book-label">第 23 頁</div>
+        <a class="book-next " href="#page-24" aria-label="下一頁">›</a>
+      </div>
+    </div>
+
+    <div id="page-24" class="book-modal">
+      <a class="book-modal-bg" href="#handbook" aria-label="關閉"></a>
+      <div class="book-modal-inner">
+        <a class="book-close" href="#handbook" aria-label="關閉">×</a>
+        <a class="book-prev " href="#page-23" aria-label="上一頁">‹</a>
+        <img src="assets/pages/24.webp" alt="旅行手冊第 24 頁">
+        <div class="book-label">第 24 頁</div>
+        <a class="book-next " href="#page-25" aria-label="下一頁">›</a>
+      </div>
+    </div>
+
+    <div id="page-25" class="book-modal">
+      <a class="book-modal-bg" href="#handbook" aria-label="關閉"></a>
+      <div class="book-modal-inner">
+        <a class="book-close" href="#handbook" aria-label="關閉">×</a>
+        <a class="book-prev " href="#page-24" aria-label="上一頁">‹</a>
+        <img src="assets/pages/25.webp" alt="旅行手冊第 25 頁">
+        <div class="book-label">第 25 頁</div>
+        <a class="book-next " href="#page-26" aria-label="下一頁">›</a>
+      </div>
+    </div>
+
+    <div id="page-26" class="book-modal">
+      <a class="book-modal-bg" href="#handbook" aria-label="關閉"></a>
+      <div class="book-modal-inner">
+        <a class="book-close" href="#handbook" aria-label="關閉">×</a>
+        <a class="book-prev " href="#page-25" aria-label="上一頁">‹</a>
+        <img src="assets/pages/26.webp" alt="旅行手冊第 26 頁">
+        <div class="book-label">第 26 頁</div>
+        <a class="book-next " href="#page-27" aria-label="下一頁">›</a>
+      </div>
+    </div>
+
+    <div id="page-27" class="book-modal">
+      <a class="book-modal-bg" href="#handbook" aria-label="關閉"></a>
+      <div class="book-modal-inner">
+        <a class="book-close" href="#handbook" aria-label="關閉">×</a>
+        <a class="book-prev " href="#page-26" aria-label="上一頁">‹</a>
+        <img src="assets/pages/27.webp" alt="旅行手冊第 27 頁">
+        <div class="book-label">第 27 頁</div>
+        <a class="book-next " href="#page-28" aria-label="下一頁">›</a>
+      </div>
+    </div>
+
+    <div id="page-28" class="book-modal">
+      <a class="book-modal-bg" href="#handbook" aria-label="關閉"></a>
+      <div class="book-modal-inner">
+        <a class="book-close" href="#handbook" aria-label="關閉">×</a>
+        <a class="book-prev " href="#page-27" aria-label="上一頁">‹</a>
+        <img src="assets/pages/28.webp" alt="旅行手冊第 28 頁">
+        <div class="book-label">第 28 頁</div>
+        <a class="book-next " href="#page-29" aria-label="下一頁">›</a>
+      </div>
+    </div>
+
+    <div id="page-29" class="book-modal">
+      <a class="book-modal-bg" href="#handbook" aria-label="關閉"></a>
+      <div class="book-modal-inner">
+        <a class="book-close" href="#handbook" aria-label="關閉">×</a>
+        <a class="book-prev " href="#page-28" aria-label="上一頁">‹</a>
+        <img src="assets/pages/29.webp" alt="旅行手冊第 29 頁">
+        <div class="book-label">第 29 頁</div>
+        <a class="book-next " href="#page-30" aria-label="下一頁">›</a>
+      </div>
+    </div>
+
+    <div id="page-30" class="book-modal">
+      <a class="book-modal-bg" href="#handbook" aria-label="關閉"></a>
+      <div class="book-modal-inner">
+        <a class="book-close" href="#handbook" aria-label="關閉">×</a>
+        <a class="book-prev " href="#page-29" aria-label="上一頁">‹</a>
+        <img src="assets/pages/30.webp" alt="旅行手冊第 30 頁">
+        <div class="book-label">第 30 頁</div>
+        <a class="book-next " href="#page-31" aria-label="下一頁">›</a>
+      </div>
+    </div>
+
+    <div id="page-31" class="book-modal">
+      <a class="book-modal-bg" href="#handbook" aria-label="關閉"></a>
+      <div class="book-modal-inner">
+        <a class="book-close" href="#handbook" aria-label="關閉">×</a>
+        <a class="book-prev " href="#page-30" aria-label="上一頁">‹</a>
+        <img src="assets/pages/31.webp" alt="旅行手冊第 31 頁">
+        <div class="book-label">第 31 頁</div>
+        <a class="book-next " href="#page-32" aria-label="下一頁">›</a>
+      </div>
+    </div>
+
+    <div id="page-32" class="book-modal">
+      <a class="book-modal-bg" href="#handbook" aria-label="關閉"></a>
+      <div class="book-modal-inner">
+        <a class="book-close" href="#handbook" aria-label="關閉">×</a>
+        <a class="book-prev " href="#page-31" aria-label="上一頁">‹</a>
+        <img src="assets/pages/32.webp" alt="旅行手冊第 32 頁">
+        <div class="book-label">第 32 頁</div>
+        <a class="book-next " href="#page-33" aria-label="下一頁">›</a>
+      </div>
+    </div>
+
+    <div id="page-33" class="book-modal">
+      <a class="book-modal-bg" href="#handbook" aria-label="關閉"></a>
+      <div class="book-modal-inner">
+        <a class="book-close" href="#handbook" aria-label="關閉">×</a>
+        <a class="book-prev " href="#page-32" aria-label="上一頁">‹</a>
+        <img src="assets/pages/33.webp" alt="旅行手冊第 33 頁">
+        <div class="book-label">第 33 頁</div>
+        <a class="book-next " href="#page-34" aria-label="下一頁">›</a>
+      </div>
+    </div>
+
+    <div id="page-34" class="book-modal">
+      <a class="book-modal-bg" href="#handbook" aria-label="關閉"></a>
+      <div class="book-modal-inner">
+        <a class="book-close" href="#handbook" aria-label="關閉">×</a>
+        <a class="book-prev " href="#page-33" aria-label="上一頁">‹</a>
+        <img src="assets/pages/34.webp" alt="旅行手冊第 34 頁">
+        <div class="book-label">第 34 頁</div>
+        <a class="book-next " href="#page-35" aria-label="下一頁">›</a>
+      </div>
+    </div>
+
+    <div id="page-35" class="book-modal">
+      <a class="book-modal-bg" href="#handbook" aria-label="關閉"></a>
+      <div class="book-modal-inner">
+        <a class="book-close" href="#handbook" aria-label="關閉">×</a>
+        <a class="book-prev " href="#page-34" aria-label="上一頁">‹</a>
+        <img src="assets/pages/35.webp" alt="旅行手冊第 35 頁">
+        <div class="book-label">第 35 頁</div>
+        <a class="book-next " href="#page-36" aria-label="下一頁">›</a>
+      </div>
+    </div>
+
+    <div id="page-36" class="book-modal">
+      <a class="book-modal-bg" href="#handbook" aria-label="關閉"></a>
+      <div class="book-modal-inner">
+        <a class="book-close" href="#handbook" aria-label="關閉">×</a>
+        <a class="book-prev " href="#page-35" aria-label="上一頁">‹</a>
+        <img src="assets/pages/36.webp" alt="旅行手冊第 36 頁">
+        <div class="book-label">第 36 頁</div>
+        <a class="book-next " href="#page-37" aria-label="下一頁">›</a>
+      </div>
+    </div>
+
+    <div id="page-37" class="book-modal">
+      <a class="book-modal-bg" href="#handbook" aria-label="關閉"></a>
+      <div class="book-modal-inner">
+        <a class="book-close" href="#handbook" aria-label="關閉">×</a>
+        <a class="book-prev " href="#page-36" aria-label="上一頁">‹</a>
+        <img src="assets/pages/37.webp" alt="旅行手冊第 37 頁">
+        <div class="book-label">第 37 頁</div>
+        <a class="book-next " href="#page-38" aria-label="下一頁">›</a>
+      </div>
+    </div>
+
+    <div id="page-38" class="book-modal">
+      <a class="book-modal-bg" href="#handbook" aria-label="關閉"></a>
+      <div class="book-modal-inner">
+        <a class="book-close" href="#handbook" aria-label="關閉">×</a>
+        <a class="book-prev " href="#page-37" aria-label="上一頁">‹</a>
+        <img src="assets/pages/38.webp" alt="旅行手冊第 38 頁">
+        <div class="book-label">第 38 頁</div>
+        <a class="book-next " href="#page-39" aria-label="下一頁">›</a>
+      </div>
+    </div>
+
+    <div id="page-39" class="book-modal">
+      <a class="book-modal-bg" href="#handbook" aria-label="關閉"></a>
+      <div class="book-modal-inner">
+        <a class="book-close" href="#handbook" aria-label="關閉">×</a>
+        <a class="book-prev " href="#page-38" aria-label="上一頁">‹</a>
+        <img src="assets/pages/39.webp" alt="旅行手冊第 39 頁">
+        <div class="book-label">第 39 頁</div>
+        <a class="book-next " href="#page-40" aria-label="下一頁">›</a>
+      </div>
+    </div>
+
+    <div id="page-40" class="book-modal">
+      <a class="book-modal-bg" href="#handbook" aria-label="關閉"></a>
+      <div class="book-modal-inner">
+        <a class="book-close" href="#handbook" aria-label="關閉">×</a>
+        <a class="book-prev " href="#page-39" aria-label="上一頁">‹</a>
+        <img src="assets/pages/40.webp" alt="旅行手冊第 40 頁">
+        <div class="book-label">第 40 頁</div>
+        <a class="book-next " href="#page-41" aria-label="下一頁">›</a>
+      </div>
+    </div>
+
+    <div id="page-41" class="book-modal">
+      <a class="book-modal-bg" href="#handbook" aria-label="關閉"></a>
+      <div class="book-modal-inner">
+        <a class="book-close" href="#handbook" aria-label="關閉">×</a>
+        <a class="book-prev " href="#page-40" aria-label="上一頁">‹</a>
+        <img src="assets/pages/41.webp" alt="旅行手冊第 41 頁">
+        <div class="book-label">第 41 頁</div>
+        <a class="book-next " href="#page-42" aria-label="下一頁">›</a>
+      </div>
+    </div>
+
+    <div id="page-42" class="book-modal">
+      <a class="book-modal-bg" href="#handbook" aria-label="關閉"></a>
+      <div class="book-modal-inner">
+        <a class="book-close" href="#handbook" aria-label="關閉">×</a>
+        <a class="book-prev " href="#page-41" aria-label="上一頁">‹</a>
+        <img src="assets/pages/42.webp" alt="旅行手冊第 42 頁">
+        <div class="book-label">第 42 頁</div>
+        <a class="book-next " href="#page-43" aria-label="下一頁">›</a>
+      </div>
+    </div>
+
+    <div id="page-43" class="book-modal">
+      <a class="book-modal-bg" href="#handbook" aria-label="關閉"></a>
+      <div class="book-modal-inner">
+        <a class="book-close" href="#handbook" aria-label="關閉">×</a>
+        <a class="book-prev " href="#page-42" aria-label="上一頁">‹</a>
+        <img src="assets/pages/43.webp" alt="旅行手冊第 43 頁">
+        <div class="book-label">第 43 頁</div>
+        <a class="book-next " href="#page-44" aria-label="下一頁">›</a>
+      </div>
+    </div>
+
+    <div id="page-44" class="book-modal">
+      <a class="book-modal-bg" href="#handbook" aria-label="關閉"></a>
+      <div class="book-modal-inner">
+        <a class="book-close" href="#handbook" aria-label="關閉">×</a>
+        <a class="book-prev " href="#page-43" aria-label="上一頁">‹</a>
+        <img src="assets/pages/44.webp" alt="旅行手冊第 44 頁">
+        <div class="book-label">第 44 頁</div>
+        <a class="book-next " href="#page-45" aria-label="下一頁">›</a>
+      </div>
+    </div>
+
+    <div id="page-45" class="book-modal">
+      <a class="book-modal-bg" href="#handbook" aria-label="關閉"></a>
+      <div class="book-modal-inner">
+        <a class="book-close" href="#handbook" aria-label="關閉">×</a>
+        <a class="book-prev " href="#page-44" aria-label="上一頁">‹</a>
+        <img src="assets/pages/45.webp" alt="旅行手冊第 45 頁">
+        <div class="book-label">第 45 頁</div>
+        <a class="book-next " href="#page-46" aria-label="下一頁">›</a>
+      </div>
+    </div>
+
+    <div id="page-46" class="book-modal">
+      <a class="book-modal-bg" href="#handbook" aria-label="關閉"></a>
+      <div class="book-modal-inner">
+        <a class="book-close" href="#handbook" aria-label="關閉">×</a>
+        <a class="book-prev " href="#page-45" aria-label="上一頁">‹</a>
+        <img src="assets/pages/46.webp" alt="旅行手冊第 46 頁">
+        <div class="book-label">第 46 頁</div>
+        <a class="book-next " href="#page-47" aria-label="下一頁">›</a>
+      </div>
+    </div>
+
+    <div id="page-47" class="book-modal">
+      <a class="book-modal-bg" href="#handbook" aria-label="關閉"></a>
+      <div class="book-modal-inner">
+        <a class="book-close" href="#handbook" aria-label="關閉">×</a>
+        <a class="book-prev " href="#page-46" aria-label="上一頁">‹</a>
+        <img src="assets/pages/47.webp" alt="旅行手冊第 47 頁">
+        <div class="book-label">第 47 頁</div>
+        <a class="book-next " href="#page-48" aria-label="下一頁">›</a>
+      </div>
+    </div>
+
+    <div id="page-48" class="book-modal">
+      <a class="book-modal-bg" href="#handbook" aria-label="關閉"></a>
+      <div class="book-modal-inner">
+        <a class="book-close" href="#handbook" aria-label="關閉">×</a>
+        <a class="book-prev " href="#page-47" aria-label="上一頁">‹</a>
+        <img src="assets/pages/48.webp" alt="旅行手冊第 48 頁">
+        <div class="book-label">第 48 頁</div>
+        <a class="book-next " href="#page-49" aria-label="下一頁">›</a>
+      </div>
+    </div>
+
+    <div id="page-49" class="book-modal">
+      <a class="book-modal-bg" href="#handbook" aria-label="關閉"></a>
+      <div class="book-modal-inner">
+        <a class="book-close" href="#handbook" aria-label="關閉">×</a>
+        <a class="book-prev " href="#page-48" aria-label="上一頁">‹</a>
+        <img src="assets/pages/49.webp" alt="旅行手冊第 49 頁">
+        <div class="book-label">第 49 頁</div>
+        <a class="book-next " href="#page-50" aria-label="下一頁">›</a>
+      </div>
+    </div>
+
+    <div id="page-50" class="book-modal">
+      <a class="book-modal-bg" href="#handbook" aria-label="關閉"></a>
+      <div class="book-modal-inner">
+        <a class="book-close" href="#handbook" aria-label="關閉">×</a>
+        <a class="book-prev " href="#page-49" aria-label="上一頁">‹</a>
+        <img src="assets/pages/50.webp" alt="旅行手冊第 50 頁">
+        <div class="book-label">第 50 頁</div>
+        <a class="book-next " href="#page-51" aria-label="下一頁">›</a>
+      </div>
+    </div>
+
+    <div id="page-51" class="book-modal">
+      <a class="book-modal-bg" href="#handbook" aria-label="關閉"></a>
+      <div class="book-modal-inner">
+        <a class="book-close" href="#handbook" aria-label="關閉">×</a>
+        <a class="book-prev " href="#page-50" aria-label="上一頁">‹</a>
+        <img src="assets/pages/51.webp" alt="旅行手冊第 51 頁">
+        <div class="book-label">第 51 頁</div>
+        <a class="book-next " href="#page-52" aria-label="下一頁">›</a>
+      </div>
+    </div>
+
+    <div id="page-52" class="book-modal">
+      <a class="book-modal-bg" href="#handbook" aria-label="關閉"></a>
+      <div class="book-modal-inner">
+        <a class="book-close" href="#handbook" aria-label="關閉">×</a>
+        <a class="book-prev " href="#page-51" aria-label="上一頁">‹</a>
+        <img src="assets/pages/52.webp" alt="旅行手冊第 52 頁">
+        <div class="book-label">第 52 頁</div>
+        <a class="book-next " href="#page-53" aria-label="下一頁">›</a>
+      </div>
+    </div>
+
+    <div id="page-53" class="book-modal">
+      <a class="book-modal-bg" href="#handbook" aria-label="關閉"></a>
+      <div class="book-modal-inner">
+        <a class="book-close" href="#handbook" aria-label="關閉">×</a>
+        <a class="book-prev " href="#page-52" aria-label="上一頁">‹</a>
+        <img src="assets/pages/53.webp" alt="旅行手冊第 53 頁">
+        <div class="book-label">第 53 頁</div>
+        <a class="book-next " href="#page-54" aria-label="下一頁">›</a>
+      </div>
+    </div>
+
+    <div id="page-54" class="book-modal">
+      <a class="book-modal-bg" href="#handbook" aria-label="關閉"></a>
+      <div class="book-modal-inner">
+        <a class="book-close" href="#handbook" aria-label="關閉">×</a>
+        <a class="book-prev " href="#page-53" aria-label="上一頁">‹</a>
+        <img src="assets/pages/54.webp" alt="旅行手冊第 54 頁">
+        <div class="book-label">第 54 頁</div>
+        <a class="book-next " href="#page-55" aria-label="下一頁">›</a>
+      </div>
+    </div>
+
+    <div id="page-55" class="book-modal">
+      <a class="book-modal-bg" href="#handbook" aria-label="關閉"></a>
+      <div class="book-modal-inner">
+        <a class="book-close" href="#handbook" aria-label="關閉">×</a>
+        <a class="book-prev " href="#page-54" aria-label="上一頁">‹</a>
+        <img src="assets/pages/55.webp" alt="旅行手冊第 55 頁">
+        <div class="book-label">第 55 頁</div>
+        <a class="book-next " href="#page-56" aria-label="下一頁">›</a>
+      </div>
+    </div>
+
+    <div id="page-56" class="book-modal">
+      <a class="book-modal-bg" href="#handbook" aria-label="關閉"></a>
+      <div class="book-modal-inner">
+        <a class="book-close" href="#handbook" aria-label="關閉">×</a>
+        <a class="book-prev " href="#page-55" aria-label="上一頁">‹</a>
+        <img src="assets/pages/56.webp" alt="旅行手冊第 56 頁">
+        <div class="book-label">第 56 頁</div>
+        <a class="book-next " href="#page-57" aria-label="下一頁">›</a>
+      </div>
+    </div>
+
+    <div id="page-57" class="book-modal">
+      <a class="book-modal-bg" href="#handbook" aria-label="關閉"></a>
+      <div class="book-modal-inner">
+        <a class="book-close" href="#handbook" aria-label="關閉">×</a>
+        <a class="book-prev " href="#page-56" aria-label="上一頁">‹</a>
+        <img src="assets/pages/57.webp" alt="旅行手冊第 57 頁">
+        <div class="book-label">第 57 頁</div>
+        <a class="book-next " href="#page-58" aria-label="下一頁">›</a>
+      </div>
+    </div>
+
+    <div id="page-58" class="book-modal">
+      <a class="book-modal-bg" href="#handbook" aria-label="關閉"></a>
+      <div class="book-modal-inner">
+        <a class="book-close" href="#handbook" aria-label="關閉">×</a>
+        <a class="book-prev " href="#page-57" aria-label="上一頁">‹</a>
+        <img src="assets/pages/58.webp" alt="旅行手冊第 58 頁">
+        <div class="book-label">第 58 頁</div>
+        <a class="book-next " href="#page-59" aria-label="下一頁">›</a>
+      </div>
+    </div>
+
+    <div id="page-59" class="book-modal">
+      <a class="book-modal-bg" href="#handbook" aria-label="關閉"></a>
+      <div class="book-modal-inner">
+        <a class="book-close" href="#handbook" aria-label="關閉">×</a>
+        <a class="book-prev " href="#page-58" aria-label="上一頁">‹</a>
+        <img src="assets/pages/59.webp" alt="旅行手冊第 59 頁">
+        <div class="book-label">第 59 頁</div>
+        <a class="book-next " href="#page-60" aria-label="下一頁">›</a>
+      </div>
+    </div>
+
+    <div id="page-60" class="book-modal">
+      <a class="book-modal-bg" href="#handbook" aria-label="關閉"></a>
+      <div class="book-modal-inner">
+        <a class="book-close" href="#handbook" aria-label="關閉">×</a>
+        <a class="book-prev " href="#page-59" aria-label="上一頁">‹</a>
+        <img src="assets/pages/60.webp" alt="旅行手冊第 60 頁">
+        <div class="book-label">第 60 頁</div>
+        <a class="book-next disabled" href="#page-60" aria-label="下一頁">›</a>
+      </div>
+    </div>
+<script src="app.js"></script>
+</body>
+</html>
