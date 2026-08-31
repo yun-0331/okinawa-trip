@@ -51,6 +51,55 @@
 }
 </style>
 
+
+<style id="okinawa-today-route-style">
+.route-section-title{margin-top:18px}
+.route-day-badge{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:62px;padding:7px 11px;border-radius:999px;
+  background:#F7C6D9;color:#6f5963;font-size:12px;font-weight:900
+}
+.route-card{
+  background:linear-gradient(145deg,rgba(255,255,255,.94),rgba(207,193,244,.20));
+  border:1px solid rgba(207,193,244,.48);
+  border-radius:24px;padding:16px;
+  box-shadow:0 10px 28px rgba(84,111,132,.09)
+}
+.route-loading,.route-offtrip{text-align:center;padding:18px 8px;color:#756b76}
+.route-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:12px}
+.route-head h3{margin:0;font-size:18px}
+.route-head p{margin:4px 0 0;color:#8b8190;font-size:12px}
+.route-progress{font-size:12px;font-weight:800;color:#7b6e7a;white-space:nowrap}
+.route-progress-bar{height:7px;background:rgba(207,193,244,.30);border-radius:999px;overflow:hidden;margin:0 0 14px}
+.route-progress-fill{height:100%;background:#F28C9A;border-radius:999px;transition:width .25s ease}
+.route-stop{display:grid;grid-template-columns:32px 1fr auto;gap:9px;align-items:center;padding:11px 0;border-bottom:1px dashed rgba(120,110,125,.16)}
+.route-stop:last-of-type{border-bottom:0}
+.route-check{
+  width:30px;height:30px;border-radius:50%;border:1px solid rgba(119,200,233,.55);
+  background:white;font-weight:900;font-size:16px;cursor:pointer
+}
+.route-stop.done .route-check{background:#77C8E9;color:white}
+.route-stop.done .route-stop-name{text-decoration:line-through;opacity:.58}
+.route-stop-time{font-size:11px;color:#9a8f9a;margin-bottom:2px}
+.route-stop-name{font-weight:900;font-size:14px}
+.route-nav{
+  text-decoration:none;white-space:nowrap;padding:7px 9px;border-radius:12px;
+  background:rgba(119,200,233,.18);color:#536c78;font-size:12px;font-weight:900
+}
+.route-note{margin-top:11px;font-size:11px;color:#968b96;text-align:center}
+.route-days{display:flex;gap:6px;overflow-x:auto;margin-top:13px;padding-bottom:2px}
+.route-day-btn{
+  border:0;background:rgba(247,198,217,.32);padding:7px 10px;border-radius:999px;
+  font-size:11px;font-weight:800;color:#76636c;white-space:nowrap;cursor:pointer
+}
+.route-day-btn.active{background:#F28C9A;color:white}
+@media(max-width:420px){
+  .route-card{padding:14px}
+  .route-stop{grid-template-columns:30px 1fr auto;gap:7px}
+  .route-nav{padding:7px 8px}
+}
+</style>
+
 </head>
 <body>
 <div class="app-shell">
@@ -90,6 +139,16 @@
       </div>
       <div class="weather-card" id="weatherCard">
         <div class="weather-loading">🌤️ 正在讀取沖繩天氣…</div>
+      </div>
+
+
+      <!-- Today route navigation -->
+      <div class="section-title route-section-title">
+        <div><small>TODAY ROUTE</small><h2>📍 今日行程導航</h2></div>
+        <span class="route-day-badge" id="routeDayBadge">旅程前</span>
+      </div>
+      <div class="route-card" id="todayRouteCard">
+        <div class="route-loading">🌺 正在整理今日行程…</div>
       </div>
 
       <div class="flight-strip">
@@ -1145,6 +1204,125 @@
 
   if(refresh) refresh.addEventListener("click", loadWeather);
   loadWeather();
+})();
+</script>
+
+
+<script id="okinawa-today-route-script">
+(function(){
+  const card = document.getElementById("todayRouteCard");
+  const badge = document.getElementById("routeDayBadge");
+  if(!card) return;
+
+  const routes = {
+    1:{date:"2026-10-26", title:"抵達沖繩・中南部自駕", stops:[
+      ["10:50","抵達那霸機場","那覇空港"],
+      ["12:00","OTS 租車","OTSレンタカー 臨空豊崎営業所"],
+      ["12:30","糸滿魚市場","糸満お魚センター"],
+      ["14:00","Costco 沖繩南城倉庫店","コストコホールセール 沖縄南城倉庫店"],
+      ["16:30","AEON MALL Okinawa Rycom","イオンモール沖縄ライカム"],
+      ["21:00","Sunset Resort Canphou","Sunset Resort Canphou"]
+    ]},
+    2:{date:"2026-10-27", title:"美麗海・古宇利島・名護", stops:[
+      ["10:00","出發","Sunset Resort Canphou"],
+      ["","美麗海水族館","沖縄美ら海水族館"],
+      ["11:00","海豚表演","オキちゃん劇場"],
+      ["15:00","鯨鯊餵食","沖縄美ら海水族館"],
+      ["16:00","Kouri Shrimp","KOURI SHRIMP"],
+      ["17:00","古宇利島 Heart Rock","ハートロック"],
+      ["18:00","名護 AEON／唐吉訶德／夜釣","イオン名護店"],
+      ["","回住宿","Sunset Resort Canphou"]
+    ]},
+    3:{date:"2026-10-28", title:"瀨底島・JUNGLIA・PARCO", stops:[
+      ["09:40","退房出發","Sunset Resort Canphou"],
+      ["10:30","沖縄マリンスタジオ・玻璃獨木舟","沖縄マリンスタジオ"],
+      ["11:30","JUNGLIA OKINAWA","JUNGLIA OKINAWA"],
+      ["17:30","PARCO CITY","サンエー浦添西海岸 PARCO CITY"],
+      ["","HOTEL GRACERY NAHA","ホテルグレイスリー那覇"]
+    ]},
+    4:{date:"2026-10-29", title:"水族館・海灘・瀨長島", stops:[
+      ["10:00","iias 沖繩豐崎／DMM Kariyushi Aquarium","DMMかりゆし水族館"],
+      ["14:00","Chura SUN Beach","美らSUNビーチ"],
+      ["15:00","瀨長島・Umikaji Terrace","瀬長島ウミカジテラス"],
+      ["18:30","OTS 還車","OTSレンタカー"],
+      ["","HOTEL GRACERY NAHA","ホテルグレイスリー那覇"]
+    ]},
+    5:{date:"2026-10-30", title:"那霸市區散策", stops:[
+      ["","達摩寺","達磨寺 沖縄"],
+      ["","泊港漁市場","泊いゆまち"],
+      ["","波上宮","波上宮"],
+      ["","奧武山公園","奥武山公園"],
+      ["","沖繩 ちゅらさん6","沖縄 ちゅらさん6"],
+      ["","HOTEL GRACERY NAHA","ホテルグレイスリー那覇"]
+    ]},
+    6:{date:"2026-10-31", title:"國際通・回台灣", stops:[
+      ["","飯店退房","ホテルグレイスリー那覇"],
+      ["","國際通","国際通り 那覇"],
+      ["","前往那霸機場","那覇空港"],
+      ["20:25","CI123 那霸 → 台北","那覇空港"]
+    ]}
+  };
+
+  const KEY = "okinawa_route_done_v1";
+  let done = {};
+  try{ done = JSON.parse(localStorage.getItem(KEY)||"{}"); }catch(e){ done = {}; }
+
+  function japanDate(){
+    const parts = new Intl.DateTimeFormat("en-CA",{timeZone:"Asia/Tokyo",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(new Date());
+    const o={}; parts.forEach(p=>o[p.type]=p.value);
+    return `${o.year}-${o.month}-${o.day}`;
+  }
+  function actualDay(){
+    const d = japanDate();
+    for(let i=1;i<=6;i++) if(routes[i].date===d) return i;
+    return 0;
+  }
+  function mapUrl(q){
+    return "https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(q);
+  }
+  function save(){ localStorage.setItem(KEY,JSON.stringify(done)); }
+
+  function render(day){
+    const r=routes[day];
+    if(!r) return;
+    badge.textContent="Day "+day;
+    let completed=0;
+    const stopHtml=r.stops.map((s,i)=>{
+      const k="d"+day+"s"+i;
+      const isDone=!!done[k];
+      if(isDone) completed++;
+      return `<div class="route-stop ${isDone?"done":""}">
+        <button class="route-check" type="button" data-key="${k}" aria-label="標記完成">${isDone?"✓":"○"}</button>
+        <div><div class="route-stop-time">${s[0]||"行程"}</div><div class="route-stop-name">${s[1]}</div></div>
+        <a class="route-nav" href="${mapUrl(s[2])}" target="_blank" rel="noopener">📍導航</a>
+      </div>`;
+    }).join("");
+    const pct=Math.round(completed/r.stops.length*100);
+    card.innerHTML=`<div class="route-head"><div><h3>Day ${day}｜${r.title}</h3><p>${r.date.replaceAll("-"," / ")}</p></div><div class="route-progress">${completed}/${r.stops.length} 完成</div></div>
+      <div class="route-progress-bar"><div class="route-progress-fill" style="width:${pct}%"></div></div>
+      ${stopHtml}
+      <div class="route-days">${[1,2,3,4,5,6].map(n=>`<button type="button" class="route-day-btn ${n===day?"active":""}" data-day="${n}">Day ${n}</button>`).join("")}</div>
+      <div class="route-note">✓ 完成狀態會保存在這支手機裡・導航會開啟 Google Maps</div>`;
+
+    card.querySelectorAll(".route-check").forEach(btn=>{
+      btn.addEventListener("click",()=>{
+        done[btn.dataset.key]=!done[btn.dataset.key]; save(); render(day);
+      });
+    });
+    card.querySelectorAll(".route-day-btn").forEach(btn=>{
+      btn.addEventListener("click",()=>render(Number(btn.dataset.day)));
+    });
+  }
+
+  const today=actualDay();
+  if(today){
+    render(today);
+  }else{
+    badge.textContent="預覽";
+    render(1);
+    const note=card.querySelector(".route-note");
+    if(note) note.textContent="目前非旅遊日期，先顯示 Day 1 預覽；可切換 Day 1～6 查看。";
+  }
 })();
 </script>
 
