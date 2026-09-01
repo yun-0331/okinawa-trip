@@ -603,6 +603,51 @@ main,.app-shell,.app{
 }
 </style>
 
+
+<style id="fishing-map-standalone-fix">
+#fishing .fishing-intro-card{
+  padding:18px 16px !important;
+  overflow:visible !important;
+}
+#fishing .fishing-intro-card .hint{
+  display:block !important;
+  position:static !important;
+  margin:8px 0 0 !important;
+  padding:0 !important;
+  line-height:1.7 !important;
+}
+#fishing .fishing-map-card{
+  padding:10px !important;
+  margin-top:10px !important;
+  overflow:hidden !important;
+}
+#fishing .fishing-map-btn{
+  display:flex !important;
+  position:static !important;
+  width:100% !important;
+  min-height:54px !important;
+  box-sizing:border-box !important;
+  align-items:center !important;
+  justify-content:space-between !important;
+  gap:10px !important;
+  margin:0 !important;
+  padding:14px 16px !important;
+  border-radius:18px !important;
+  text-decoration:none !important;
+  background:linear-gradient(135deg,#F28C9A,#F7A0B3) !important;
+  color:#fff !important;
+  font-size:16px !important;
+  line-height:1.35 !important;
+  box-shadow:none !important;
+  transform:none !important;
+}
+#fishing .fishing-map-btn b{
+  flex:1;
+  text-align:center;
+  color:#fff !important;
+}
+</style>
+
 </head>
 <body>
 <div class="app-shell">
@@ -904,7 +949,18 @@ main,.app-shell,.app{
 
     <section id="fishing" class="view">
 <div class="page-head"><div><small>NAGO NIGHT FISHING</small><h2>🎣 名護夜釣攻略</h2></div></div>
-<div class="card"><b>10 月名護夜釣</b><p class="hint">主場：名護漁港｜建議抓滿潮前後約 2 小時，實際潮汐以當天資料為準。</p><a class="primary" href="https://www.google.com/maps/search/?api=1&query=%E5%90%8D%E8%AD%B7%E6%BC%81%E6%B8%AF" target="_blank">📍 Google Maps・名護漁港</a></div>
+<div class="card fishing-intro-card">
+  <b>10 月名護夜釣</b>
+  <p class="hint">主場：名護漁港｜建議抓滿潮前後約 2 小時，實際潮汐以當天資料為準。</p>
+</div>
+
+<div class="card fishing-map-card">
+  <a class="fishing-map-btn" href="https://www.google.com/maps/search/?api=1&query=%E5%90%8D%E8%AD%B7%E6%BC%81%E6%B8%AF" target="_blank" rel="noopener">
+    <span>📍</span>
+    <b>Google Maps・名護漁港</b>
+    <span>›</span>
+  </a>
+</div>
 <div class="card"><h3>📍 港內 3 個釣點</h3><p><b>① 港內常夜燈區</b><br><small>有燈、魚況較多，較適合第一次夜釣。</small></p><p><b>② 外側防波堤轉角</b><br><small>水流較快，有機會遇到較大的魚；注意安全。</small></p><p><b>③ 港內船道旁</b><br><small>魚種較多，但要避開船隻進出，不影響作業。</small></p></div>
 <div class="card"><h3>🐟 10 月可能遇到</h3><p><b>石斑（ミーバイ）／笛鯛（タマン）</b>　沉底蝦餌</p><p><b>牛港鰺（ガーラ）</b>　路亞</p><p><b>竹筴魚（アジ）</b>　Sabiki 串鉤</p><p><b>白烏賊（アオリイカ）</b>　木蝦 Egi；傍晚到夜間可留意。</p></div>
 <div class="card"><h3>🪝 懶人釣組</h3><p><b>沉底蝦餌</b><br><small>PE 1.5–2 號｜鉛 8–12 號｜子線 4–5 號／60–80 cm｜伊勢尼 6–8 號｜冷凍蝦或活蝦</small></p><p><b>Sabiki</b><br><small>搭配約 15–20 g 鉛。</small></p><p><b>木蝦 Egi</b><br><small>3.0–3.5 號；粉紅、橘、夜光色系。</small></p><p><b>魚餌</b><br><small>冷凍蝦、活蝦、南極蝦；釣烏賊用 Egi。</small></p></div>
