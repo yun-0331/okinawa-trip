@@ -517,6 +517,30 @@ main,.app-shell,.app{
 #dayHeadline{scroll-margin-top:18px;}
 </style>
 
+
+<style id="fishing-page-visual-fix">
+#fishing .card:first-of-type{
+  padding-bottom:18px !important;
+}
+#fishing .card:first-of-type .hint{
+  display:block !important;
+  margin:8px 0 14px !important;
+  line-height:1.65 !important;
+  position:static !important;
+}
+#fishing .card:first-of-type .primary{
+  display:inline-flex !important;
+  align-items:center;
+  justify-content:center;
+  position:static !important;
+  margin-top:2px !important;
+  white-space:normal !important;
+  line-height:1.35 !important;
+  max-width:100%;
+  box-sizing:border-box;
+}
+</style>
+
 </head>
 <body>
 <div class="app-shell">
@@ -925,7 +949,8 @@ main,.app-shell,.app{
       <button data-nav="stay"><span>🏨</span>住宿</button>
       <button data-nav="shopping"><span>🛍️</span>購物</button>
       <button data-nav="expenses"><span>💰</span>花費</button>
-      <button data-nav="converter"><span>💱</span>換算</button>\n      <button data-nav="fishing"><span>🎣</span>釣魚</button>
+      <button data-nav="converter"><span>💱</span>換算</button>
+      <button data-nav="fishing"><span>🎣</span>釣魚</button>
       <button class="nav-item jp-nav-item" type="button" data-target-page="japanese" aria-label="日文"><span class="nav-ico">🇯🇵</span><span>日文</span></button>
       <button data-nav="handbook"><span>📖</span>手冊</button>
     </nav>
