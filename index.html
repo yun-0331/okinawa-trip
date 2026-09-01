@@ -1585,6 +1585,58 @@ main,.app-shell,.app{
     </div>
 <script src="app.js"></script>
 
+<script id="parco-okinogu-itinerary-upgrade">
+(function(){
+  try{
+    if(typeof days==="undefined") return;
+
+    const d3=days.find(d=>d.day===3);
+    if(d3){
+      const parco=d3.stops.find(s=>s.name==="PARCO CITY");
+      if(parco){
+        parco.desc='購物、晚餐與伴手禮。<br><b>🛍 THANK YOU MART 浦添 PARCO CITY 店</b><br>1F・10:00–22:00｜主打 390 日圓價位的卡通聯名雜貨，可留意三麗鷗、排球少年等系列；實際商品與庫存以現場為準。';
+      }
+    }
+
+    const d5=days.find(d=>d.day===5);
+    if(d5){
+      d5.summary="達摩寺 → 泊港漁市場 → 波上宮 → 奧武山公園 → 沖宮 → 沖繩ちゅらさん6 → HOTEL GRACERY NAHA";
+      const hasOkinogu=d5.stops.some(s=>s.name==="沖宮");
+      if(!hasOkinogu){
+        const idx=d5.stops.findIndex(s=>s.name==="奧武山公園");
+        const okinogu={
+          time:"下午",
+          name:"沖宮",
+          desc:"位於奧武山公園內。地址：沖縄県那覇市奥武山町44。御守種類豐富，可以和奧武山公園一起順遊。",
+          map:"沖宮 沖縄県那覇市奥武山町44",
+          type:"spot"
+        };
+        d5.stops.splice(idx>=0?idx+1:d5.stops.length,0,okinogu);
+      }
+    }
+
+    // app.js 已先畫過畫面，這裡同步刷新六天摘要與目前詳細行程
+    const cards=document.querySelectorAll("#dayOverview .day-card");
+    if(cards[2] && d3){
+      const p=cards[2].querySelector("p");
+      if(p) p.textContent=d3.summary;
+    }
+    if(cards[4] && d5){
+      const p=cards[4].querySelector("p");
+      if(p) p.textContent=d5.summary;
+    }
+
+    if(typeof selectDay==="function"){
+      const current=(typeof selectedDay!=="undefined" ? selectedDay : 1);
+      selectDay(current);
+    }
+  }catch(e){
+    console.warn("PARCO / 沖宮資料更新失敗",e);
+  }
+})();
+</script>
+
+
 <script>
 /* Expense recovery v1 - independent from app.js */
 (function () {
@@ -1811,6 +1863,7 @@ main,.app-shell,.app{
       ["","泊港漁市場","泊いゆまち"],
       ["","波上宮","波上宮"],
       ["","奧武山公園","奥武山公園"],
+       ["","沖宮","沖宮 沖縄県那覇市奥武山町44"],
       ["","沖繩 ちゅらさん6","沖縄 ちゅらさん6"],
       ["","HOTEL GRACERY NAHA","ホテルグレイスリー那覇"]
     ]},
