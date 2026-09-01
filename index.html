@@ -1772,6 +1772,15 @@ main,.app-shell,.app{
   try{
     if(typeof days==="undefined") return;
 
+    const d1=days.find(d=>d.day===1);
+    if(d1){
+      const rycom=d1.stops.find(s=>/AEON|Rycom|ライカム/i.test(s.name||""));
+      if(rycom){
+        const owalaInfo='<br><b>🥤 MURASAKI SPORTS AEON MALL 沖繩 Rycom 店</b><br>Owala 官方販售店，可留意 FreeSip／FreeSip Twist 系列；實際款式、顏色與庫存以現場為準。';
+        if(!(rycom.desc||"").includes("MURASAKI SPORTS")) rycom.desc=(rycom.desc||"")+owalaInfo;
+      }
+    }
+
     const d3=days.find(d=>d.day===3);
     if(d3){
       const parco=d3.stops.find(s=>s.name==="PARCO CITY");
