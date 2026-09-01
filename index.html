@@ -548,6 +548,61 @@ main,.app-shell,.app{
 }
 </style>
 
+
+<style id="nago-tide-style">
+#nagoTideCard .tide-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin:12px 0;
+}
+#nagoTideCard .tide-box{
+  padding:13px 12px;
+  border-radius:16px;
+  background:rgba(119,200,233,.13);
+  border:1px solid rgba(119,200,233,.22);
+}
+#nagoTideCard .tide-box small{
+  display:block;
+  color:#8c8490;
+  margin-bottom:5px;
+  font-weight:800;
+}
+#nagoTideCard .tide-box strong{
+  font-size:21px;
+  color:#4f4a55;
+}
+#nagoTideCard .tide-recommend{
+  padding:14px;
+  border-radius:16px;
+  background:linear-gradient(135deg,rgba(247,198,217,.24),rgba(207,193,244,.22));
+  margin-bottom:10px;
+}
+#nagoTideCard .tide-recommend small,
+#nagoTideCard .tide-recommend span{
+  display:block;
+}
+#nagoTideCard .tide-recommend b{
+  display:block;
+  font-size:18px;
+  margin:4px 0;
+}
+#nagoTideCard .tide-recommend span{
+  color:#8d838d;
+  font-size:11px;
+}
+#nagoTideCard .tide-meta{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px 14px;
+  color:#817985;
+  font-size:12px;
+}
+#nagoTideCard #refreshTideBtn{
+  width:100%;
+}
+</style>
+
 </head>
 <body>
 <div class="app-shell">
@@ -853,7 +908,41 @@ main,.app-shell,.app{
 <div class="card"><h3>📍 港內 3 個釣點</h3><p><b>① 港內常夜燈區</b><br><small>有燈、魚況較多，較適合第一次夜釣。</small></p><p><b>② 外側防波堤轉角</b><br><small>水流較快，有機會遇到較大的魚；注意安全。</small></p><p><b>③ 港內船道旁</b><br><small>魚種較多，但要避開船隻進出，不影響作業。</small></p></div>
 <div class="card"><h3>🐟 10 月可能遇到</h3><p><b>石斑（ミーバイ）／笛鯛（タマン）</b>　沉底蝦餌</p><p><b>牛港鰺（ガーラ）</b>　路亞</p><p><b>竹筴魚（アジ）</b>　Sabiki 串鉤</p><p><b>白烏賊（アオリイカ）</b>　木蝦 Egi；傍晚到夜間可留意。</p></div>
 <div class="card"><h3>🪝 懶人釣組</h3><p><b>沉底蝦餌</b><br><small>PE 1.5–2 號｜鉛 8–12 號｜子線 4–5 號／60–80 cm｜伊勢尼 6–8 號｜冷凍蝦或活蝦</small></p><p><b>Sabiki</b><br><small>搭配約 15–20 g 鉛。</small></p><p><b>木蝦 Egi</b><br><small>3.0–3.5 號；粉紅、橘、夜光色系。</small></p><p><b>魚餌</b><br><small>冷凍蝦、活蝦、南極蝦；釣烏賊用 Egi。</small></p></div>
-<div class="card"><h3>🌊 時間怎麼抓</h3><p>優先抓 <b>滿潮前後約 2 小時</b>。例如滿潮若是 19:30，可先抓約 17:30–21:30。</p><p class="hint">這是抓時間的方法，不代表旅行當天一定是 19:30 滿潮；出發前再看當日潮汐。</p></div>
+
+<div class="card" id="nagoTideCard">
+  <h3>🌊 今日潮汐｜名護漁港</h3>
+  <div id="tideStatus" class="hint">正在抓取今日潮汐資料…</div>
+
+  <div id="tideData" style="display:none">
+    <div class="tide-grid">
+      <div class="tide-box">
+        <small>📈 滿潮</small>
+        <strong id="highTideText">--:--</strong>
+      </div>
+      <div class="tide-box">
+        <small>📉 乾潮</small>
+        <strong id="lowTideText">--:--</strong>
+      </div>
+    </div>
+
+    <div class="tide-recommend">
+      <small>🎣 建議釣魚時段</small>
+      <b id="tideRecommendText">--:-- ～ --:--</b>
+      <span>以滿潮前後約 2 小時作為參考</span>
+    </div>
+
+    <div class="tide-meta">
+      <span>🌊 浪高：約 <b id="waveHeightText">--</b> m</span>
+      <span>🕘 更新：<b id="tideUpdatedText">--:--</b></span>
+    </div>
+  </div>
+
+  <p class="hint" style="margin-top:10px">
+    潮汐為名護附近海域的模型預測，適合安排行程與釣魚時段參考；實際海況仍以現場為準。
+  </p>
+  <button type="button" id="refreshTideBtn" class="soft-mini" style="margin-top:6px">🔄 重新更新</button>
+</div>
+
 <div class="card"><h3>🛒 附近釣具店</h3><p><b>Fishing Step 名護店</b><br><small>06:00–22:00｜0980-53-3007</small><br><a href="https://www.google.com/maps/search/?api=1&query=Fishing+Step+Nago" target="_blank">📍 Google Maps</a></p><p><b>Sealand 名護店</b><br><small>07:00–21:00｜0980-54-4075</small><br><a href="https://www.google.com/maps/search/?api=1&query=Sealand+Nago" target="_blank">📍 Google Maps</a></p><p><b>Motobu Fishing Gear</b><br><small>07:00–19:00｜0980-47-4495</small><br><a href="https://www.google.com/maps/search/?api=1&query=Motobu+Fishing+Gear+Okinawa" target="_blank">📍 Google Maps</a></p></div>
 <div class="card"><h3>🎒 夜釣出發前</h3><p>☐ 釣竿／釣組　☐ 魚餌　☐ 手電筒／頭燈　☐ 飲用水　☐ 毛巾　☐ 垃圾袋</p><p class="hint">港區以現場告示與管理規定為準；避開作業區、船道與禁止進入區域，夜間注意腳下與海邊安全。</p></div>
 </section>
@@ -2276,6 +2365,129 @@ document.addEventListener("click", function(e){
       if(target) target.scrollIntoView({behavior:"smooth",block:"start"});
     },80);
   }, true);
+})();
+</script>
+
+
+<script id="nago-tide-live">
+(function(){
+  const LAT = 26.591;
+  const LON = 127.978;
+
+  function japanDateString(){
+    const parts = new Intl.DateTimeFormat("en-CA",{
+      timeZone:"Asia/Tokyo",year:"numeric",month:"2-digit",day:"2-digit"
+    }).formatToParts(new Date());
+    const o={}; parts.forEach(p=>o[p.type]=p.value);
+    return `${o.year}-${o.month}-${o.day}`;
+  }
+
+  function hhmm(s){
+    return String(s || "").slice(11,16);
+  }
+
+  function clampTime(hour, delta){
+    let h = hour + delta;
+    if(h < 0) h = 0;
+    if(h > 23) h = 23;
+    return String(h).padStart(2,"0") + ":00";
+  }
+
+  function localExtrema(rows){
+    const highs=[], lows=[];
+    for(let i=1;i<rows.length-1;i++){
+      const a=rows[i-1].level, b=rows[i].level, c=rows[i+1].level;
+      if(!Number.isFinite(a)||!Number.isFinite(b)||!Number.isFinite(c)) continue;
+      if(b>=a && b>c) highs.push(rows[i]);
+      if(b<=a && b<c) lows.push(rows[i]);
+    }
+    return {highs,lows};
+  }
+
+  async function loadTide(){
+    const status=document.getElementById("tideStatus");
+    const wrap=document.getElementById("tideData");
+    if(!status || !wrap) return;
+
+    status.textContent="正在抓取今日潮汐資料…";
+    wrap.style.display="none";
+
+    try{
+      const url =
+        `https://marine-api.open-meteo.com/v1/marine?latitude=${LAT}&longitude=${LON}` +
+        `&hourly=sea_level_height_msl,wave_height&timezone=Asia%2FTokyo&forecast_days=2`;
+
+      const r=await fetch(url,{cache:"no-store"});
+      if(!r.ok) throw new Error("HTTP "+r.status);
+      const data=await r.json();
+
+      const times=data.hourly?.time || [];
+      const levels=data.hourly?.sea_level_height_msl || [];
+      const waves=data.hourly?.wave_height || [];
+      const today=japanDateString();
+
+      const rows=[];
+      for(let i=0;i<times.length;i++){
+        if(String(times[i]).startsWith(today)){
+          rows.push({
+            time:times[i],
+            level:Number(levels[i]),
+            wave:Number(waves[i])
+          });
+        }
+      }
+      if(rows.length<3) throw new Error("no tide rows");
+
+      const {highs,lows}=localExtrema(rows);
+
+      // Fallback to absolute max/min if local extrema are not available
+      const highest = highs.length
+        ? highs.reduce((a,b)=>b.level>a.level?b:a)
+        : rows.reduce((a,b)=>b.level>a.level?b:a);
+      const lowest = lows.length
+        ? lows.reduce((a,b)=>b.level<a.level?b:a)
+        : rows.reduce((a,b)=>b.level<a.level?b:a);
+
+      const highText = highs.length
+        ? highs.slice(0,2).map(x=>hhmm(x.time)).join("・")
+        : hhmm(highest.time);
+      const lowText = lows.length
+        ? lows.slice(0,2).map(x=>hhmm(x.time)).join("・")
+        : hhmm(lowest.time);
+
+      const highHour = parseInt(hhmm(highest.time).slice(0,2),10);
+      const rec = `${clampTime(highHour,-2)} ～ ${clampTime(highHour,2)}`;
+
+      const validWaves=rows.map(x=>x.wave).filter(Number.isFinite);
+      const avgWave=validWaves.length
+        ? validWaves.reduce((a,b)=>a+b,0)/validWaves.length
+        : NaN;
+
+      document.getElementById("highTideText").textContent=highText;
+      document.getElementById("lowTideText").textContent=lowText;
+      document.getElementById("tideRecommendText").textContent=rec;
+      document.getElementById("waveHeightText").textContent=
+        Number.isFinite(avgWave)?avgWave.toFixed(1):"--";
+
+      const nowJP=new Intl.DateTimeFormat("zh-TW",{
+        timeZone:"Asia/Tokyo",hour:"2-digit",minute:"2-digit",hour12:false
+      }).format(new Date());
+      document.getElementById("tideUpdatedText").textContent=nowJP;
+
+      status.textContent="已更新今日潮汐（日本時間）";
+      wrap.style.display="block";
+    }catch(e){
+      status.textContent="目前無法取得即時潮汐，請稍後再試。";
+      wrap.style.display="none";
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded",loadTide);
+  document.addEventListener("click",function(e){
+    if(e.target.closest("#refreshTideBtn")) loadTide();
+    const fishingNav=e.target.closest('[data-nav="fishing"]');
+    if(fishingNav) setTimeout(loadTide,250);
+  });
 })();
 </script>
 
