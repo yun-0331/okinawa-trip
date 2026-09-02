@@ -1772,6 +1772,16 @@ main,.app-shell,.app{
   try{
     if(typeof days==="undefined") return;
 
+    const day1CostcoPatch=days.find(d=>d.day===1);
+    if(day1CostcoPatch){
+      const costco=day1CostcoPatch.stops.find(s=>/Costco|好市多|コストコ/i.test(s.name||""));
+      if(costco){
+        if(!/可去可不去/.test(costco.name||"")) costco.name=(costco.name||"Costco")+"（可去可不去）";
+        const note="<br><b>💡 備註：可去可不去</b>｜當天時間不夠可以直接略過，不影響後續行程。";
+        if(!(costco.desc||"").includes("可去可不去")) costco.desc=(costco.desc||"")+note;
+      }
+    }
+
     const d1=days.find(d=>d.day===1);
     if(d1){
       const rycom=d1.stops.find(s=>/AEON|Rycom|ライカム/i.test(s.name||""));
@@ -2021,7 +2031,7 @@ main,.app-shell,.app{
       ["10:50","抵達那霸機場","那覇空港"],
       ["12:00","OTS 租車","OTSレンタカー 臨空豊崎営業所"],
       ["12:30","糸滿魚市場","糸満お魚センター"],
-      ["14:00","Costco 沖繩南城倉庫店","コストコホールセール 沖縄南城倉庫店"],
+      ["14:00","Costco 沖繩南城倉庫店（可去可不去）","コストコホールセール 沖縄南城倉庫店"],
       ["16:30","AEON MALL Okinawa Rycom","イオンモール沖縄ライカム"],
       ["21:00","Sunset Resort Canphou","Sunset Resort Canphou"]
     ]},
