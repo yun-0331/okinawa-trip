@@ -1782,6 +1782,15 @@ main,.app-shell,.app{
       }
     }
 
+    const day3CheckoutPatch=days.find(d=>d.day===3);
+    if(day3CheckoutPatch){
+      const checkout=day3CheckoutPatch.stops.find(s=>/退房/.test(s.name||""));
+      if(checkout){
+        const note='<br><b>⚠️ 備註：玻璃獨木舟需提早20分鐘前抵達！預約 10:30；10:10 前抵達！</b>';
+        if(!(checkout.desc||"").includes("10:10 前抵達")) checkout.desc=(checkout.desc||"")+note;
+      }
+    }
+
     const d1=days.find(d=>d.day===1);
     if(d1){
       const rycom=d1.stops.find(s=>/AEON|Rycom|ライカム/i.test(s.name||""));
