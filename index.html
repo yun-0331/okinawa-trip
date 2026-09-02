@@ -1782,6 +1782,15 @@ main,.app-shell,.app{
       }
     }
 
+    const day4OTSReturnPatch=days.find(d=>d.day===4);
+    if(day4OTSReturnPatch){
+      const ots=day4OTSReturnPatch.stops.find(s=>/OTS|還車|返却/i.test((s.name||"")+" "+(s.desc||"")));
+      if(ots){
+        const guide='<br><b>🚝 OTS 還車後｜前往那霸機場站</b><br>① 進入航廈後，搭乘電梯或手扶梯上至 <b>2 樓</b>。<br>② 沿著指標往「<b>國內線航廈</b>」方向走，會看到「<b>單軌電車（Monorail / ゆいレール）</b>」的空中連通天橋。<br>③ 順著連通道走過去，即可直接抵達「<b>那霸機場站</b>」改札口。';
+        if(!(ots.desc||"").includes("前往那霸機場站")) ots.desc=(ots.desc||"")+guide;
+      }
+    }
+
     const day3CheckoutPatch=days.find(d=>d.day===3);
     if(day3CheckoutPatch){
       const checkout=day3CheckoutPatch.stops.find(s=>/退房/.test(s.name||""));
