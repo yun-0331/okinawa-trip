@@ -1848,6 +1848,24 @@ main,.app-shell,.app{
       }
     }
 
+    const day6AnimatePatch=days.find(d=>d.day===6);
+    if(day6AnimatePatch){
+      const kokusaiIdx=day6AnimatePatch.stops.findIndex(s=>/國際通|国際通|Kokusai/i.test((s.name||"")+" "+(s.map||"")));
+      const exists=day6AnimatePatch.stops.some(s=>/Animate|アニメイト/i.test((s.name||"")+" "+(s.desc||"")));
+      if(!exists){
+        const animateStop={
+          time:"國際通逛街中",
+          name:"アニメイト那覇国際通り店",
+          desc:"🎌 Animate 那霸國際通店｜可找排球少年等動漫周邊；實際商品與庫存以現場為準。",
+          map:"アニメイト那覇国際通り店",
+          type:"shop"
+        };
+        if(kokusaiIdx>=0) day6AnimatePatch.stops.splice(kokusaiIdx+1,0,animateStop);
+        else day6AnimatePatch.stops.unshift(animateStop);
+      }
+      day6AnimatePatch.summary="國際通 → アニメイト那覇国際通り店 → 那霸機場／返台";
+    }
+
     const day4OTSReturnPatch=days.find(d=>d.day===4);
     if(day4OTSReturnPatch){
       const ots=day4OTSReturnPatch.stops.find(s=>/OTS|還車|返却/i.test((s.name||"")+" "+(s.desc||"")));
