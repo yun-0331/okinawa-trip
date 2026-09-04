@@ -703,6 +703,87 @@ main,.app-shell,.app{
 }
 </style>
 
+
+<style id="expense-split-style">
+.expense-split-overview{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:12px;
+  width:100%;
+}
+.expense-split-overview>div{
+  background:rgba(255,255,255,.68);
+  border:1px solid rgba(226,199,214,.75);
+  border-radius:14px;
+  padding:10px 12px;
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+.expense-split-overview small{font-size:12px;color:#8b7d88}
+.expense-split-overview b{font-size:17px;color:#514452}
+
+.expense-share-box{
+  margin:12px 0 4px;
+  border:1px solid #ecd7e1;
+  border-radius:16px;
+  background:#fff9fc;
+  overflow:hidden;
+}
+.expense-share-toggle{
+  display:flex !important;
+  align-items:center;
+  gap:11px;
+  padding:13px 14px;
+  margin:0 !important;
+  cursor:pointer;
+}
+.expense-share-toggle input{
+  width:20px !important;
+  height:20px !important;
+  flex:0 0 auto;
+  accent-color:#f28c9a;
+}
+.expense-share-toggle span{
+  display:flex;
+  flex-direction:column;
+  gap:3px;
+  min-width:0;
+}
+.expense-share-toggle b{font-size:15px}
+.expense-share-toggle small{font-size:12px;color:#948690;line-height:1.45}
+
+.expense-share-options{
+  border-top:1px dashed #ecd7e1;
+  padding:12px 14px 14px;
+}
+.expense-share-options[hidden]{display:none !important}
+.expense-share-options label{margin:0}
+.expense-share-preview{
+  margin-top:8px;
+  padding:9px 11px;
+  border-radius:12px;
+  background:#f7f1ff;
+  color:#6f5d80;
+  font-size:13px;
+  font-weight:700;
+}
+
+.expense-item-main{min-width:0;flex:1}
+.expense-split-meta{
+  margin-top:4px;
+  color:#a05c78 !important;
+  font-weight:700;
+  line-height:1.45;
+}
+@media(max-width:520px){
+  .expense-split-overview{grid-template-columns:1fr 1fr;gap:8px}
+  .expense-split-overview>div{padding:9px}
+  .expense-split-overview b{font-size:15px}
+}
+</style>
+
 </head>
 <body>
 <div class="app-shell">
@@ -982,9 +1063,13 @@ main,.app-shell,.app{
     <section id="expenses" class="view">
       <div class="page-head"><div><small>EXPENSES</small><h2>花費紀錄</h2></div><button id="clearExpenses" class="ghost-danger">清除</button></div>
       <div class="expense-summary">
-        <span>目前合計</span>
+        <span>目前先付款合計</span>
         <strong id="expenseTotal">¥0</strong>
         <small id="expenseTwd">約 NT$0</small>
+        <div class="expense-split-overview">
+          <div><small>👛 我實際負擔</small><b id="expenseOwnTotal">¥0</b></div>
+          <div><small>🤝 可向朋友收回</small><b id="expenseRecoverTotal">¥0</b></div>
+        </div>
       </div>
       <div id="expenseCategorySummary" class="expense-category-summary"></div>
       <form id="expenseForm" class="card form-card">
@@ -997,6 +1082,20 @@ main,.app-shell,.app{
           </label>
         </div>
         <label>內容<input id="expenseNote" placeholder="例如：蝦蝦飯"></label>
+
+        <div class="expense-share-box">
+          <label class="expense-share-toggle">
+            <input id="expenseShared" type="checkbox">
+            <span><b>🤝 這筆要分攤</b><small>例如：我先付款，再跟朋友一起平分</small></span>
+          </label>
+          <div id="expenseShareOptions" class="expense-share-options" hidden>
+            <label>總共幾人平分（含自己）
+              <input id="expenseSplitCount" type="number" inputmode="numeric" min="2" max="30" value="2">
+            </label>
+            <div id="expenseSharePreview" class="expense-share-preview">每人約 ¥0</div>
+          </div>
+        </div>
+
         <button class="primary" type="submit">＋ 新增花費</button>
       </form>
       <div id="expenseList" class="expense-list"></div>
@@ -1940,13 +2039,14 @@ main,.app-shell,.app{
 </script>
 
 
-<script>
-/* Expense recovery v1 - independent from app.js */
+<script id="expense-split-v2">
+/* Expense recovery v2 + split support - independent from app.js */
 (function () {
   function byId(id){ return document.getElementById(id); }
   function safeParse(raw, fallback){
     try { return JSON.parse(raw); } catch(e){ return fallback; }
   }
+  function money(v){ return "¥" + Math.round(Number(v)||0).toLocaleString("ja-JP"); }
 
   const form = byId("expenseForm");
   const amount = byId("expenseAmount");
@@ -1955,18 +2055,39 @@ main,.app-shell,.app{
   const list = byId("expenseList");
   const totalEl = byId("expenseTotal");
   const twdEl = byId("expenseTwd");
+  const ownTotalEl = byId("expenseOwnTotal");
+  const recoverTotalEl = byId("expenseRecoverTotal");
   const summary = byId("expenseCategorySummary");
   const clear = byId("clearExpenses");
   const rate = byId("rate");
+  const shared = byId("expenseShared");
+  const splitCount = byId("expenseSplitCount");
+  const shareOptions = byId("expenseShareOptions");
+  const sharePreview = byId("expenseSharePreview");
 
   if (!form || !amount || !category || !list || !totalEl || !twdEl) return;
 
   let expenses = safeParse(localStorage.getItem("okinawa_expenses") || "[]", []);
   if (!Array.isArray(expenses)) expenses = [];
 
+  // Backward-compatible: old entries are simply non-shared.
+  expenses = expenses.map(function(x){
+    if(typeof x.shared === "undefined") x.shared = false;
+    if(!x.splitCount || Number(x.splitCount) < 2) x.splitCount = 1;
+    return x;
+  });
+
   function getRate(){
     const r = parseFloat(rate && rate.value);
     return Number.isFinite(r) && r > 0 ? r : parseFloat(localStorage.getItem("okinawa_rate") || "0.205") || 0.205;
+  }
+  function ownShare(x){
+    const a = Number(x.amount)||0;
+    const c = x.shared ? Math.max(2, Number(x.splitCount)||2) : 1;
+    return a / c;
+  }
+  function recoverShare(x){
+    return Math.max(0, (Number(x.amount)||0) - ownShare(x));
   }
 
   function save(){
@@ -1974,10 +2095,27 @@ main,.app-shell,.app{
     render();
   }
 
+  function updateShareUI(){
+    if(!shared || !shareOptions) return;
+    shareOptions.hidden = !shared.checked;
+    const a = Number(amount && amount.value)||0;
+    const c = Math.max(2, Number(splitCount && splitCount.value)||2);
+    if(sharePreview){
+      sharePreview.textContent = shared.checked
+        ? "每人約 " + money(a/c) + "｜朋友共分攤 " + money(a-a/c)
+        : "";
+    }
+  }
+
   function render(){
     const total = expenses.reduce((sum, x) => sum + (Number(x.amount) || 0), 0);
-    totalEl.textContent = "¥" + total.toLocaleString("ja-JP");
+    const ownTotal = expenses.reduce((sum, x) => sum + ownShare(x), 0);
+    const recoverTotal = expenses.reduce((sum, x) => sum + recoverShare(x), 0);
+
+    totalEl.textContent = money(total);
     twdEl.textContent = "約 NT$" + Math.round(total * getRate()).toLocaleString("zh-TW");
+    if(ownTotalEl) ownTotalEl.textContent = money(ownTotal);
+    if(recoverTotalEl) recoverTotalEl.textContent = money(recoverTotal);
 
     list.innerHTML = "";
     if (!expenses.length){
@@ -1987,11 +2125,18 @@ main,.app-shell,.app{
         const realIndex = expenses.length - 1 - reverseIndex;
         const row = document.createElement("div");
         row.className = "expense-item";
+        const c = x.shared ? Math.max(2, Number(x.splitCount)||2) : 1;
+        const splitMeta = x.shared
+          ? '🤝 '+c+' 人平分｜我負擔 '+money(ownShare(x))+'｜待收 '+money(recoverShare(x))
+          : '';
         row.innerHTML =
-          '<div><p><b></b></p><small></small></div><strong></strong><button type="button" aria-label="刪除">×</button>';
+          '<div class="expense-item-main"><p><b></b></p><small class="expense-meta"></small><small class="expense-split-meta"></small></div><strong></strong><button type="button" aria-label="刪除">×</button>';
         row.querySelector("b").textContent = x.note || x.category || "花費";
-        row.querySelector("small").textContent = (x.category || "其他") + " · " + (x.date || "");
-        row.querySelector("strong").textContent = "¥" + (Number(x.amount) || 0).toLocaleString("ja-JP");
+        row.querySelector(".expense-meta").textContent = (x.category || "其他") + " · " + (x.date || "");
+        const splitEl = row.querySelector(".expense-split-meta");
+        splitEl.textContent = splitMeta;
+        splitEl.style.display = splitMeta ? "block" : "none";
+        row.querySelector("strong").textContent = money(x.amount);
         row.querySelector("button").onclick = function(){
           expenses.splice(realIndex, 1);
           save();
@@ -2006,13 +2151,12 @@ main,.app-shell,.app{
         const n = expenses.filter(x => x.category === c).reduce((a,x)=>a+(Number(x.amount)||0),0);
         const chip = document.createElement("div");
         chip.className = "expense-chip";
-        chip.innerHTML = "<small>"+c+"</small><b>¥"+n.toLocaleString("ja-JP")+"</b>";
+        chip.innerHTML = "<small>"+c+"</small><b>"+money(n)+"</b>";
         summary.appendChild(chip);
       });
     }
   }
 
-  // Capture phase makes this work even if another submit handler is broken.
   form.addEventListener("submit", function(e){
     e.preventDefault();
     e.stopImmediatePropagation();
@@ -2023,15 +2167,23 @@ main,.app-shell,.app{
       return;
     }
 
+    const isShared = !!(shared && shared.checked);
+    const count = isShared ? Math.max(2, Number(splitCount && splitCount.value)||2) : 1;
+
     expenses.push({
       amount: value,
       category: category.value || "其他",
       note: note ? note.value.trim() : "",
-      date: new Date().toLocaleDateString("zh-TW")
+      date: new Date().toLocaleDateString("zh-TW"),
+      shared: isShared,
+      splitCount: count
     });
 
     amount.value = "";
     if (note) note.value = "";
+    if (shared) shared.checked = false;
+    if (splitCount) splitCount.value = "2";
+    updateShareUI();
     save();
   }, true);
 
@@ -2046,10 +2198,12 @@ main,.app-shell,.app{
     }, true);
   }
 
-  if (rate){
-    rate.addEventListener("input", render);
-  }
+  if (shared) shared.addEventListener("change", updateShareUI);
+  if (splitCount) splitCount.addEventListener("input", updateShareUI);
+  if (amount) amount.addEventListener("input", updateShareUI);
+  if (rate) rate.addEventListener("input", render);
 
+  updateShareUI();
   render();
 })();
 </script>
