@@ -784,6 +784,216 @@ main,.app-shell,.app{
 }
 </style>
 
+
+<style id="restaurant-page-style">
+#restaurants .restaurant-page-head{
+  display:block;
+  margin-bottom:14px;
+}
+#restaurants .restaurant-page-head small{
+  display:block;
+  margin-bottom:6px;
+  color:#b67c9d;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.16em;
+}
+#restaurants .restaurant-page-head h2{
+  margin:0 0 7px;
+  font-size:27px;
+}
+#restaurants .restaurant-page-head p{
+  margin:0;
+  color:var(--muted,#776b75);
+  line-height:1.7;
+  font-size:14px;
+}
+.restaurant-status-summary{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin:14px 0;
+}
+.restaurant-summary-card{
+  border-radius:18px;
+  padding:13px 14px;
+  border:1px solid rgba(220,200,214,.8);
+  display:flex;
+  flex-direction:column;
+  gap:3px;
+  background:#fff;
+}
+.restaurant-summary-card.reserved{background:#fff4f7}
+.restaurant-summary-card.wishlist{background:#f8f5ff}
+.restaurant-summary-card small{font-weight:800;color:#9d6a83}
+.restaurant-summary-card b{font-size:21px;color:#4f444c}
+.restaurant-summary-card span{font-size:12px;color:#8d8189}
+.restaurant-filters{
+  display:flex;
+  gap:8px;
+  overflow-x:auto;
+  padding:2px 0 8px;
+  scrollbar-width:none;
+}
+.restaurant-filters::-webkit-scrollbar{display:none}
+.restaurant-filters button{
+  flex:0 0 auto;
+  border:1px solid #ead7e1;
+  background:#fff;
+  color:#756870;
+  border-radius:999px;
+  padding:9px 13px;
+  font-weight:800;
+}
+.restaurant-filters button.active{
+  background:#f7e6ef;
+  border-color:#e8bfd2;
+  color:#8f526f;
+}
+.restaurant-section-label{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap:10px;
+  margin:16px 2px 9px;
+}
+.restaurant-section-label span{
+  font-size:15px;
+  font-weight:900;
+  color:#554950;
+}
+.restaurant-section-label small{
+  font-size:11px;
+  color:#9a8d95;
+  text-align:right;
+}
+.restaurant-card{
+  border-radius:20px;
+  border:1px solid #eadde4;
+  background:#fff;
+  padding:15px;
+  margin-bottom:13px;
+  box-shadow:0 6px 18px rgba(80,55,70,.05);
+}
+.restaurant-card[hidden]{display:none!important}
+.restaurant-card-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:10px;
+}
+.restaurant-area{
+  display:block;
+  color:#9b7f8f;
+  font-size:12px;
+  font-weight:800;
+  margin-bottom:4px;
+}
+.restaurant-card h3{
+  margin:0;
+  font-size:18px;
+  line-height:1.4;
+}
+.restaurant-badge{
+  flex:0 0 auto;
+  border-radius:999px;
+  padding:7px 10px;
+  font-size:12px;
+  font-weight:900;
+  white-space:nowrap;
+}
+.restaurant-badge.reserved{
+  background:#ffe5ed;
+  color:#a7496b;
+}
+.restaurant-badge.wishlist{
+  background:#eee8ff;
+  color:#745ba0;
+}
+.reservation-highlight{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:9px;
+  margin-top:13px;
+}
+.reservation-highlight>div{
+  border-radius:14px;
+  padding:10px 12px;
+  background:#fff7fa;
+  border:1px solid #f0dce5;
+  display:flex;
+  flex-direction:column;
+  gap:3px;
+}
+.reservation-highlight small{
+  color:#9b7d8b;
+  font-size:11px;
+}
+.reservation-highlight b{
+  font-size:16px;
+  color:#53464d;
+}
+.restaurant-alert{
+  margin-top:10px;
+  padding:10px 12px;
+  border-radius:13px;
+  background:#fff3dc;
+  color:#80612c;
+  font-weight:800;
+  font-size:13px;
+  line-height:1.5;
+}
+.restaurant-note{
+  margin-top:12px;
+  color:#756a72;
+  line-height:1.65;
+  font-size:13px;
+}
+.restaurant-tags{
+  display:flex;
+  gap:7px;
+  flex-wrap:wrap;
+  margin-top:11px;
+}
+.restaurant-tags span{
+  background:#f8f5f7;
+  color:#766971;
+  border-radius:999px;
+  padding:6px 9px;
+  font-size:11px;
+  font-weight:800;
+}
+.restaurant-map-btn{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-top:12px;
+  padding:11px 13px;
+  border-radius:14px;
+  background:#f5f9ff;
+  text-decoration:none;
+  color:#527093;
+  font-weight:800;
+}
+.restaurant-footnote{
+  margin:15px 0 4px;
+  padding:14px 15px;
+  border-radius:18px;
+  background:#fff9f3;
+  border:1px solid #f0e0cd;
+}
+.restaurant-footnote p{
+  margin:5px 0 0;
+  font-size:12px;
+  line-height:1.65;
+  color:#82756d;
+}
+@media(max-width:520px){
+  .restaurant-status-summary{grid-template-columns:1fr 1fr}
+  .restaurant-card h3{font-size:17px}
+}
+</style>
+
 </head>
 <body>
 <div class="app-shell">
@@ -848,6 +1058,7 @@ main,.app-shell,.app{
       <div class="quick-grid">
         <button class="quick" data-nav="favorites"><span>❤️</span><b>我的收藏</b><small>想去・想買・想吃</small></button>
         <button class="quick" data-nav="shopping"><span>🛍</span><b>購物清單</b><small>分類採買更好找</small></button>
+        <button class="quick" data-nav="restaurants"><span>🍽️</span><b>餐廳名單</b><small>想吃・待預約・已預約</small></button>
         <button class="quick" data-nav="converter"><span>🧮</span><b>日幣換算</b><small>JPY ⇄ TWD</small></button>
         <button class="quick" data-nav="driving"><span>🚗</span><b>自駕</b><small>租車・交通規則・注意事項</small></button><button class="quick" data-nav="handbook"><span>📖</span><b>完整手冊</b><small>59頁隨身瀏覽</small></button>
       </div><div class="install-card">
@@ -1011,6 +1222,96 @@ main,.app-shell,.app{
         <button data-fav-filter="shop">購物</button>
       </div>
       <div id="favoritesList" class="favorite-list"></div>
+    </section>
+
+
+    <section id="restaurants" class="view">
+      <div class="page-head restaurant-page-head">
+        <div>
+          <small>OKINAWA RESTAURANTS</small>
+          <h2>🍽️ 餐廳名單</h2>
+          <p>把想吃、待預約與已預約餐廳集中整理；已預約的會優先顯示日期與時間。</p>
+        </div>
+      </div>
+
+      <div class="restaurant-status-summary">
+        <div class="restaurant-summary-card reserved">
+          <small>✓ 已預約</small>
+          <b>1 間</b>
+          <span>有固定日期／時間</span>
+        </div>
+        <div class="restaurant-summary-card wishlist">
+          <small>♡ 想吃</small>
+          <b>1 間</b>
+          <span>行程彈性安排</span>
+        </div>
+      </div>
+
+      <div class="restaurant-filters" id="restaurantFilters">
+        <button type="button" class="active" data-restaurant-filter="all">全部</button>
+        <button type="button" data-restaurant-filter="reserved">✓ 已預約</button>
+        <button type="button" data-restaurant-filter="wishlist">♡ 想吃</button>
+      </div>
+
+      <div class="restaurant-section-label">
+        <span>⭐ 已預約餐廳</span>
+        <small>依預約時間優先安排</small>
+      </div>
+
+      <article class="restaurant-card reserved" data-restaurant-status="reserved">
+        <div class="restaurant-card-head">
+          <div>
+            <span class="restaurant-area">🌆 那霸・久茂地</span>
+            <h3>炭火燒肉ぶち久茂地 -2nd</h3>
+          </div>
+          <span class="restaurant-badge reserved">✓ 已預約</span>
+        </div>
+
+        <div class="reservation-highlight">
+          <div><small>📅 日期</small><b>10/29（Day 4）</b></div>
+          <div><small>⏰ 時間</small><b>20:20</b></div>
+        </div>
+
+        <div class="restaurant-alert">⏳ 位置保留 10 分鐘，建議提早抵達。</div>
+
+        <div class="restaurant-tags">
+          <span>🥩 燒肉</span><span>📌 固定行程</span>
+        </div>
+
+        <a class="restaurant-map-btn" href="https://www.google.com/maps/search/?api=1&query=%E7%82%AD%E7%81%AB%E7%84%BC%E8%82%89%E3%81%B6%E3%81%A1%E4%B9%85%E8%8C%82%E5%9C%B0%202nd%20%E9%82%A3%E8%A6%87" target="_blank" rel="noopener">
+          <span>📍 Google Maps</span><b>導航 ›</b>
+        </a>
+      </article>
+
+      <div class="restaurant-section-label">
+        <span>🍜 想吃餐廳</span>
+        <small>依當天行程與時間彈性安排</small>
+      </div>
+
+      <article class="restaurant-card wishlist" data-restaurant-status="wishlist">
+        <div class="restaurant-card-head">
+          <div>
+            <span class="restaurant-area">🏝️ 名護・北部</span>
+            <h3>燒肉本部牧場（名護店）</h3>
+          </div>
+          <span class="restaurant-badge wishlist">♡ 想吃</span>
+        </div>
+
+        <div class="restaurant-note">北部行程期間可安排；目前先列入想吃名單，尚未設定固定預約時間。</div>
+
+        <div class="restaurant-tags">
+          <span>🥩 燒肉</span><span>🚗 名護行程</span>
+        </div>
+
+        <a class="restaurant-map-btn" href="https://www.google.com/maps/search/?api=1&query=%E7%84%BC%E8%82%89%E3%82%82%E3%81%A8%E3%81%B6%E7%89%A7%E5%A0%B4%20%E5%90%8D%E8%AD%B7%E5%BA%97" target="_blank" rel="noopener">
+          <span>📍 Google Maps</span><b>導航 ›</b>
+        </a>
+      </article>
+
+      <div class="restaurant-footnote">
+        <b>💡 餐廳整理方式</b>
+        <p>之後新增餐廳時，可以繼續分成「想吃／待預約／已預約」；已預約餐廳可再補人數、預約姓名、訂位編號與備註。</p>
+      </div>
     </section>
 
     <section id="shopping" class="view">
@@ -1270,6 +1571,7 @@ main,.app-shell,.app{
       <button data-nav="itinerary"><span>🗓️</span>行程</button>
       <button data-nav="stay"><span>🏨</span>住宿</button>
       <button data-nav="shopping"><span>🛍️</span>購物</button>
+      <button data-nav="restaurants"><span>🍽️</span>餐廳</button>
       <button data-nav="expenses"><span>💰</span>花費</button>
       <button data-nav="converter"><span>💱</span>換算</button>
       <button data-nav="fishing"><span>🎣</span>釣魚</button>
@@ -2842,6 +3144,34 @@ document.addEventListener("click", function(e){
     const fishingNav=e.target.closest('[data-nav="fishing"]');
     if(fishingNav) setTimeout(loadTide,250);
   });
+})();
+</script>
+
+
+<script id="restaurant-filter-script">
+(function(){
+  const buttons=[...document.querySelectorAll("[data-restaurant-filter]")];
+  const cards=[...document.querySelectorAll("[data-restaurant-status]")];
+  const labels=[...document.querySelectorAll("#restaurants .restaurant-section-label")];
+
+  function apply(filter){
+    buttons.forEach(b=>b.classList.toggle("active",b.dataset.restaurantFilter===filter));
+    cards.forEach(c=>{
+      c.hidden = filter!=="all" && c.dataset.restaurantStatus!==filter;
+    });
+
+    labels.forEach(label=>{
+      let next=label.nextElementSibling, any=false;
+      while(next && !next.classList.contains("restaurant-section-label") && !next.classList.contains("restaurant-footnote")){
+        if(next.matches && next.matches("[data-restaurant-status]") && !next.hidden) any=true;
+        next=next.nextElementSibling;
+      }
+      label.style.display=any ? "" : "none";
+    });
+  }
+
+  buttons.forEach(btn=>btn.addEventListener("click",()=>apply(btn.dataset.restaurantFilter)));
+  apply("all");
 })();
 </script>
 
