@@ -1947,6 +1947,23 @@ main,.app-shell,.app{
       }
     }
 
+    const day1NogamiPatch=days.find(d=>d.day===1);
+    if(day1NogamiPatch){
+      const exists=day1NogamiPatch.stops.some(s=>/乃が美|NOGAMI|Nogami/i.test((s.name||"")+" "+(s.desc||"")));
+      if(!exists){
+        const aeonIdx=day1NogamiPatch.stops.findIndex(s=>/AEON|永旺|Rycom/i.test((s.name||"")+" "+(s.map||"")));
+        const nogamiStop={
+          time:"AEON 前",
+          name:"乃が美（NOGAMI）",
+          desc:"🍞 專營優質「生」食パン。地址：沖縄県沖縄市久保田3-1-12 プラザハウスショッピングセンター1F。",
+          map:"乃が美 沖縄市久保田3-1-12",
+          type:"food"
+        };
+        day1NogamiPatch.stops.splice(aeonIdx>=0?aeonIdx:day1NogamiPatch.stops.length,0,nogamiStop);
+      }
+      day1NogamiPatch.summary="那霸機場 → OTS 租車 → 系滿漁市場 → Costco（可去可不去）→ 乃が美 NOGAMI → AEON MALL 沖繩 Rycom → Sunset Resort Canphou";
+    }
+
     const day6AnimatePatch=days.find(d=>d.day===6);
     if(day6AnimatePatch){
       const kokusaiIdx=day6AnimatePatch.stops.findIndex(s=>/國際通|国際通|Kokusai/i.test((s.name||"")+" "+(s.map||"")));
@@ -2288,6 +2305,7 @@ main,.app-shell,.app{
       ["12:00","OTS 租車","OTSレンタカー 臨空豊崎営業所"],
       ["12:30","糸滿魚市場","糸満お魚センター"],
       ["14:00","Costco 沖繩南城倉庫店（可去可不去）","コストコホールセール 沖縄南城倉庫店"],
+      ["AEON 前","乃が美 NOGAMI（生食パン）","乃が美 沖縄市久保田3-1-12"],
       ["16:30","AEON Mall 沖繩 Rycom（Pokémon Center＋Owala＋30週年四表情皮卡丘＋On）","イオンモール沖縄ライカム"],
       ["21:00","Sunset Resort Canphou","Sunset Resort Canphou"]
     ]},
