@@ -994,6 +994,45 @@ main,.app-shell,.app{
 }
 </style>
 
+
+<style id="restaurant-grouping-style">
+.restaurant-location-group{
+  margin:12px 0 18px;
+}
+.restaurant-location-title{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  margin:8px 2px 9px;
+  padding:8px 10px;
+  border-radius:12px;
+  background:#faf7f9;
+}
+.restaurant-location-title span{
+  font-size:14px;
+  font-weight:900;
+  color:#594b53;
+}
+.restaurant-location-title small{
+  font-size:11px;
+  color:#9a8c95;
+}
+.restaurant-empty{
+  border:1px dashed #e7d9e1;
+  border-radius:16px;
+  padding:13px 14px;
+  color:#a0929a;
+  background:#fffdfd;
+  font-size:13px;
+  text-align:center;
+}
+.restaurant-location-group[hidden],
+.restaurant-section-label[hidden]{
+  display:none!important;
+}
+</style>
+
 </head>
 <body>
 <div class="app-shell">
@@ -1225,12 +1264,13 @@ main,.app-shell,.app{
     </section>
 
 
+    
     <section id="restaurants" class="view">
       <div class="page-head restaurant-page-head">
         <div>
           <small>OKINAWA RESTAURANTS</small>
           <h2>🍽️ 餐廳名單</h2>
-          <p>把想吃、待預約與已預約餐廳集中整理；已預約的會優先顯示日期與時間。</p>
+          <p>想吃餐廳依地點整理；已預約餐廳則依日期排序，旅途中會更好找。</p>
         </div>
       </div>
 
@@ -1238,12 +1278,12 @@ main,.app-shell,.app{
         <div class="restaurant-summary-card reserved">
           <small>✓ 已預約</small>
           <b>1 間</b>
-          <span>有固定日期／時間</span>
+          <span>依日期排序</span>
         </div>
         <div class="restaurant-summary-card wishlist">
           <small>♡ 想吃</small>
           <b>4 間</b>
-          <span>行程彈性安排</span>
+          <span>依地點排序</span>
         </div>
       </div>
 
@@ -1255,10 +1295,10 @@ main,.app-shell,.app{
 
       <div class="restaurant-section-label">
         <span>⭐ 已預約餐廳</span>
-        <small>依預約時間優先安排</small>
+        <small>依日期排序</small>
       </div>
 
-      <article class="restaurant-card reserved" data-restaurant-status="reserved">
+      <article class="restaurant-card reserved" data-restaurant-status="reserved" data-reserved-date="2026-10-29">
         <div class="restaurant-card-head">
           <div>
             <span class="restaurant-area">🌆 那霸・久茂地</span>
@@ -1283,90 +1323,116 @@ main,.app-shell,.app{
         </a>
       </article>
 
-      <div class="restaurant-section-label">
+      <div class="restaurant-section-label wishlist-master-label">
         <span>🍜 想吃餐廳</span>
-        <small>依當天行程與時間彈性安排</small>
+        <small>機場 → 名護 → 中部 → 國際通</small>
       </div>
 
-      <article class="restaurant-card wishlist" data-restaurant-status="wishlist">
-        <div class="restaurant-card-head">
-          <div>
-            <span class="restaurant-area">🏝️ 名護・北部</span>
-            <h3>燒肉本部牧場（名護店）</h3>
+      <div class="restaurant-location-group" data-location-group="airport">
+        <div class="restaurant-location-title">
+          <span>✈️ 機場</span>
+          <small>那霸機場</small>
+        </div>
+
+        <article class="restaurant-card wishlist" data-restaurant-status="wishlist" data-location-order="1">
+          <div class="restaurant-card-head">
+            <div>
+              <span class="restaurant-area">✈️ 那霸機場</span>
+              <h3>豬肉蛋飯糰</h3>
+            </div>
+            <span class="restaurant-badge wishlist">♡ 想吃</span>
           </div>
-          <span class="restaurant-badge wishlist">♡ 想吃</span>
-        </div>
-
-        <div class="restaurant-note">北部行程期間可安排；目前先列入想吃名單，尚未設定固定預約時間。</div>
-
-        <div class="restaurant-tags">
-          <span>🥩 燒肉</span><span>🚗 名護行程</span>
-        </div>
-
-        <a class="restaurant-map-btn" href="https://www.google.com/maps/search/?api=1&query=%E7%84%BC%E8%82%89%E3%82%82%E3%81%A8%E3%81%B6%E7%89%A7%E5%A0%B4%20%E5%90%8D%E8%AD%B7%E5%BA%97" target="_blank" rel="noopener">
-          <span>📍 Google Maps</span><b>導航 ›</b>
-        </a>
-      </article>
-
-
-      <article class="restaurant-card wishlist" data-restaurant-status="wishlist">
-        <div class="restaurant-card-head">
-          <div>
-            <span class="restaurant-area">✈️ 那霸機場</span>
-            <h3>豬肉蛋飯糰</h3>
+          <div class="restaurant-note">抵達或離開那霸機場時可以安排，列入機場想吃清單。</div>
+          <div class="restaurant-tags">
+            <span>🍙 飯糰</span><span>✈️ 機場美食</span>
           </div>
-          <span class="restaurant-badge wishlist">♡ 想吃</span>
-        </div>
-        <div class="restaurant-note">抵達或離開那霸機場時可以安排，列入機場想吃清單。</div>
-        <div class="restaurant-tags">
-          <span>🍙 飯糰</span><span>✈️ 機場美食</span>
-        </div>
-        <a class="restaurant-map-btn" href="https://www.google.com/maps/search/?api=1&query=%E9%82%A3%E8%A6%87%E6%A9%9F%E5%A0%B4%20%E8%B1%AC%E8%82%89%E8%9B%8B%E9%A3%AF%E7%B3%B0" target="_blank" rel="noopener">
-          <span>📍 Google Maps</span><b>搜尋 ›</b>
-        </a>
-      </article>
+          <a class="restaurant-map-btn" href="https://www.google.com/maps/search/?api=1&query=%E9%82%A3%E8%A6%87%E6%A9%9F%E5%A0%B4%20%E8%B1%AC%E8%82%89%E8%9B%8B%E9%A3%AF%E7%B3%B0" target="_blank" rel="noopener">
+            <span>📍 Google Maps</span><b>搜尋 ›</b>
+          </a>
+        </article>
 
-      <article class="restaurant-card wishlist" data-restaurant-status="wishlist">
-        <div class="restaurant-card-head">
-          <div>
-            <span class="restaurant-area">✈️ 那霸機場</span>
-            <h3>蘋果派</h3>
+        <article class="restaurant-card wishlist" data-restaurant-status="wishlist" data-location-order="1">
+          <div class="restaurant-card-head">
+            <div>
+              <span class="restaurant-area">✈️ 那霸機場</span>
+              <h3>蘋果派</h3>
+            </div>
+            <span class="restaurant-badge wishlist">♡ 想吃</span>
           </div>
-          <span class="restaurant-badge wishlist">♡ 想吃</span>
-        </div>
-        <div class="restaurant-note">和豬肉蛋飯糰一起列入那霸機場想吃清單，方便抵達／回程時查看。</div>
-        <div class="restaurant-tags">
-          <span>🥧 甜點</span><span>✈️ 機場美食</span>
-        </div>
-        <a class="restaurant-map-btn" href="https://www.google.com/maps/search/?api=1&query=%E9%82%A3%E8%A6%87%E6%A9%9F%E5%A0%B4%20%E8%98%8B%E6%9E%9C%E6%B4%BE" target="_blank" rel="noopener">
-          <span>📍 Google Maps</span><b>搜尋 ›</b>
-        </a>
-      </article>
+          <div class="restaurant-note">和豬肉蛋飯糰一起列入那霸機場想吃清單，方便抵達／回程時查看。</div>
+          <div class="restaurant-tags">
+            <span>🥧 甜點</span><span>✈️ 機場美食</span>
+          </div>
+          <a class="restaurant-map-btn" href="https://www.google.com/maps/search/?api=1&query=%E9%82%A3%E8%A6%87%E6%A9%9F%E5%A0%B4%20%E8%98%8B%E6%9E%9C%E6%B4%BE" target="_blank" rel="noopener">
+            <span>📍 Google Maps</span><b>搜尋 ›</b>
+          </a>
+        </article>
+      </div>
 
-      <article class="restaurant-card wishlist" data-restaurant-status="wishlist">
-        <div class="restaurant-card-head">
-          <div>
-            <span class="restaurant-area">🏝️ 名護・北部</span>
-            <h3>阿古豬涮涮鍋 ASAHIYA</h3>
+      <div class="restaurant-location-group" data-location-group="nago">
+        <div class="restaurant-location-title">
+          <span>🏝️ 名護</span>
+          <small>北部</small>
+        </div>
+
+        <article class="restaurant-card wishlist" data-restaurant-status="wishlist" data-location-order="2">
+          <div class="restaurant-card-head">
+            <div>
+              <span class="restaurant-area">🏝️ 名護・北部</span>
+              <h3>燒肉本部牧場（名護店）</h3>
+            </div>
+            <span class="restaurant-badge wishlist">♡ 想吃</span>
           </div>
-          <span class="restaurant-badge wishlist">♡ 想吃</span>
+          <div class="restaurant-note">北部行程期間可安排；目前先列入想吃名單，尚未設定固定預約時間。</div>
+          <div class="restaurant-tags">
+            <span>🥩 燒肉</span><span>🚗 名護行程</span>
+          </div>
+          <a class="restaurant-map-btn" href="https://www.google.com/maps/search/?api=1&query=%E7%84%BC%E8%82%89%E3%82%82%E3%81%A8%E3%81%B6%E7%89%A7%E5%A0%B4%20%E5%90%8D%E8%AD%B7%E5%BA%97" target="_blank" rel="noopener">
+            <span>📍 Google Maps</span><b>導航 ›</b>
+          </a>
+        </article>
+
+        <article class="restaurant-card wishlist" data-restaurant-status="wishlist" data-location-order="2">
+          <div class="restaurant-card-head">
+            <div>
+              <span class="restaurant-area">🏝️ 名護・北部</span>
+              <h3>阿古豬涮涮鍋 ASAHIYA</h3>
+            </div>
+            <span class="restaurant-badge wishlist">♡ 想吃</span>
+          </div>
+          <div class="restaurant-note">名護行程期間可安排，先列入想吃名單，尚未設定固定預約時間。</div>
+          <div class="restaurant-tags">
+            <span>🐷 阿古豬</span><span>🍲 涮涮鍋</span><span>🚗 名護行程</span>
+          </div>
+          <a class="restaurant-map-btn" href="https://www.google.com/maps/search/?api=1&query=ASAHIYA%20%E3%82%A2%E3%82%B0%E3%83%BC%E8%B1%9A%20%E3%81%97%E3%82%83%E3%81%B6%E3%81%97%E3%82%83%E3%81%B6%20%E5%90%8D%E8%AD%B7" target="_blank" rel="noopener">
+            <span>📍 Google Maps</span><b>導航 ›</b>
+          </a>
+        </article>
+      </div>
+
+      <div class="restaurant-location-group empty-group" data-location-group="central">
+        <div class="restaurant-location-title">
+          <span>🌺 中部</span>
+          <small>之後新增會放這裡</small>
         </div>
-        <div class="restaurant-note">名護行程期間可安排，先列入想吃名單，尚未設定固定預約時間。</div>
-        <div class="restaurant-tags">
-          <span>🐷 阿古豬</span><span>🍲 涮涮鍋</span><span>🚗 名護行程</span>
+        <div class="restaurant-empty">目前還沒有中部想吃餐廳。</div>
+      </div>
+
+      <div class="restaurant-location-group empty-group" data-location-group="kokusai">
+        <div class="restaurant-location-title">
+          <span>🌆 國際通</span>
+          <small>那霸市區</small>
         </div>
-        <a class="restaurant-map-btn" href="https://www.google.com/maps/search/?api=1&query=ASAHIYA%20%E3%82%A2%E3%82%B0%E3%83%BC%E8%B1%9A%20%E3%81%97%E3%82%83%E3%81%B6%E3%81%97%E3%82%83%E3%81%B6%20%E5%90%8D%E8%AD%B7" target="_blank" rel="noopener">
-          <span>📍 Google Maps</span><b>導航 ›</b>
-        </a>
-      </article>
+        <div class="restaurant-empty">目前還沒有國際通想吃餐廳。</div>
+      </div>
 
       <div class="restaurant-footnote">
         <b>💡 餐廳整理方式</b>
-        <p>之後新增餐廳時，可以繼續分成「想吃／待預約／已預約」；已預約餐廳可再補人數、預約姓名、訂位編號與備註。</p>
+        <p>想吃餐廳固定依「機場 → 名護 → 中部 → 國際通」排列；已預約餐廳則會依預約日期由早到晚排列。</p>
       </div>
     </section>
 
-    <section id="shopping" class="view">
+<section id="shopping" class="view">
       <div class="page-head"><div><small>SHOPPING</small><h2>購物清單</h2></div><button id="clearShopping" class="ghost-danger">清除</button></div>
       <div class="shopping-cats">
         <button class="active" data-shop="all">全部</button>
@@ -3200,25 +3266,47 @@ document.addEventListener("click", function(e){
 </script>
 
 
+
 <script id="restaurant-filter-script">
 (function(){
-  const buttons=[...document.querySelectorAll("[data-restaurant-filter]")];
-  const cards=[...document.querySelectorAll("[data-restaurant-status]")];
-  const labels=[...document.querySelectorAll("#restaurants .restaurant-section-label")];
+  const root=document.getElementById("restaurants");
+  if(!root) return;
+
+  const buttons=[...root.querySelectorAll("[data-restaurant-filter]")];
+  const cards=[...root.querySelectorAll("[data-restaurant-status]")];
+  const groups=[...root.querySelectorAll(".restaurant-location-group")];
+  const allLabels=[...root.querySelectorAll(".restaurant-section-label")];
+
+  // 已預約：依日期由早到晚
+  const reservedCards=[...root.querySelectorAll('[data-restaurant-status="reserved"]')];
+  if(reservedCards.length>1){
+    const first=reservedCards[0];
+    const parent=first.parentElement;
+    reservedCards
+      .sort((a,b)=>(a.dataset.reservedDate||"9999").localeCompare(b.dataset.reservedDate||"9999"))
+      .forEach(card=>parent.insertBefore(card, root.querySelector(".wishlist-master-label")));
+  }
 
   function apply(filter){
     buttons.forEach(b=>b.classList.toggle("active",b.dataset.restaurantFilter===filter));
+
     cards.forEach(c=>{
       c.hidden = filter!=="all" && c.dataset.restaurantStatus!==filter;
     });
 
-    labels.forEach(label=>{
-      let next=label.nextElementSibling, any=false;
-      while(next && !next.classList.contains("restaurant-section-label") && !next.classList.contains("restaurant-footnote")){
-        if(next.matches && next.matches("[data-restaurant-status]") && !next.hidden) any=true;
-        next=next.nextElementSibling;
+    // 想吃地區群組：只有「全部 / 想吃」顯示
+    groups.forEach(group=>{
+      group.hidden = filter==="reserved";
+    });
+
+    // 標題顯示控制
+    allLabels.forEach(label=>{
+      if(label.classList.contains("wishlist-master-label")){
+        label.hidden = filter==="reserved";
+      }else{
+        // 已預約標題
+        label.hidden = filter==="wishlist";
       }
-      label.style.display=any ? "" : "none";
     });
   }
 
@@ -3226,6 +3314,7 @@ document.addEventListener("click", function(e){
   apply("all");
 })();
 </script>
+
 
 </body>
 </html>
