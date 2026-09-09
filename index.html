@@ -2357,13 +2357,30 @@ main,.app-shell,.app{
   try{
     if(typeof days==="undefined") return;
 
-    const day1CostcoPatch=days.find(d=>d.day===1);
-    if(day1CostcoPatch){
-      const costco=day1CostcoPatch.stops.find(s=>/Costco|好市多|コストコ/i.test(s.name||""));
-      if(costco){
-        if(!/可去可不去/.test(costco.name||"")) costco.name=(costco.name||"Costco")+"（可去可不去）";
-        const note="<br><b>💡 備註：可去可不去</b>｜當天時間不夠可以直接略過，不影響後續行程。";
-        if(!(costco.desc||"").includes("可去可不去")) costco.desc=(costco.desc||"")+note;
+    const day1MarketChoicePatch=days.find(d=>d.day===1);
+    if(day1MarketChoicePatch){
+      // 好市多確定不去：從 Day 1 詳細行程移除
+      day1MarketChoicePatch.stops=day1MarketChoicePatch.stops.filter(
+        s=>!/Costco|好市多|コストコ/i.test((s.name||"")+" "+(s.map||""))
+      );
+
+      // 系滿漁市場與泡瀨漁港當天二選一
+      const itomanIdx=day1MarketChoicePatch.stops.findIndex(
+        s=>/系滿|糸満|Itoman/i.test((s.name||"")+" "+(s.map||""))
+      );
+      if(itomanIdx>=0){
+        const itoman=day1MarketChoicePatch.stops[itomanIdx];
+        itoman.name="系滿漁市場｜A 選項";
+        itoman.desc=(itoman.desc||"")+"<br><b>🐟 漁市場二選一</b>｜當天與「泡瀨漁港」擇一前往。";
+        if(!day1MarketChoicePatch.stops.some(s=>/泡瀨|泡瀬|Awase/i.test((s.name||"")+" "+(s.map||"")))){
+          day1MarketChoicePatch.stops.splice(itomanIdx+1,0,{
+            time:"二選一",
+            name:"泡瀨漁港｜B 選項",
+            desc:"🐟 與「系滿漁市場」二選一，當天依時間、路線與想逛的市場決定。",
+            map:"泡瀬漁港 沖縄",
+            type:"food"
+          });
+        }
       }
     }
 
@@ -2381,7 +2398,7 @@ main,.app-shell,.app{
         };
         day1NogamiPatch.stops.splice(aeonIdx>=0?aeonIdx:day1NogamiPatch.stops.length,0,nogamiStop);
       }
-      day1NogamiPatch.summary="那霸機場 → OTS 租車 → 系滿漁市場 → Costco（可去可不去）→ 乃が美 NOGAMI → AEON MALL 沖繩 Rycom → Sunset Resort Canphou";
+      day1NogamiPatch.summary="那霸機場 → OTS 租車 → 系滿漁市場／泡瀨漁港（二選一）→ 乃が美 NOGAMI → AEON MALL 沖繩 Rycom → Sunset Resort Canphou";
     }
 
     const day6AnimatePatch=days.find(d=>d.day===6);
@@ -2724,7 +2741,6 @@ main,.app-shell,.app{
       ["10:50","抵達那霸機場","那覇空港"],
       ["12:00","OTS 租車","OTSレンタカー 臨空豊崎営業所"],
       ["12:30","糸滿魚市場","糸満お魚センター"],
-      ["14:00","Costco 沖繩南城倉庫店（可去可不去）","コストコホールセール 沖縄南城倉庫店"],
       ["AEON 前","乃が美 NOGAMI（生食パン）","乃が美 沖縄市久保田3-1-12"],
       ["16:30","AEON Mall 沖繩 Rycom（Pokémon Center＋Owala＋30週年四表情皮卡丘＋On）","イオンモール沖縄ライカム"],
       ["21:00","Sunset Resort Canphou","Sunset Resort Canphou"]
@@ -3315,6 +3331,33 @@ document.addEventListener("click", function(e){
 })();
 </script>
 
+
+
+<script id="day1-market-choice-home-patch">
+(function(){
+  function patchHomeDay1(){
+    const route=document.getElementById("todayRoute");
+    if(!route) return;
+
+    // Remove any Costco/好市多 item rendered in TODAY ROUTE.
+    [...route.querySelectorAll("*")].forEach(el=>{
+      if(el.children.length===0 && /Costco|好市多|コストコ/i.test(el.textContent||"")){
+        const item=el.closest(".route-item,.today-route-item,.timeline-item,.today-stop,li,article");
+        if(item) item.remove();
+      }
+    });
+
+    // If 系滿 is shown, visually mark it as a two-choice stop and add 泡瀨 option when possible.
+    const all=[...route.querySelectorAll("*")];
+    const textNode=all.find(el=>el.children.length===0 && /系滿|糸満|Itoman/i.test(el.textContent||""));
+    if(textNode && !/二選一/.test(textNode.textContent||"")){
+      textNode.textContent=(textNode.textContent||"")+"／泡瀨漁港（二選一）";
+    }
+  }
+  window.addEventListener("load",()=>setTimeout(patchHomeDay1,80));
+  document.addEventListener("click",()=>setTimeout(patchHomeDay1,50),true);
+})();
+</script>
 
 </body>
 </html>
