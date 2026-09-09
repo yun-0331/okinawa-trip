@@ -2384,6 +2384,14 @@ main,.app-shell,.app{
       }
     }
 
+    const day1AeonNoTimePatch=days.find(d=>d.day===1);
+    if(day1AeonNoTimePatch){
+      const aeon=day1AeonNoTimePatch.stops.find(
+        s=>/AEON|永旺|Rycom|ライカム/i.test((s.name||"")+" "+(s.map||""))
+      );
+      if(aeon) aeon.time="";
+    }
+
     const day1NogamiPatch=days.find(d=>d.day===1);
     if(day1NogamiPatch){
       const exists=day1NogamiPatch.stops.some(s=>/乃が美|NOGAMI|Nogami/i.test((s.name||"")+" "+(s.desc||"")));
@@ -2742,7 +2750,7 @@ main,.app-shell,.app{
       ["12:00","OTS 租車","OTSレンタカー 臨空豊崎営業所"],
       ["12:30","糸滿魚市場","糸満お魚センター"],
       ["AEON 前","乃が美 NOGAMI（生食パン）","乃が美 沖縄市久保田3-1-12"],
-      ["16:30","AEON Mall 沖繩 Rycom（Pokémon Center＋Owala＋30週年四表情皮卡丘＋On）","イオンモール沖縄ライカム"],
+      ["","AEON Mall 沖繩 Rycom（Pokémon Center＋Owala＋30週年四表情皮卡丘＋On）","イオンモール沖縄ライカム"],
       ["21:00","Sunset Resort Canphou","Sunset Resort Canphou"]
     ]},
     2:{date:"2026-10-27", title:"美麗海・古宇利島・名護", stops:[
@@ -3356,6 +3364,28 @@ document.addEventListener("click", function(e){
   }
   window.addEventListener("load",()=>setTimeout(patchHomeDay1,80));
   document.addEventListener("click",()=>setTimeout(patchHomeDay1,50),true);
+})();
+</script>
+
+
+<script id="day1-aeon-no-time-home-patch">
+(function(){
+  function hideAeonTime(){
+    const route=document.getElementById("todayRoute");
+    if(!route) return;
+    [...route.querySelectorAll("*")].forEach(el=>{
+      if(/AEON|永旺|Rycom|ライカム/i.test(el.textContent||"")){
+        const item=el.closest(".route-item,.today-route-item,.timeline-item,.today-stop,li,article") || el.parentElement;
+        if(item){
+          [...item.querySelectorAll("*")].forEach(n=>{
+            if((n.textContent||"").trim()==="16:30") n.style.display="none";
+          });
+        }
+      }
+    });
+  }
+  window.addEventListener("load",()=>setTimeout(hideAeonTime,100));
+  document.addEventListener("click",()=>setTimeout(hideAeonTime,60),true);
 })();
 </script>
 
