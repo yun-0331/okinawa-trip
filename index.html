@@ -2370,13 +2370,13 @@ main,.app-shell,.app{
       );
       if(itomanIdx>=0){
         const itoman=day1MarketChoicePatch.stops[itomanIdx];
-        itoman.name="系滿漁市場｜A 選項";
-        itoman.desc=(itoman.desc||"")+"<br><b>🐟 漁市場二選一</b>｜當天與「泡瀨漁港」擇一前往。";
+        itoman.name="⭐ 首選｜系滿魚市場";
+        itoman.desc="🦀 <b>目標：帝王蟹腳</b><br>🦪 生蠔・🐚 干貝・🦞 龍蝦・🍣 生魚片";
         if(!day1MarketChoicePatch.stops.some(s=>/泡瀨|泡瀬|Awase/i.test((s.name||"")+" "+(s.map||"")))){
           day1MarketChoicePatch.stops.splice(itomanIdx+1,0,{
             time:"二選一",
-            name:"泡瀨漁港｜B 選項",
-            desc:"🐟 與「系滿漁市場」二選一，當天依時間、路線與想逛的市場決定。<br><b>📍 備註：</b>地點靠近 AEON Mall 沖繩 Rycom。",
+            name:"備選｜泡瀨漁港",
+            desc:"若當天時間太晚／不想繞路，再改去泡瀨。<br><b>📍 備註：</b>地點靠近 AEON Mall 沖繩 Rycom。",
             map:"泡瀬漁港 沖縄",
             type:"food"
           });
@@ -2406,7 +2406,7 @@ main,.app-shell,.app{
         };
         day1NogamiPatch.stops.splice(aeonIdx>=0?aeonIdx:day1NogamiPatch.stops.length,0,nogamiStop);
       }
-      day1NogamiPatch.summary="那霸機場 → OTS 租車 → 系滿漁市場／泡瀨漁港（二選一）→ 乃が美 NOGAMI → AEON MALL 沖繩 Rycom → Sunset Resort Canphou";
+      day1NogamiPatch.summary="那霸機場 → OTS 租車 → ⭐ 系滿魚市場（首選）／泡瀨漁港（備選）→ 乃が美 NOGAMI → AEON MALL 沖繩 Rycom → Sunset Resort Canphou";
     }
 
     const day6AnimatePatch=days.find(d=>d.day===6);
@@ -3359,7 +3359,7 @@ document.addEventListener("click", function(e){
     const all=[...route.querySelectorAll("*")];
     const textNode=all.find(el=>el.children.length===0 && /系滿|糸満|Itoman/i.test(el.textContent||""));
     if(textNode && !/二選一/.test(textNode.textContent||"")){
-      textNode.textContent=(textNode.textContent||"")+"／泡瀨漁港（二選一）";
+      textNode.textContent="⭐ 系滿魚市場（首選）／泡瀨漁港（備選）";
     }
   }
   window.addEventListener("load",()=>setTimeout(patchHomeDay1,80));
