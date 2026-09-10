@@ -3389,5 +3389,45 @@ document.addEventListener("click", function(e){
 })();
 </script>
 
+
+<script id="day1-overview-refresh-patch">
+(function(){
+  function refreshDay1Overview(){
+    if(typeof days==="undefined") return;
+    const d1=days.find(d=>d.day===1);
+    if(!d1) return;
+
+    d1.summary="那霸機場 → OTS 租車 → ⭐ 系滿魚市場（首選）／泡瀨漁港（備選） → 乃が美 NOGAMI → AEON MALL 沖繩 Rycom → Sunset Resort Canphou";
+
+    const overview=document.getElementById("dayOverview");
+    if(!overview) return;
+
+    // Update only the Day 1 overview card text without disturbing its click behavior.
+    const candidates=[...overview.children];
+    let card=candidates.find(el=>/DAY\s*1|Day\s*1|10\/26/i.test(el.textContent||""));
+    if(!card) card=candidates[0];
+    if(!card) return;
+
+    // Find the summary-like text node/element containing the old route.
+    const nodes=[card,...card.querySelectorAll("*")];
+    const routeEl=nodes.find(el=>{
+      const t=(el.textContent||"").trim();
+      return /那霸機場/.test(t) && (/系滿|Costco|好市多|OTS/.test(t));
+    });
+    if(routeEl){
+      // Prefer the deepest matching element to avoid overwriting the whole card.
+      const deep=nodes.filter(el=>{
+        const t=(el.textContent||"").trim();
+        return /那霸機場/.test(t) && (/系滿|Costco|好市多|OTS/.test(t));
+      }).sort((a,b)=>b.querySelectorAll("*").length-a.querySelectorAll("*").length).pop();
+      if(deep) deep.textContent=d1.summary;
+    }
+  }
+
+  window.addEventListener("load",()=>setTimeout(refreshDay1Overview,180));
+  document.addEventListener("click",()=>setTimeout(refreshDay1Overview,80),true);
+})();
+</script>
+
 </body>
 </html>
