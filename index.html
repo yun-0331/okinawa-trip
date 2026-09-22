@@ -3874,5 +3874,45 @@ document.addEventListener("click", function(e){
 })();
 </script>
 
+
+<script id="day4-reserved-restaurant-detail-sync-v61">
+(function(){
+  function fixDay4(){
+    try{
+      if(typeof days==="undefined") return;
+      const d4=days.find(d=>d.day===4);
+      if(!d4) return;
+
+      // Avoid duplicates if another patch already inserted it.
+      d4.stops=d4.stops.filter(s=>!/炭火燒肉ぶち久茂地|炭火焼肉ぶち久茂地/i.test((s.name||"")+" "+(s.desc||"")));
+
+      const restaurant={
+        time:"20:20",
+        name:"✓ 已預約｜炭火燒肉ぶち久茂地 -2nd",
+        desc:"🍽️ <b>20:20 已預約</b><br>⚠️ 預約位置僅保留 10 分鐘，請提早抵達。",
+        map:"炭火焼肉ぶち久茂地 2nd 那覇",
+        type:"food"
+      };
+
+      const hotelIndex=d4.stops.findIndex(s=>/HOTEL GRACERY NAHA/i.test((s.name||"")+" "+(s.desc||"")));
+      if(hotelIndex>=0) d4.stops.splice(hotelIndex,0,restaurant);
+      else d4.stops.push(restaurant);
+
+      d4.summary="iias 沖繩豐崎／DMM 水族館 → 美麗SUN海灘 → 瀨長島 → 18:30 OTS 還車 → 20:20 炭火燒肉ぶち久茂地 -2nd（已預約）→ HOTEL GRACERY NAHA";
+    }catch(e){}
+  }
+
+  function refresh(){
+    fixDay4();
+    try{
+      const active=document.querySelector('#dayTabs [data-day].active');
+      if(active && Number(active.dataset.day)===4) active.click();
+    }catch(e){}
+  }
+  fixDay4();
+  window.addEventListener("load",()=>setTimeout(refresh,240));
+})();
+</script>
+
 </body>
 </html>
