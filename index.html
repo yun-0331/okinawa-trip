@@ -1048,6 +1048,28 @@ main,.app-shell,.app{
 .day3-drive-warning b{color:#b24f64}
 </style>
 
+
+<style id="today-route-sync-style">
+#todayRoute .today-route-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:10px}
+#todayRoute .today-route-head h3{margin:0 0 4px;font-size:16px}
+#todayRoute .today-route-head small{color:#918793}
+#todayRoute .today-route-head>b{font-size:12px;color:#756a75;white-space:nowrap}
+#todayRoute .today-route-progress{height:7px;background:#eee7f8;border-radius:999px;overflow:hidden;margin-bottom:15px}
+#todayRoute .today-route-progress i{display:block;height:100%;background:#e8cfee;border-radius:999px}
+#todayRoute .today-route-row{display:grid;grid-template-columns:30px 1fr auto;gap:10px;align-items:center;padding:11px 0;border-bottom:1px dashed #e8e0e5}
+#todayRoute .today-route-check{width:29px;height:29px;border-radius:50%;border:1px solid #b9dce7;background:#fff;font-size:18px}
+#todayRoute .today-route-copy{min-width:0}
+#todayRoute .today-route-copy small{display:block;color:#a39aa3;font-size:11px;margin-bottom:2px}
+#todayRoute .today-route-copy b{display:block;font-size:13px;line-height:1.45;color:#554d57}
+#todayRoute .today-route-map{padding:8px 10px;border-radius:12px;background:#eaf7fb;text-decoration:none;color:#568296;font-size:11px;font-weight:800;white-space:nowrap}
+#todayRoute .today-route-row.done{opacity:.55}
+#todayRoute .today-route-row.done .today-route-copy b{text-decoration:line-through}
+#todayRoute .today-route-days{display:flex;gap:7px;flex-wrap:wrap;margin-top:14px}
+#todayRoute .today-route-days button{border:0;border-radius:999px;padding:7px 11px;background:#f5e7ed;color:#756671;font-size:11px;font-weight:800}
+#todayRoute .today-route-days button.active{background:#ef8194;color:#fff}
+#todayRoute .today-route-foot{text-align:center;color:#aaa0a8;font-size:10px;margin-top:13px}
+</style>
+
 </head>
 <body>
 <div class="app-shell">
@@ -3580,6 +3602,154 @@ document.addEventListener("click", function(e){
   }
   applyParkNote();
   window.addEventListener("load",()=>setTimeout(applyParkNote,120));
+})();
+</script>
+
+
+<script id="today-route-all-days-sync-v57">
+(function(){
+  const ROUTES={
+    1:{
+      title:"Day 1｜抵達沖繩・中南部自駕",
+      date:"2026 / 10 / 26",
+      stops:[
+        ["10:50","抵達那霸機場","那覇空港"],
+        ["12:00","OTS 租車","OTSレンタカー"],
+        ["12:30","⭐ 首選｜系滿魚市場","糸満お魚センター"],
+        ["備選","泡瀨漁港｜若時間太晚／不想繞路再改去","泡瀬漁港"],
+        ["AEON 前","乃が美 NOGAMI（生食パン）","乃が美 沖縄市久保田3-1-12"],
+        ["","AEON Mall 沖繩 Rycom（Pokémon Center＋Owala＋30週年四表情皮卡丘＋On）","AEON MALL Okinawa Rycom"],
+        ["21:00","Sunset Resort Canphou","Sunset Resort Canphou"]
+      ]
+    },
+    2:{
+      title:"Day 2｜美麗海・古宇利島・名護",
+      date:"2026 / 10 / 27",
+      stops:[
+        ["10:00","出發","Sunset Resort Canphou"],
+        ["","美麗海水族館｜11:00 海豚秀・15:00 鯨鯊餵食","沖縄美ら海水族館"],
+        ["16:00","古宇利蝦蝦飯 Kouri Shrimp","Kouri Shrimp"],
+        ["17:00","古宇利島愛心岩","ハートロック 古宇利島"],
+        ["時間允許","🛝 21世紀之森公園（全新公園・備選）","21世紀の森公園 名護"],
+        ["18:00","名護 AEON／唐吉訶德／夜釣","AEON Nago"]
+      ]
+    },
+    3:{
+      title:"Day 3｜瀨底島・JUNGLIA・PARCO CITY",
+      date:"2026 / 10 / 28",
+      stops:[
+        ["09:40","退房｜前往瀨底島","Sunset Resort Canphou"],
+        ["10:10 前","沖縄マリンスタジオ｜10:30 玻璃獨木舟（需提前20分鐘抵達）","沖縄マリンスタジオ"],
+        ["11:30","JUNGLIA 沖繩","JUNGLIA OKINAWA"],
+        ["移動提醒","⚠️ JUNGLIA → PARCO CITY 車程快要2小時｜18:30 已預約叙々苑，要抓好時間","SAN-A Urasoe West Coast PARCO CITY"],
+        ["17:30","PARCO CITY｜1F THANK YOU MART・沖縄宝島・Hands塵蟎片／3F ABC-MART・HMV・namco","SAN-A Urasoe West Coast PARCO CITY"],
+        ["18:30","✓ 已預約｜叙々苑 沖縄浦添パルコシティ店","叙々苑 沖縄浦添パルコシティ店"],
+        ["","HOTEL GRACERY NAHA","HOTEL GRACERY NAHA"]
+      ]
+    },
+    4:{
+      title:"Day 4｜DMM 水族館・瀨長島・還車",
+      date:"2026 / 10 / 29",
+      stops:[
+        ["10:00","iias 沖繩豐崎／DMM Kariyushi 水族館","DMMかりゆし水族館"],
+        ["14:00","Chura SUN Beach","美らSUNビーチ"],
+        ["15:00","瀨長島／Umikaji Terrace","瀬長島ウミカジテラス"],
+        ["18:30","OTS 還車 🚝 還車後前往那霸機場站","OTSレンタカー"],
+        ["20:20","✓ 已預約｜炭火燒肉ぶち久茂地 -2nd（位置保留10分鐘）","炭火焼肉ぶち久茂地 2nd 那覇"]
+      ]
+    },
+    5:{
+      title:"Day 5｜那霸市區・神社散策",
+      date:"2026 / 10 / 30",
+      stops:[
+        ["","達摩寺","達磨寺 沖縄"],
+        ["","泊港漁市場","泊いゆまち"],
+        ["","波上宮","波上宮"],
+        ["","奧武山公園","奥武山公園"],
+        ["","沖宮｜奧武山公園內・御守","沖宮"],
+        ["","沖繩 ちゅらさん6（男生行程）","沖縄 ちゅらさん6"],
+        ["","HOTEL GRACERY NAHA","HOTEL GRACERY NAHA"]
+      ]
+    },
+    6:{
+      title:"Day 6｜國際通・返台",
+      date:"2026 / 10 / 31",
+      stops:[
+        ["","飯店退房","HOTEL GRACERY NAHA"],
+        ["","國際通逛街","国際通 那覇"],
+        ["國際通逛街中","アニメイト那覇国際通り店｜排球少年等動漫周邊","アニメイト那覇国際通り店"],
+        ["","那霸機場","那覇空港"],
+        ["20:25","CI123｜OKA → TPE 21:05","那覇空港"]
+      ]
+    }
+  };
+
+  function mapUrl(q){
+    return "https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(q);
+  }
+
+  function renderRoute(day){
+    const data=ROUTES[day], root=document.getElementById("todayRoute");
+    if(!data||!root) return false;
+
+    // Preserve the site's existing completion storage, but render the current authoritative route.
+    let done={};
+    try{done=JSON.parse(localStorage.getItem("okinawa_route_done_v1")||"{}")||{};}catch(e){}
+    const dayDone=done[day]||{};
+    const completed=data.stops.filter((_,i)=>!!dayDone[i]).length;
+
+    root.innerHTML=`
+      <div class="today-route-head">
+        <div>
+          <h3>${data.title}</h3>
+          <small>${data.date}</small>
+        </div>
+        <b>${completed}/${data.stops.length} 完成</b>
+      </div>
+      <div class="today-route-progress"><i style="width:${data.stops.length?completed/data.stops.length*100:0}%"></i></div>
+      <div class="today-route-list">
+        ${data.stops.map((s,i)=>`
+          <div class="today-route-row ${dayDone[i]?"done":""}">
+            <button type="button" class="today-route-check" data-route-check="${i}" aria-label="完成">○</button>
+            <div class="today-route-copy">
+              ${s[0]?`<small>${s[0]}</small>`:""}
+              <b>${s[1]}</b>
+            </div>
+            <a class="today-route-map" href="${mapUrl(s[2])}" target="_blank" rel="noopener">📍 導航</a>
+          </div>`).join("")}
+      </div>
+      <div class="today-route-days">
+        ${[1,2,3,4,5,6].map(n=>`<button type="button" data-route-day="${n}" class="${n===day?"active":""}">Day ${n}</button>`).join("")}
+      </div>
+      <div class="today-route-foot">✓ 完成狀態會保存在這支手機裡・導航會開啟 Google Maps</div>`;
+
+    root.querySelectorAll("[data-route-day]").forEach(btn=>{
+      btn.addEventListener("click",()=>renderRoute(Number(btn.dataset.routeDay)));
+    });
+    root.querySelectorAll("[data-route-check]").forEach(btn=>{
+      btn.addEventListener("click",()=>{
+        const i=Number(btn.dataset.routeCheck);
+        let all={};
+        try{all=JSON.parse(localStorage.getItem("okinawa_route_done_v1")||"{}")||{};}catch(e){}
+        all[day]=all[day]||{};
+        all[day][i]=!all[day][i];
+        localStorage.setItem("okinawa_route_done_v1",JSON.stringify(all));
+        renderRoute(day);
+      });
+    });
+    return true;
+  }
+
+  function init(){
+    const root=document.getElementById("todayRoute");
+    if(!root) return;
+    let initial=1;
+    const active=root.querySelector("[data-route-day].active");
+    if(active) initial=Number(active.dataset.routeDay)||1;
+    renderRoute(initial);
+  }
+
+  window.addEventListener("load",()=>setTimeout(init,250));
 })();
 </script>
 
