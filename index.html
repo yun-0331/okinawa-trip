@@ -1070,6 +1070,9 @@ main,.app-shell,.app{
 #todayRoute .today-route-foot{text-align:center;color:#aaa0a8;font-size:10px;margin-top:13px}
 </style>
 
+<style id="expense-own-count-style">
+.expense-own-help{display:block;margin-top:6px;color:#9b8f99;font-size:11px;line-height:1.5}
+</style>
 </head>
 <body>
 <div class="app-shell">
@@ -1570,6 +1573,10 @@ main,.app-shell,.app{
           <div id="expenseShareOptions" class="expense-share-options" hidden>
             <label>總共幾人平分（含自己）
               <input id="expenseSplitCount" type="number" inputmode="numeric" min="2" max="30" value="2">
+            </label>
+            <label>我自己負擔幾位
+              <input id="expenseOwnCount" type="number" inputmode="numeric" min="1" max="30" value="1">
+              <small class="expense-own-help">例如：總共 5 位，我負擔 3 位，朋友就是 2 位。</small>
             </label>
             <div id="expenseSharePreview" class="expense-share-preview">每人約 ¥0</div>
           </div>
@@ -3753,5 +3760,23 @@ document.addEventListener("click", function(e){
 })();
 </script>
 
+
+<script id="expense-own-count-addon-v3">
+(function(){
+ const amount=document.getElementById("expenseAmount"), total=document.getElementById("expenseSplitCount"),
+ own=document.getElementById("expenseOwnCount"), shared=document.getElementById("expenseShared"),
+ preview=document.getElementById("expenseSharePreview");
+ if(!amount||!total||!own||!preview) return;
+ function update(){
+   const a=Number(amount.value)||0, t=Math.max(2,parseInt(total.value)||2);
+   let o=Math.max(1,parseInt(own.value)||1); if(o>t){o=t;own.value=t;} own.max=t;
+   const each=a/t, mine=each*o, friends=a-mine;
+   preview.textContent=`每人約 ¥${Math.round(each).toLocaleString()}｜我負擔 ${o} 位 ¥${Math.round(mine).toLocaleString()}｜朋友 ${t-o} 位 ¥${Math.round(friends).toLocaleString()}`;
+ }
+ [amount,total,own].forEach(x=>x.addEventListener("input",update));
+ if(shared) shared.addEventListener("change",update);
+ update();
+})();
+</script>
 </body>
 </html>
