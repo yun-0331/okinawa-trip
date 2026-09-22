@@ -3474,32 +3474,7 @@ document.addEventListener("click", function(e){
 </script>
 
 
-<script id="day3-parco-hands-mite-patch">
-(function(){
-  function apply(){
-    try{
-      if(typeof days!=="undefined"){
-        const d3=days.find(d=>d.day===3);
-        if(d3){
-          const parco=d3.stops.find(s=>/PARCO CITY/i.test((s.name||"")+" "+(s.map||"")));
-          if(parco && !/塵蟎片|手創館|ハンズ/.test(parco.desc||"")){
-            parco.desc=(parco.desc||"")+"<br>🧹 <b>1F ハンズ（Hands／手創館）</b>：找「日本塵蟎片／防蟎用品」；實際品牌與庫存以現場為準。";
-          }
-        }
-      }
-      [document.getElementById("timeline"),document.getElementById("todayRoute")].filter(Boolean).forEach(root=>{
-        const nodes=[...root.querySelectorAll("*")];
-        const parco=nodes.find(el=>el.children.length===0 && /PARCO CITY/i.test(el.textContent||""));
-        if(parco && !/塵蟎|Hands|手創館/.test(parco.textContent||"")){
-          parco.textContent=(parco.textContent||"")+"｜1F Hands 手創館：日本塵蟎片";
-        }
-      });
-    }catch(e){}
-  }
-  window.addEventListener("load",()=>setTimeout(apply,180));
-  document.addEventListener("click",()=>setTimeout(apply,80),true);
-})();
-</script>
+
 
 <script id="day3-jojoen-reservation-patch">
 (function(){
@@ -3536,6 +3511,45 @@ document.addEventListener("click", function(e){
   applyWarning();
   window.addEventListener("load",()=>setTimeout(applyWarning,120));
   document.addEventListener("click",()=>setTimeout(applyWarning,60),true);
+})();
+</script>
+
+
+<script id="day3-parco-full-repair-v2">
+(function(){
+  const FULL_PARCO_DESC =
+    '🛍️ 晚餐與購物一起逛。<br>'+
+    '<b>🛍 PARCO CITY 必逛清單｜依樓層整理</b><br>'+
+    '🌸 <b>1F｜THANK YOU MART</b>：390 日圓價位角色聯名雜貨，可留意三麗鷗、排球少年等系列。<br>'+
+    '🌺 <b>1F｜沖縄宝島</b>：找沖繩特色伴手禮與在地商品。<br>'+
+    '🧹 <b>1F｜ハンズ（Hands／手創館）</b>：找「日本塵蟎片／防蟎用品」；實際品牌與庫存以現場為準。<br>'+
+    '👟 <b>3F｜ABC-MART GRAND STAGE</b>：鞋款重點店，可順便找 On；實際品牌、尺寸與庫存以現場為準。<br>'+
+    '🎵 <b>3F｜HMV＆BOOKS OKINAWA</b>：K-POP、專輯、書籍與角色周邊。<br>'+
+    '🎮 <b>3F｜namco</b>：遊戲機、夾娃娃，適合親子逛街中途玩一下。';
+
+  function repair(){
+    try{
+      if(typeof days==="undefined") return;
+      const d3=days.find(d=>d.day===3);
+      if(!d3) return;
+      const parco=d3.stops.find(s=>/PARCO CITY/i.test((s.name||"")+" "+(s.map||"")));
+      if(!parco) return;
+
+      parco.time="17:30";
+      parco.name="PARCO CITY";
+      parco.desc=FULL_PARCO_DESC;
+      parco.map="SAN-A Urasoe West Coast PARCO CITY";
+
+      // If Day3 is currently open, re-render so the repaired data appears immediately.
+      const activeDayBtn=document.querySelector('#dayTabs [data-day].active');
+      if(activeDayBtn && Number(activeDayBtn.dataset.day)===3){
+        activeDayBtn.click();
+      }
+    }catch(e){}
+  }
+
+  repair();
+  window.addEventListener("load",()=>setTimeout(repair,160));
 })();
 </script>
 
