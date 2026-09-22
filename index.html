@@ -1277,7 +1277,7 @@ main,.app-shell,.app{
       <div class="restaurant-status-summary">
         <div class="restaurant-summary-card reserved">
           <small>✓ 已預約</small>
-          <b>1 間</b>
+          <b>2 間</b>
           <span>依日期排序</span>
         </div>
         <div class="restaurant-summary-card wishlist">
@@ -1298,7 +1298,15 @@ main,.app-shell,.app{
         <small>依日期排序</small>
       </div>
 
-      <article class="restaurant-card reserved" data-restaurant-status="reserved" data-reserved-date="2026-10-29">
+      <article class="restaurant-card reserved" data-restaurant-status="reserved" data-reserved-date="2026-10-28">
+<div class="restaurant-card-head"><div><span class="restaurant-area">🌊 浦添・PARCO CITY 3F</span><h3>叙々苑 沖縄浦添パルコシティ店</h3></div><span class="restaurant-badge reserved">✓ 已預約</span></div>
+<div class="reservation-highlight"><div><small>📅 日期</small><b>10/28（Day 3・星期三）</b></div><div><small>⏰ 時間</small><b>18:30</b></div></div>
+<div class="restaurant-alert">📍 位於 PARCO CITY 3F，直接安排在 Day 3 的 PARCO CITY 行程中用餐。</div>
+<div class="restaurant-tags"><span>🥩 燒肉</span><span>📌 已預約</span><span>🛍️ PARCO CITY</span></div>
+<a class="restaurant-map-btn" href="https://www.google.com/maps/search/?api=1&query=%E5%8F%99%E3%80%85%E8%8B%91%20%E6%B2%96%E7%B8%84%E6%B5%A6%E6%B7%BB%E3%83%91%E3%83%AB%E3%82%B3%E3%82%B7%E3%83%86%E3%82%A3%E5%BA%97" target="_blank" rel="noopener"><span>📍 Google Maps</span><b>導航 ›</b></a>
+</article>
+
+<article class="restaurant-card reserved" data-restaurant-status="reserved" data-reserved-date="2026-10-29">
         <div class="restaurant-card-head">
           <div>
             <span class="restaurant-area">🌆 那霸・久茂地</span>
@@ -2767,7 +2775,7 @@ main,.app-shell,.app{
       ["09:40","退房出發","Sunset Resort Canphou"],
       ["10:30","沖縄マリンスタジオ・玻璃獨木舟","沖縄マリンスタジオ"],
       ["11:30","JUNGLIA OKINAWA","JUNGLIA OKINAWA"],
-      ["17:30","PARCO CITY（THANK YOU MART＋沖縄宝島＋ABC-MART＋HMV＋namco）","サンエー浦添西海岸 PARCO CITY"],
+      ["17:30","PARCO CITY（THANK YOU MART＋1F Hands 手創館／塵蟎片＋沖縄宝島＋ABC-MART＋HMV＋namco）","サンエー浦添西海岸 PARCO CITY"],
       ["","HOTEL GRACERY NAHA","ホテルグレイスリー那覇"]
     ]},
     4:{date:"2026-10-29", title:"水族館・海灘・瀨長島", stops:[
@@ -3429,5 +3437,50 @@ document.addEventListener("click", function(e){
 })();
 </script>
 
+
+<script id="day3-parco-hands-mite-patch">
+(function(){
+  function apply(){
+    try{
+      if(typeof days!=="undefined"){
+        const d3=days.find(d=>d.day===3);
+        if(d3){
+          const parco=d3.stops.find(s=>/PARCO CITY/i.test((s.name||"")+" "+(s.map||"")));
+          if(parco && !/塵蟎片|手創館|ハンズ/.test(parco.desc||"")){
+            parco.desc=(parco.desc||"")+"<br>🧹 <b>1F ハンズ（Hands／手創館）</b>：找「日本塵蟎片／防蟎用品」；實際品牌與庫存以現場為準。";
+          }
+        }
+      }
+      [document.getElementById("timeline"),document.getElementById("todayRoute")].filter(Boolean).forEach(root=>{
+        const nodes=[...root.querySelectorAll("*")];
+        const parco=nodes.find(el=>el.children.length===0 && /PARCO CITY/i.test(el.textContent||""));
+        if(parco && !/塵蟎|Hands|手創館/.test(parco.textContent||"")){
+          parco.textContent=(parco.textContent||"")+"｜1F Hands 手創館：日本塵蟎片";
+        }
+      });
+    }catch(e){}
+  }
+  window.addEventListener("load",()=>setTimeout(apply,180));
+  document.addEventListener("click",()=>setTimeout(apply,80),true);
+})();
+</script>
+
+<script id="day3-jojoen-reservation-patch">
+(function(){
+ function apply(){
+  try{
+   if(typeof days==="undefined") return;
+   const d3=days.find(d=>d.day===3); if(!d3) return;
+   if(!d3.stops.some(s=>/叙々苑|Jojoen/i.test((s.name||"")+" "+(s.desc||"")))){
+    const p=d3.stops.findIndex(s=>/PARCO CITY/i.test((s.name||"")+" "+(s.map||"")));
+    const stop={time:"18:30",name:"✓ 已預約｜叙々苑 沖縄浦添パルコシティ店",desc:"🥩 10/28（星期三）18:30 已預約。位於 PARCO CITY 3F。",map:"叙々苑 沖縄浦添パルコシティ店",type:"food"};
+    if(p>=0)d3.stops.splice(p+1,0,stop);else d3.stops.push(stop);
+   }
+   d3.summary="玻璃獨木舟 → JUNGLIA 沖繩 → PARCO CITY → 18:30 叙々苑（已預約）→ HOTEL GRACERY NAHA";
+  }catch(e){}
+ }
+ apply(); window.addEventListener("load",()=>setTimeout(apply,120));
+})();
+</script>
 </body>
 </html>
