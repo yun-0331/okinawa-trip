@@ -3794,5 +3794,85 @@ document.addEventListener("click", function(e){
  update();
 })();
 </script>
+
+<script id="day1-detailed-itinerary-authoritative-fix-v60">
+(function(){
+  function fixDay1(){
+    try{
+      if(typeof days==="undefined") return;
+      const d1=days.find(d=>d.day===1);
+      if(!d1) return;
+
+      d1.title="抵達沖繩・中南部自駕";
+      d1.summary="那霸機場 → OTS 租車 → ⭐ 系滿魚市場（首選）／泡瀨漁港（備選） → 乃が美 NOGAMI → AEON Mall 沖繩 Rycom → Sunset Resort Canphou";
+      d1.stops=[
+        {
+          time:"10:50",
+          name:"抵達那霸機場",
+          desc:"CI120 抵達沖繩。出關後前往 OTS 接駁點。",
+          map:"那覇空港",
+          type:"transport"
+        },
+        {
+          time:"12:00",
+          name:"OTS 租車",
+          desc:"前往 OTS 辦理取車。",
+          map:"OTSレンタカー",
+          type:"transport"
+        },
+        {
+          time:"12:30",
+          name:"⭐ 首選｜系滿魚市場",
+          desc:"🦀 <b>目標：帝王蟹腳</b><br>🦪 生蠔・🐚 干貝・🦞 龍蝦・🍣 生魚片",
+          map:"糸満お魚センター",
+          type:"food"
+        },
+        {
+          time:"備選",
+          name:"泡瀨漁港",
+          desc:"若當天時間太晚／不想繞路，再改去泡瀨。<br><b>📍 備註：</b>地點靠近 AEON Mall 沖繩 Rycom。",
+          map:"泡瀬漁港 沖縄",
+          type:"food"
+        },
+        {
+          time:"AEON 前",
+          name:"乃が美 NOGAMI（生食パン）",
+          desc:"🍞 Day 1 先買來吃看看；如果好吃，Day 6 最後一天想再買帶回台灣。",
+          map:"乃が美 沖縄市久保田3-1-12",
+          type:"food"
+        },
+        {
+          time:"",
+          name:"AEON Mall 沖繩 Rycom",
+          desc:"🛍️ Pokémon Center OKINAWA／Owala／30週年四表情皮卡丘／On 等購物目標。<br><b>※ 不顯示固定時間，依當天實際進度前往。</b>",
+          map:"AEON MALL Okinawa Rycom",
+          type:"shop"
+        },
+        {
+          time:"21:00",
+          name:"Sunset Resort Canphou",
+          desc:"入住 Sunset Resort Canphou。",
+          map:"Sunset Resort Canphou",
+          type:"stay"
+        }
+      ];
+    }catch(e){}
+  }
+
+  function rerenderIfDay1(){
+    try{
+      fixDay1();
+      const active=document.querySelector('#dayTabs [data-day].active');
+      if(active && Number(active.dataset.day)===1){
+        active.click();
+      }
+    }catch(e){}
+  }
+
+  fixDay1();
+  window.addEventListener("load",()=>setTimeout(rerenderIfDay1,220));
+})();
+</script>
+
 </body>
 </html>
