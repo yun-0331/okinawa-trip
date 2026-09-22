@@ -3553,5 +3553,35 @@ document.addEventListener("click", function(e){
 })();
 </script>
 
+
+<script id="day2-21st-century-forest-park-note">
+(function(){
+  function applyParkNote(){
+    try{
+      if(typeof days==="undefined") return;
+      const d2=days.find(d=>d.day===2);
+      if(!d2) return;
+
+      const exists=d2.stops.some(s=>/21世紀之森公園|21世紀の森公園/i.test((s.name||"")+" "+(s.desc||"")));
+      if(!exists){
+        // Add as an optional stop near the Nago portion of Day 2.
+        const nagoIdx=d2.stops.findIndex(s=>/名護.*AEON|AEON.*名護|Don Quijote|ドン・キホーテ|夜釣|釣/i.test((s.name||"")+" "+(s.desc||"")));
+        const park={
+          time:"時間允許",
+          name:"備註｜可以去 21世紀之森公園（全新公園）",
+          desc:"🛝 Day 2 備選景點｜如果當天時間允許，可以順路去 21世紀之森公園走走、讓小朋友玩一下；不列為固定行程。",
+          map:"21世紀の森公園 名護",
+          type:"spot"
+        };
+        if(nagoIdx>=0) d2.stops.splice(nagoIdx,0,park);
+        else d2.stops.push(park);
+      }
+    }catch(e){}
+  }
+  applyParkNote();
+  window.addEventListener("load",()=>setTimeout(applyParkNote,120));
+})();
+</script>
+
 </body>
 </html>
