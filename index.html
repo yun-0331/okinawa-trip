@@ -1033,6 +1033,21 @@ main,.app-shell,.app{
 }
 </style>
 
+
+<style id="day3-drive-warning-style">
+.day3-drive-warning{
+  margin-top:10px;
+  padding:11px 12px;
+  border-radius:14px;
+  background:#fff4f5;
+  border:1px solid #f3c8cf;
+  color:#6d4d55;
+  line-height:1.65;
+  font-size:13px;
+}
+.day3-drive-warning b{color:#b24f64}
+</style>
+
 </head>
 <body>
 <div class="app-shell">
@@ -3497,5 +3512,26 @@ document.addEventListener("click", function(e){
  apply(); window.addEventListener("load",()=>setTimeout(apply,120));
 })();
 </script>
+
+<script id="day3-junglia-parco-time-warning">
+(function(){
+  function applyWarning(){
+    try{
+      if(typeof days==="undefined") return;
+      const d3=days.find(d=>d.day===3);
+      if(!d3) return;
+      const junglia=d3.stops.find(s=>/JUNGLIA|ジャングリア/i.test((s.name||"")+" "+(s.map||"")));
+      if(junglia && !/車程快要 2 小時|車程快要2小時/.test(junglia.desc||"")){
+        junglia.desc=(junglia.desc||"")+
+          '<br><div class="day3-drive-warning"><b>⚠️ 時間提醒</b><br>JUNGLIA 叢林樂園 → PARCO CITY 車程快要 2 小時，要抓好離園與移動時間。<br><b>🍽️ 18:30 已預約叙々苑，請預留塞車、停車與進館時間。</b></div>';
+      }
+    }catch(e){}
+  }
+  applyWarning();
+  window.addEventListener("load",()=>setTimeout(applyWarning,120));
+  document.addEventListener("click",()=>setTimeout(applyWarning,60),true);
+})();
+</script>
+
 </body>
 </html>
