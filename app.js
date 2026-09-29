@@ -1,306 +1,646 @@
-/* Okinawa Trip app.js - handbook path fix v2 */
-
-const days = [
- {day:1,date:"10/26",dow:"一",title:"抵達沖繩・南部採買",summary:"那霸機場 → OTS租車 → 系滿漁市場 → 好市多 → 永旺夢樂城 → 塔普日落渡假村",
-  stops:[
-   {time:"10:50",name:"抵達那霸機場",desc:"CI120 抵達沖繩。出關後前往 OTS 接駁點。",map:"那覇空港",type:"spot"},
-   {time:"12:00",name:"預約租車",desc:"前往 OTS 辦理取車。",map:"OTS Rent a Car Okinawa",type:"spot"},
-   {time:"12:30",name:"系滿漁市場",desc:"第一餐安排海鮮與市場美食。",map:"糸満お魚センター",type:"food"},
-   {time:"14:00",name:"好市多",desc:"南城倉庫店補貨、採買旅途中需要的用品。",map:"Costco Wholesale Okinawa Nanjo Warehouse",type:"shop"},
-   {time:"16:30",name:"永旺夢樂城 AEON Mall",desc:"逛街、晚餐與親子採買。",map:"AEON MALL Okinawa Rycom",type:"shop"},
-   {time:"21:00",name:"塔普日落渡假村",desc:"入住 Sunset Resort Canphou。",map:"Sunset Resort Canphou Okinawa",type:"spot",stay:true}
-  ]},
- {day:2,date:"10/27",dow:"二",title:"美麗海・古宇利・名護",summary:"美麗海水族館 → 古宇利蝦蝦飯 → 古宇利島心型岩 → 名護AEON／唐吉訶德／釣魚",
-  stops:[
-   {time:"10:00",name:"出發",desc:"前往沖繩美麗海水族館。",map:"沖縄美ら海水族館",type:"spot"},
-   {time:"11:00",name:"美麗海水族館",desc:"11:00 海豚秀；15:00 鯨鯊餵食。",map:"沖縄美ら海水族館",type:"spot"},
-   {time:"16:00",name:"古宇利蝦蝦飯",desc:"古宇利島人氣蝦蝦飯。",map:"Kouri Shrimp",type:"food"},
-   {time:"17:00",name:"古宇利島心型岩",desc:"傍晚前往心型岩拍照。",map:"ハートロック",type:"spot"},
-   {time:"18:00",name:"名護 AEON／唐吉訶德／釣魚",desc:"晚上依時間與體力安排購物及名護夜釣。",map:"Nago Fishing Port",type:"shop"},
-   {time:"晚間",name:"塔普日落渡假村",desc:"回住宿休息。",map:"Sunset Resort Canphou Okinawa",type:"spot",stay:true}
-  ]},
- {day:3,date:"10/28",dow:"三",title:"玻璃獨木舟・JUNGLIA・PARCO",summary:"退房 → 沖縄マリンスタジオ玻璃獨木舟 → JUNGLIA → PARCO CITY → HOTEL GRACERY NAHA",
-  stops:[
-   {time:"09:40",name:"退房",desc:"10 點前完成退房。",map:"Sunset Resort Canphou Okinawa",type:"spot"},
-   {time:"10:30",name:"玻璃獨木舟",desc:"沖縄マリンスタジオ・瀬底島，預約時段 10:30。",map:"沖縄マリンスタジオ",type:"spot"},
-   {time:"11:30",name:"JUNGLIA 叢林樂園",desc:"前往沖繩北部主題樂園。",map:"JUNGLIA OKINAWA",type:"spot"},
-   {time:"17:30",name:"PARCO CITY",desc:"購物、晚餐與伴手禮。",map:"SAN-A Urasoe West Coast PARCO CITY",type:"shop"},
-   {time:"晚間",name:"HOTEL GRACERY NAHA",desc:"入住那霸住宿。",map:"HOTEL GRACERY NAHA",type:"spot",stay:true}
-  ]},
- {day:4,date:"10/29",dow:"四",title:"DMM水族館・美麗SUN・瀨長島",summary:"iias沖繩豐崎／DMM水族館 → 美麗SUN海灘 → 瀨長島 → 18:30還車",
-  stops:[
-   {time:"10:00",name:"iias 沖繩豐崎／DMM水族館",desc:"DMM Kariyushi 水族館與商場。",map:"DMM Kariyushi Aquarium",type:"spot"},
-   {time:"14:00",name:"美麗SUN海灘",desc:"海邊散步、拍照。",map:"美らSUNビーチ",type:"spot"},
-   {time:"15:00",name:"瀨長島",desc:"Umikaji Terrace；可安排幸福鬆餅。",map:"瀬長島ウミカジテラス",type:"spot"},
-   {time:"18:30",name:"還車",desc:"結束自駕行程，前往 OTS 還車。",map:"OTS Rent a Car Okinawa",type:"spot"},
-   {time:"晚間",name:"HOTEL GRACERY NAHA",desc:"返回那霸住宿。",map:"HOTEL GRACERY NAHA",type:"spot",stay:true}
-  ]},
- {day:5,date:"10/30",dow:"五",title:"那霸市區・神社・市場",summary:"達摩寺 → 泊港漁市場 → 波上宮 → 奧武山公園 → 沖繩ちゅらさん6 → HOTEL GRACERY NAHA",
-  stops:[
-   {time:"上午",name:"達摩寺",desc:"第五天市區行程第一站。",map:"達磨寺 沖縄",type:"spot"},
-   {time:"中午",name:"泊港漁市場",desc:"安排海鮮與午餐。",map:"泊いゆまち",type:"food"},
-   {time:"下午",name:"波上宮",desc:"沖繩代表性神社與海岸景觀。",map:"波上宮",type:"spot"},
-   {time:"下午",name:"奧武山公園",desc:"市區散步與單軌移動。",map:"奥武山公園",type:"spot"},
-   {time:"傍晚",name:"沖繩 ちゅらさん6",desc:"手冊中的男生行程安排。",map:"沖縄 ちゅらさん6",type:"spot"},
-   {time:"晚間",name:"HOTEL GRACERY NAHA",desc:"最後一晚住宿。",map:"HOTEL GRACERY NAHA",type:"spot",stay:true}
-  ]},
- {day:6,date:"10/31",dow:"六",title:"退房・國際通・返台",summary:"退房 → 國際通 → 那霸機場 → CI123 回台北",
-  stops:[
-   {time:"上午",name:"退房",desc:"整理行李並完成退房。",map:"HOTEL GRACERY NAHA",type:"spot"},
-   {time:"白天",name:"國際通",desc:"最後採買；也可安排單軌一日遊與紀念章。",map:"国際通り 那覇",type:"shop"},
-   {time:"傍晚",name:"那霸機場",desc:"提早抵達，預留國內線商店與報到時間。",map:"那覇空港",type:"spot"},
-   {time:"20:25",name:"CI123 回台灣",desc:"OKA → TPE，20:25 起飛、21:05 抵達。",map:"那覇空港",type:"spot"}
-  ]}
-];
-
-const $=s=>document.querySelector(s), $$=s=>document.querySelectorAll(s);
-function openMaps(q){ window.open("https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(q),"_blank","noopener"); }
-window.openMaps=openMaps;
-
-function navigate(id){
-  $$(".view").forEach(v=>v.classList.toggle("active",v.id===id));
-  $$(".bottom-nav [data-nav]").forEach(b=>b.classList.toggle("active",b.dataset.nav===id));
-  window.scrollTo({top:0,behavior:"smooth"});
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const fmt=n=>'$'+Math.round(Number(n)||0).toLocaleString('zh-TW');
+let cur={y:2026,m:9};
+const installmentAmount=(y,m)=>(y<2026||(y===2026&&m<=11))?3000:0;
+const baseCardFeeAmount=(y,m)=>({202610:3000,202611:3000,202612:2000,202701:1200}[y*100+m]||0);
+function storedYuantaInstallmentDue(y,m){
+  let txs=[];try{const z=JSON.parse(localStorage.getItem('liyunjia-creditcards-v1')||'[]');if(Array.isArray(z))txs=z}catch(e){}
+  let total=0;
+  for(const tx of txs){
+    if(tx.card!=='yuanta'||+tx.installmentCount!==8)continue;
+    const dm=String(tx.date||'').match(/^(\d{4})-(\d{2})-(\d{2})$/);if(!dm)continue;
+    const sy=+dm[1],sm=+dm[2],sd=+dm[3],firstOffset=sd<=26?1:2;
+    const start=sy*12+(sm-1)+firstOffset;
+    const target=y*12+(m-1),idx=target-start;if(idx<0||idx>=8)continue;
+    const t=Math.max(0,Math.round(+tx.amount||0)),base=Math.floor(t/8);
+    total+=idx===7?t-base*7:base;
+  }
+  return total;
 }
-$$("[data-nav]").forEach(b=>b.addEventListener("click",()=>navigate(b.dataset.nav)));
-
-function getTripMode(){
- const start=new Date("2026-10-26T00:00:00+09:00"), end=new Date("2026-10-31T23:59:59+09:00"), now=new Date();
- if(now<start) return {mode:"before",daysLeft:Math.ceil((start-now)/86400000)};
- if(now<=end) return {mode:"during",day:Math.max(1,Math.min(6,Math.floor((now-start)/86400000)+1))};
- return {mode:"after"};
+const cardFeeAmount=(y,m)=>baseCardFeeAmount(y,m)+storedYuantaInstallmentDue(y,m);
+const defaultsFor=(y=cur.y,m=cur.m)=>{let rows=[['先生生活費',12000,'必要'],['孝親費',12000,'必要'],['大寶生活費',1200,'必要'],['二寶生活費',400,'必要'],['保險',16500,'必要'],['信貸(1)',7496,'債務'],['信貸(2)',6100,'債務'],['信貸(3)',6844,'債務']];if(installmentAmount(y,m)>0)rows.push(['分期（至115年11月）',installmentAmount(y,m),'債務']);if(cardFeeAmount(y,m)>0)rows.push(['卡費（10月～1月）',cardFeeAmount(y,m),'債務']);rows.push(['補習與英文',17100,'小孩'],['ETC 與加油',9000,'交通'],['電話',4000,'必要'],['長照',1500,'必要'],['捐款與 ETF',1600,'可調整']);return rows};
+const defaults=defaultsFor();
+const CATS=['必要','可調整','債務','小孩','交通','其他'];
+const CAT_ICON={必要:'M12 3l7 4v5c0 4.8-3 8-7 9-9-2-7-9-7-9V7l7-4z',可調整:'M4 7h16M7 7v13h10V7M9 4h6l1 3H8l1-3z',債務:'M6 4h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zm3 4h6M8 12h8M8 16h5',小孩:'M12 12a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-6 8a6 6 0 0 1 12 0',交通:'M5 17h14l-1-7a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2l-1 7zm2 0v2m10-2v2M7 13h10',其他:'M12 5v14M5 12h14'};
+const catIcon=c=>`<svg class="catIcon" viewBox="0 0 24 24"><path d="${CAT_ICON[c]||CAT_ICON.其他}"/></svg>`;
+const key=(y=cur.y,m=cur.m)=>`liyunjia-${y}-${String(m).padStart(2,'0')}`;
+const fresh=(y=cur.y,m=cur.m)=>({income:{husband:67000,wife:33000,other:8000},expenses:defaultsFor(y,m).map(([name,amount,category])=>({name,amount,category})),ledger:[],incomeLedger:[],finished:false,savedAmount:0,step:1});
+function loadMonth(y=cur.y,m=cur.m){let x=null;try{x=JSON.parse(localStorage.getItem(key(y,m))||'null')}catch(e){}
+  if(!x)x=fresh(y,m); if(!x.income)x.income=fresh(y,m).income;
+  ['husband','wife','other'].forEach(k=>{if(x.income[k]===undefined||x.income[k]===null)x.income[k]=fresh(y,m).income[k]});
+  if(Number(x.income.husband)+Number(x.income.wife)+Number(x.income.other)===0)x.income=fresh(y,m).income;
+  if(!Array.isArray(x.expenses)||!x.expenses.length)x.expenses=fresh(y,m).expenses;
+  if(x.expenses.every(e=>(+e.amount||0)===0))x.expenses=fresh(y,m).expenses;
+  // v25：固定前五項順序；兩位孩子生活費改為「必要」的一般固定支出。到期排程直接從畫面移除。
+  x.expenses=x.expenses.filter(e=>e.name!=='分期／卡費');
+  const renameChild={'大寶生活費（300×4週）':'大寶生活費','二寶生活費（100×4週）':'二寶生活費'};
+  x.expenses.forEach(e=>{if(renameChild[e.name]){e.name=renameChild[e.name];e.category='必要';delete e.scheduleId}});
+  const ensureNormal=(name,amount)=>{let e=x.expenses.find(e=>e.name===name);if(e){e.amount=amount;e.category='必要';delete e.scheduleId}else x.expenses.push({name,amount,category:'必要'})};
+  ensureNormal('大寶生活費',1200); ensureNormal('二寶生活費',400);
+  const syncTimed=(name,amount,scheduleId)=>{x.expenses=x.expenses.filter(e=>!(e.name===name||e.scheduleId===scheduleId));if(amount>0)x.expenses.push({name,amount,category:'債務',scheduleId})};
+  x.expenses=x.expenses.filter(e=>!(e.name==='分期（至115年12月）'||e.scheduleId==='installment-2026-12'));
+  // v41：元大 8 期不再獨立成一列，直接併入『卡費（10月～1月）』固定支出。
+  x.expenses=x.expenses.filter(e=>!(e.yuantaInstallmentPlanId||String(e.scheduleId||'').startsWith('yuanta-')||String(e.name||'').startsWith('元大信用卡｜')));
+  syncTimed('分期（至115年11月）',installmentAmount(y,m),'installment-2026-11');
+  syncTimed('卡費（10月～1月）',cardFeeAmount(y,m),'cardfee-2026-10-2027-01');
+  // v24：修正三筆信貸的正確每月繳款金額。
+  const correctLoanPayments={'信貸(1)':7496,'信貸(2)':6100,'信貸(3)':6844};
+  x.expenses.forEach(e=>{if(correctLoanPayments[e.name]!==undefined){e.amount=correctLoanPayments[e.name];e.category='債務';e.correctLoanPayment=true}});
+  const fixedOrder=['先生生活費','孝親費','大寶生活費','二寶生活費','保險','信貸(1)','信貸(2)','信貸(3)','分期（至115年11月）','卡費（10月～1月）','補習與英文','ETC 與加油','電話','長照','捐款與 ETF'];
+  x.expenses.sort((a,b)=>{let ai=fixedOrder.indexOf(a.name),bi=fixedOrder.indexOf(b.name);ai=ai<0?999:ai;bi=bi<0?999:bi;return ai-bi});
+  x.expenses=x.expenses.map((e,i)=>({...e,amount:+e.amount||0,category:e.category||defaultsFor(y,m)[i]?.[2]||'其他'}));
+  if(!Array.isArray(x.ledger))x.ledger=[]; if(!Array.isArray(x.incomeLedger))x.incomeLedger=[]; if(x.savedAmount===undefined)x.savedAmount=0; if(!x.step)x.step=1; if(x.step===2)x.step=1; else if(x.step===3)x.step=2; return x}
+let data=loadMonth();
+const inc=()=>+data.income.husband + +data.income.wife + +data.income.other;
+function dateSortValue(v){
+  const m=String(v||'').trim().match(/^(\d{4})[\/-](\d{1,2})[\/-](\d{1,2})$/);
+  if(!m)return 0;
+  return new Date(+m[1],+m[2]-1,+m[3]).getTime();
 }
-function renderToday(){
- const info=getTripMode(), status=$("#tripStatus"), title=$("#todayTitle"), sub=$("#todaySubtitle"), badge=$("#todayBadge"), next=$("#todayNext"), btn=$("#todayItineraryBtn");
- if(info.mode==="before"){
-   status.innerHTML=`<div><strong>沖繩倒數 ${info.daysLeft} 天</strong><p>2026/10/26 出發 · 行前準備模式</p></div><div class="status-emoji">🧳</div>`;
-   title.textContent="準備出發沖繩"; sub.textContent="先把行李、購物清單和資料確認好"; badge.textContent=`D-${info.daysLeft}`;
-   next.innerHTML=`<small>出發第一天</small><b>那霸機場 → OTS租車 → 系滿漁市場</b><p>第一天先輕鬆抵達、吃海鮮、補貨再前往住宿。</p>`;
-   btn.onclick=()=>{navigate("itinerary");selectDay(1)};
- } else if(info.mode==="during"){
-   const d=days[info.day-1];
-   status.innerHTML=`<div><strong>今天是 Day ${info.day}</strong><p>${d.date} · ${d.title}</p></div><div class="status-emoji">🌺</div>`;
-   title.textContent=`Day ${info.day}｜${d.title}`; sub.textContent=`${d.date}（${d.dow}）`; badge.textContent=`D${info.day}`;
-   const first=d.stops[0];
-   next.innerHTML=`<small>今日第一站</small><b>${first.time}　${first.name}</b><p>${first.desc}</p>`;
-   btn.onclick=()=>{navigate("itinerary");selectDay(info.day)};
- } else {
-   status.innerHTML=`<div><strong>沖繩旅行完成 ♡</strong><p>六天五夜的回憶都留在這裡</p></div><div class="status-emoji">📸</div>`;
-   title.textContent="旅行回憶模式"; sub.textContent="手冊、花費與備忘都還保留著"; badge.textContent="♡";
-   next.innerHTML=`<small>回顧旅程</small><b>打開 60 頁手冊看看這趟旅行</b><p>也可以繼續查看收藏、花費和每天的備忘。</p>`;
-   btn.onclick=()=>navigate("handbook");
- }
+const fixed=()=>data.expenses.reduce((s,x)=>s+(+x.amount||0),0);
+const spent=()=>data.ledger.reduce((s,x)=>s+(x.budgetImpact===false?0:(+x.amount||0)),0);
+const allSpent=()=>data.ledger.reduce((s,x)=>s+(+x.amount||0),0);
+const livingExtraIncome=()=>data.incomeLedger.reduce((s,x)=>s+(x.destination==='living'?(+x.amount||0):0),0);
+const allDailyIncome=()=>data.incomeLedger.reduce((s,x)=>s+(+x.amount||0),0);
+const pocketSpent=()=>data.ledger.reduce((s,x)=>s+(x.fundingSource==='pocket'?(+x.amount||0):0),0);
+const remain=()=>inc()-fixed();
+const SAVINGS_RATE=10;
+const suggestedSavings=()=>Math.max(0,Math.round(inc()*SAVINGS_RATE/100));
+const saved=()=>Math.max(0,+data.savedAmount||0);
+const baseAvailable=()=>Math.max(0,remain()-saved());
+const dailyBudget=()=>baseAvailable();
+const avail=()=>dailyBudget()+livingExtraIncome()-spent();
+function save(){localStorage.setItem(key(),JSON.stringify(data));render()}
+function setStep(n){data.step=n;localStorage.setItem(key(),JSON.stringify(data));$$('.stepPanel').forEach(p=>p.classList.toggle('active',+p.dataset.panel===n));$$('#steps button').forEach(b=>b.classList.toggle('now',+b.dataset.step===n))}
+function expenses(){let g=$('#expenses');g.innerHTML='';data.expenses.forEach((x,i)=>{let d=document.createElement('div');d.className='expense';let opts=CATS.map(c=>`<option ${x.category===c?'selected':''}>${c}</option>`).join('');d.innerHTML=`<div class="expenseMain"><span class="expenseName cat-${x.category}">${catIcon(x.category)}<b>${x.name}</b>${x.autoCardId?'<em class="autoBadge">自動</em>':x.scheduleId?'<em class="autoBadge">排程</em>':''}</span><select class="catSelect" ${(x.autoCardId||x.scheduleId)?'disabled':''}>${opts}</select></div><input type="number" inputmode="numeric" value="${x.amount}" ${(x.autoCardId||x.scheduleId)?'readonly':''}>${(x.autoCardId||x.scheduleId)?'':'<button class="deleteExpense">×</button>'}`;d.querySelector('input').onchange=e=>{if(x.autoCardId||x.scheduleId)return;data.expenses[i].amount=+e.target.value||0;save()};d.querySelector('select').onchange=e=>{if(x.autoCardId||x.scheduleId)return;data.expenses[i].category=e.target.value;save()};let del=d.querySelector('button');if(del)del.onclick=()=>{if(confirm(`刪除「${x.name}」？`)){data.expenses.splice(i,1);save()}};g.appendChild(d)});renderCategorySummary()}
+function renderCategorySummary(){let g=$('#categorySummary');let totals=Object.fromEntries(CATS.map(c=>[c,0]));data.expenses.forEach(e=>totals[e.category||'其他']+=+e.amount||0);g.innerHTML=CATS.map(c=>`<div class="catSummary cat-${c}">${catIcon(c)}<div><small>${c}</small><b>${fmt(totals[c])}</b></div></div>`).join('')}
+function localISODate(d=new Date()){const p=n=>String(n).padStart(2,'0');return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}`}
+let expenseDetailDate=localISODate();
+function ledgerDateISO(v){
+  const text=String(v||'').trim();
+  let m=text.match(/^(\d{4})[\/-](\d{1,2})[\/-](\d{1,2})$/);
+  if(m){const p=n=>String(n).padStart(2,'0');return `${m[1]}-${p(+m[2])}-${p(+m[3])}`;}
+  m=text.match(/^(\d{1,2})[\/-](\d{1,2})$/);
+  if(m){const p=n=>String(n).padStart(2,'0');return `${cur.y}-${p(+m[1])}-${p(+m[2])}`;}
+  return '';
 }
-renderToday();
-
-function renderOverview(){
- const wrap=$("#dayOverview");
- days.forEach(d=>{
-   const b=document.createElement("button"); b.className="day-card";
-   b.innerHTML=`<div class="day-badge"><small>DAY</small><b>${d.day}</b></div><div><h3>${d.date}（${d.dow}）${d.title}</h3><p>${d.summary}</p></div><div class="arrow">›</div>`;
-   b.onclick=()=>{navigate("itinerary");selectDay(d.day)};
-   wrap.appendChild(b);
- });
+function detailDateLabel(isoDate,type='expense'){
+  const m=String(isoDate||'').match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  const noun=type==='income'?'收入':type==='both'?'收支':'支出';
+  if(!m)return `${noun}明細`;
+  const today=localISODate();
+  return isoDate===today?`今日${noun}明細`:`${+m[2]}/${+m[3]} ${noun}明細`;
 }
-function renderTabs(){
- const tabs=$("#dayTabs");
- days.forEach(d=>{
-   const b=document.createElement("button"); b.textContent=`D${d.day} ${d.date}`;
-   b.dataset.day=d.day; b.onclick=()=>selectDay(d.day); tabs.appendChild(b);
- });
-}
-let selectedDay=1;
-let favorites=JSON.parse(localStorage.getItem("okinawa_favorites_v3")||"[]");
-function favoriteId(day,stop){return `${day}_${stop.name}`}
-
-function selectDay(n){
- selectedDay=n;
- $$("#dayTabs button").forEach(b=>b.classList.toggle("active",+b.dataset.day===n));
- const d=days.find(x=>x.day===n), tl=$("#timeline"); tl.innerHTML="";
- $("#dayHeadline").innerHTML=`<small>DAY ${d.day} · ${d.date}（${d.dow}）</small><h3>${d.title}</h3><p>${d.summary}</p>`;
- d.stops.forEach(s=>{
-   const id=favoriteId(d.day,s), isFav=favorites.some(x=>x.id===id);
-   const card=document.createElement("article"); card.className="stop "+(s.stay?"stay":"");
-   card.innerHTML=`<div class="stop-top"><div class="stop-time">${s.time}</div><div style="flex:1"><h3>${s.name}</h3><p>${s.desc}</p><div class="stop-actions"><button class="map-btn">📍 Google Maps</button><button class="fav-btn ${isFav?"active":""}">${isFav?"♥ 已收藏":"♡ 收藏"}</button></div></div></div>`;
-   card.querySelector(".map-btn").onclick=()=>openMaps(s.map);
-   card.querySelector(".fav-btn").onclick=()=>toggleFavorite(d,s);
-   tl.appendChild(card);
- });
- const notes=JSON.parse(localStorage.getItem("okinawa_day_notes")||"{}");
- $("#dayNote").value=notes[n]||"";
-}
-renderOverview();renderTabs();selectDay(1);
-
-let noteTimer;
-$("#dayNote").addEventListener("input",()=>{
- clearTimeout(noteTimer);$("#noteSaved").textContent="儲存中…";
- noteTimer=setTimeout(()=>{const notes=JSON.parse(localStorage.getItem("okinawa_day_notes")||"{}");notes[selectedDay]=$("#dayNote").value;localStorage.setItem("okinawa_day_notes",JSON.stringify(notes));$("#noteSaved").textContent="已自動儲存"},350);
-});
-
-// Favorites
-let favFilter="all";
-function toggleFavorite(day,stop){
- const id=favoriteId(day.day,stop), idx=favorites.findIndex(x=>x.id===id);
- if(idx>=0) favorites.splice(idx,1);
- else favorites.push({id,day:day.day,date:day.date,name:stop.name,desc:stop.desc,map:stop.map,type:stop.type});
- localStorage.setItem("okinawa_favorites_v3",JSON.stringify(favorites));
- selectDay(day.day);renderFavorites();
-}
-function renderFavorites(){
- const list=$("#favoritesList");list.innerHTML="";
- const arr=favFilter==="all"?favorites:favorites.filter(x=>x.type===favFilter);
- if(!arr.length){list.innerHTML='<div class="empty-state">還沒有收藏。<br>在每日行程的景點卡按「♡ 收藏」就會出現在這裡。</div>';return}
- arr.forEach(x=>{
-   const el=document.createElement("div");el.className="favorite-card";
-   el.innerHTML=`<div><h3>${x.name}</h3><p>Day ${x.day} · ${x.date}　${x.desc}</p></div><div class="tools"><button class="go">導航</button><button class="remove">×</button></div>`;
-   el.querySelector(".go").onclick=()=>openMaps(x.map);
-   el.querySelector(".remove").onclick=()=>{favorites=favorites.filter(f=>f.id!==x.id);localStorage.setItem("okinawa_favorites_v3",JSON.stringify(favorites));renderFavorites();selectDay(selectedDay)};
-   list.appendChild(el);
- });
-}
-$$("[data-fav-filter]").forEach(b=>b.onclick=()=>{$$("[data-fav-filter]").forEach(x=>x.classList.remove("active"));b.classList.add("active");favFilter=b.dataset.favFilter;renderFavorites()});
-$("#clearFavorites").onclick=()=>{if(confirm("要清除全部收藏嗎？")){favorites=[];localStorage.setItem("okinawa_favorites_v3","[]");renderFavorites();selectDay(selectedDay)}};
-renderFavorites();
-
-// Shopping
-const shopNames={souvenir:"伴手禮",drug:"藥妝",kids:"孩子",other:"其他"};
-let shopping=JSON.parse(localStorage.getItem("okinawa_shopping_v3")||"[]"), shopFilter="all";
-function saveShopping(){localStorage.setItem("okinawa_shopping_v3",JSON.stringify(shopping));renderShopping()}
-function renderShopping(){
- const list=$("#shoppingList");list.innerHTML="";
- const arr=shopFilter==="all"?shopping:shopping.filter(x=>x.cat===shopFilter);
- if(!arr.length){list.innerHTML='<div class="empty-state">還沒有購物項目。<br>想到什麼就先加進來，旅行時直接勾掉。</div>';return}
- arr.forEach(item=>{
-   const row=document.createElement("div");row.className="shopping-row"+(item.done?" done":"");
-   row.innerHTML=`<div class="shopping-row-main"><input type="checkbox" ${item.done?"checked":""}><div class="shopping-name">${item.text}<span class="shop-tag">${shopNames[item.cat]}</span></div></div><button>×</button>`;
-   row.querySelector("input").onchange=e=>{item.done=e.target.checked;saveShopping()};
-   row.querySelector("button").onclick=()=>{shopping=shopping.filter(x=>x.id!==item.id);saveShopping()};
-   list.appendChild(row);
- });
-}
-$("#shoppingForm").onsubmit=e=>{e.preventDefault();const t=$("#shoppingText").value.trim();if(!t)return;shopping.push({id:Date.now().toString(),text:t,cat:$("#shoppingCategory").value,done:false});$("#shoppingText").value="";saveShopping()};
-$$("[data-shop]").forEach(b=>b.onclick=()=>{$$("[data-shop]").forEach(x=>x.classList.remove("active"));b.classList.add("active");shopFilter=b.dataset.shop;renderShopping()});
-$("#clearShopping").onclick=()=>{if(confirm("要清除全部購物清單嗎？")){shopping=[];saveShopping()}};
-renderShopping();
-
-// Checklist
-const defaults={
- luggage:["護照","台灣駕照","日本駕照日文譯本","Visit Japan Web 資料","手機／充電線","行動電源","常用藥品","盥洗用品","換洗衣物","雨具","兒童用品"],
- shopping:["伴手禮","藥妝","零食／飲料","孩子想買的商品"],
- todo:["確認航班資料","確認住宿資料","確認租車預約","確認網路／漫遊","確認旅遊保險"]
-};
-let checkData=JSON.parse(localStorage.getItem("okinawa_checklists_v2")||"null");
-if(!checkData){checkData={};for(const k of Object.keys(defaults))checkData[k]=defaults[k].map((t,i)=>({id:k+"_"+i,text:t,done:false}))}
-let activeList="luggage";
-function saveChecks(){localStorage.setItem("okinawa_checklists_v2",JSON.stringify(checkData));renderChecks()}
-function renderChecks(){
- const wrap=$("#checkItems");wrap.innerHTML="";
- checkData[activeList].forEach(item=>{
-   const row=document.createElement("div");row.className="check-row"+(item.done?" done":"");
-   row.innerHTML=`<input type="checkbox" ${item.done?"checked":""}><div class="check-text">${item.text}</div><button class="delete-check">×</button>`;
-   row.querySelector("input").onchange=e=>{item.done=e.target.checked;saveChecks()};
-   row.querySelector("button").onclick=()=>{checkData[activeList]=checkData[activeList].filter(x=>x.id!==item.id);saveChecks()};
-   wrap.appendChild(row);
- });
- const total=checkData[activeList].length,done=checkData[activeList].filter(x=>x.done).length,p=total?Math.round(done/total*100):0;
- $("#checkProgressText").textContent=`${done} / ${total} 完成`;$("#checkPercent").textContent=p+"%";$("#checkProgress").style.width=p+"%";
-}
-$$("[data-list]").forEach(b=>b.onclick=()=>{$$("[data-list]").forEach(x=>x.classList.remove("active"));b.classList.add("active");activeList=b.dataset.list;renderChecks()});
-$("#addCheckForm").onsubmit=e=>{e.preventDefault();const t=$("#newCheckItem").value.trim();if(!t)return;checkData[activeList].push({id:Date.now().toString(),text:t,done:false});$("#newCheckItem").value="";saveChecks()};
-$("#resetChecklist").onclick=()=>{if(confirm("要把三個清單恢復成預設內容嗎？")){checkData={};for(const k of Object.keys(defaults))checkData[k]=defaults[k].map((t,i)=>({id:k+"_"+i,text:t,done:false}));saveChecks()}};
-renderChecks();
-
-// Converter
-const rate=$("#rate"),jpy=$("#jpy"),twd=$("#twd");
-rate.value=localStorage.getItem("okinawa_rate")||"0.205";
-function j2t(){const r=+rate.value||0;twd.value=((+jpy.value||0)*r).toFixed(0);localStorage.setItem("okinawa_rate",rate.value);updateExpenseTotal()}
-function t2j(){const r=+rate.value||0;jpy.value=r?((+twd.value||0)/r).toFixed(0):0;localStorage.setItem("okinawa_rate",rate.value)}
-rate.addEventListener("input",j2t);jpy.addEventListener("input",j2t);twd.addEventListener("input",t2j);$$("[data-jpy]").forEach(b=>b.onclick=()=>{jpy.value=b.dataset.jpy;j2t()});j2t();
-
-// Expenses
-let expenses=JSON.parse(localStorage.getItem("okinawa_expenses")||"[]");
-function saveExpenses(){localStorage.setItem("okinawa_expenses",JSON.stringify(expenses));renderExpenses()}
-function updateExpenseTotal(){
- const total=expenses.reduce((a,x)=>a+(+x.amount||0),0),r=+rate.value||0;
- $("#expenseTotal").textContent="¥"+total.toLocaleString("ja-JP");
- $("#expenseTwd").textContent="約 NT$"+Math.round(total*r).toLocaleString("zh-TW");
-}
-function renderExpenseSummary(){
- const wrap=$("#expenseCategorySummary");wrap.innerHTML="";
- const cats=["餐飲","購物","交通","門票","住宿","其他"];
- cats.forEach(c=>{const n=expenses.filter(x=>x.category===c).reduce((a,x)=>a+(+x.amount||0),0);const el=document.createElement("div");el.className="expense-chip";el.innerHTML=`<small>${c}</small><b>¥${n.toLocaleString()}</b>`;wrap.appendChild(el)})
-}
-function renderExpenses(){
- const list=$("#expenseList");list.innerHTML="";
- if(!expenses.length) list.innerHTML='<div class="card" style="text-align:center;color:#9a8b99">還沒有紀錄，旅行中可以直接在這裡新增。</div>';
- expenses.slice().reverse().forEach((x,ri)=>{
-   const idx=expenses.length-1-ri,el=document.createElement("div");el.className="expense-item";
-   el.innerHTML=`<div><p><b>${x.note||x.category}</b></p><small>${x.category} · ${x.date}</small></div><strong>¥${(+x.amount).toLocaleString()}</strong><button aria-label="刪除">×</button>`;
-   el.querySelector("button").onclick=()=>{expenses.splice(idx,1);saveExpenses()};list.appendChild(el)
- });updateExpenseTotal();renderExpenseSummary()
-}
-$("#expenseForm").addEventListener("submit",e=>{e.preventDefault();expenses.push({amount:+$("#expenseAmount").value,category:$("#expenseCategory").value,note:$("#expenseNote").value.trim(),date:new Date().toLocaleDateString("zh-TW")});$("#expenseAmount").value="";$("#expenseNote").value="";saveExpenses()});
-$("#clearExpenses").onclick=()=>{if(confirm("要清除全部花費紀錄嗎？")){expenses=[];saveExpenses()}};
-renderExpenses();
-
-
-
-
-// ===== Version 4: install/share/offline =====
-let deferredInstallPrompt = null;
-window.addEventListener("beforeinstallprompt", (event) => {
-  event.preventDefault();
-  deferredInstallPrompt = event;
-});
-
-const installBtn = document.getElementById("installBtn");
-if (installBtn) {
-  installBtn.addEventListener("click", async () => {
-    if (deferredInstallPrompt) {
-      deferredInstallPrompt.prompt();
-      try { await deferredInstallPrompt.userChoice; } catch(e) {}
-      deferredInstallPrompt = null;
-    } else {
-      const help = document.querySelector(".ios-help");
-      if (help) help.open = true;
+function ledger(){
+  let l=$('#ledger');
+  if(!l)return;
+  const expenseRows=(data.ledger||[]).map((x,i)=>({x,i,type:'expense'})).filter(r=>ledgerDateISO(r.x.date)===expenseDetailDate);
+  const incomeRows=(data.incomeLedger||[]).map((x,i)=>({x,i,type:'income'})).filter(r=>ledgerDateISO(r.x.date)===expenseDetailDate);
+  const rows=[...expenseRows,...incomeRows].sort((a,b)=>(+b.x.created||0)-(+a.x.created||0));
+  const expenseTotal=expenseRows.reduce((s,r)=>s+(+r.x.amount||0),0);
+  const incomeTotal=incomeRows.reduce((s,r)=>s+(+r.x.amount||0),0);
+  if($('#dailyListEyebrow'))$('#dailyListEyebrow').textContent='收支明細';
+  if($('#dailyListTitle'))$('#dailyListTitle').textContent=detailDateLabel(expenseDetailDate,'both');
+  if($('#dSpent'))$('#dSpent').innerHTML=`<span class="incomeTotal">+${fmt(incomeTotal)}</span><small>收入</small><span class="expenseTotal">-${fmt(expenseTotal)}</span><small>支出</small>`;
+  if($('#showExpenseHistory'))$('#showExpenseHistory').textContent='📅 查詢以往日期收支';
+  l.innerHTML=rows.length?'':'<p class="hint">這一天沒有收入或支出紀錄。</p>';
+  rows.forEach(r=>{
+    let x=r.x,d=document.createElement('div');
+    if(r.type==='income'){
+      d.className='ledger incomeEntry';
+      const destination=x.destination==='pocket'?'手頭上現金':x.destination==='linepay'?'LINE Pay Money':'當月生活費';
+      d.innerHTML=`<div><b>${escapeHtml(x.note||x.category||'收入')}</b><small>${escapeHtml(x.category||'收入')}・存入 ${escapeHtml(destination)}・${escapeHtml(x.date)}</small></div><div><b class="incomeAmount">+${fmt(x.amount)}</b><div class="ledgerActions"><button type="button" class="deleteLedger">刪除</button></div></div>`;
+      d.querySelector('.deleteLedger').onclick=()=>{
+        if(!confirm('刪除這筆收入？'))return;
+        if(x.destination==='pocket')loans.cash=Math.max(0,(+loans.cash||0)-(+x.amount||0));
+        else if(x.destination==='linepay')loans.linepayMoney=Math.max(0,(+loans.linepayMoney||0)-(+x.amount||0));
+        if(x.destination==='pocket'||x.destination==='linepay')localStorage.setItem(LOAN_KEY,JSON.stringify(loans));
+        data.incomeLedger.splice(r.i,1);save();
+      };
+    }else{
+      d.className='ledger';
+      let source=x.fundingSource==='pocket'?'手頭上現金':x.fundingSource==='linepay'?'LINE Pay Money':x.fundingSource==='living'?'當月生活費':'';
+      let methodText=[x.method||'現金',source].filter(Boolean).join('・');
+      d.innerHTML=`<div><b>${escapeHtml(x.note||x.category)}</b><small>${escapeHtml(x.category)}・${escapeHtml(methodText)}・${escapeHtml(x.date)}</small></div><div><b>-${fmt(x.amount)}</b><div class="ledgerActions"><button type="button" class="editLedger">修改</button><button type="button" class="deleteLedger">刪除</button></div></div>`;
+      d.querySelector('.editLedger').onclick=()=>openExpenseEditor(x,r.i);
+      d.querySelector('.deleteLedger').onclick=()=>{if(!confirm('刪除這筆支出？'))return;if(x.sourceId){const oldTx=cardTxs.find(t=>t.id===x.sourceId);if(oldTx?.installmentPlanId)removeYuantaInstallmentSchedule(oldTx.installmentPlanId);cardTxs=cardTxs.filter(t=>t.id!==x.sourceId);localStorage.setItem(CARD_KEY,JSON.stringify(cardTxs));refreshYuantaFixedExpenses()}if(x.fundingSource==='pocket'){loans.cash=(+loans.cash||0)+(+x.amount||0);localStorage.setItem(LOAN_KEY,JSON.stringify(loans))}else if(x.fundingSource==='linepay'){loans.linepayMoney=(+loans.linepayMoney||0)+(+x.amount||0);localStorage.setItem(LOAN_KEY,JSON.stringify(loans))}data.ledger.splice(r.i,1);save()};
     }
-  });
+    l.appendChild(d)
+  })
 }
 
-const shareBtn = document.getElementById("shareBtn");
-if (shareBtn) {
-  shareBtn.addEventListener("click", async () => {
-    const data = {
-      title: "沖繩親子自由行 2026",
-      text: "我們的沖繩 6天5夜旅行手冊",
-      url: window.location.href
-    };
-    try {
-      if (navigator.share) {
-        await navigator.share(data);
-      } else if (navigator.clipboard) {
-        await navigator.clipboard.writeText(window.location.href);
-        const old = shareBtn.textContent;
-        shareBtn.textContent = "已複製網址";
-        setTimeout(()=>shareBtn.textContent=old,1600);
-      } else {
-        prompt("複製這個網址：", window.location.href);
-      }
-    } catch(e) {}
-  });
+let editingExpense=null,editPayMethod='cash',editCashSource='living';
+function detectCardId(x){
+  if(x.sourceId){const tx=cardTxs.find(t=>t.id===x.sourceId);if(tx?.card)return tx.card}
+  return Object.keys(CARDS).find(id=>CARDS[id].name===x.method)||'ctbc';
+}
+function renderExpenseEditorPayment(){
+  $$('#editPayMethodTabs button').forEach(b=>b.classList.toggle('active',b.dataset.method===editPayMethod));
+  $$('#editCashSourceTabs button').forEach(b=>b.classList.toggle('active',b.dataset.source===editCashSource));
+  $('#editCashSourceWrap').classList.toggle('hidden',editPayMethod==='credit');
+  $('#editCardWrap').classList.toggle('hidden',editPayMethod!=='credit');
+}
+function openExpenseEditor(x,index){
+  editingExpense={x,index,sourceY:cur.y,sourceM:cur.m};
+  $('#editExpenseDate').value=ledgerDateISO(x.date)||localISODate();
+  $('#editExpenseAmount').value=+x.amount||0;
+  $('#editExpenseCategory').value=x.category||'其他';
+  $('#editExpenseNote').value=x.note||'';
+  editPayMethod=x.sourceId||x.source==='credit-card'||Object.values(CARDS).some(c=>c.name===x.method)?'credit':'cash';
+  editCashSource=x.fundingSource==='pocket'?'pocket':x.fundingSource==='linepay'?'linepay':'living';
+  $('#editExpenseCard').value=detectCardId(x);
+  renderExpenseEditorPayment();
+  $('#editExpenseDlg').showModal();
+}
+$$('#editPayMethodTabs button').forEach(b=>b.addEventListener('click',()=>{editPayMethod=b.dataset.method;renderExpenseEditorPayment()}));
+$$('#editCashSourceTabs button').forEach(b=>b.addEventListener('click',()=>{editCashSource=b.dataset.source;renderExpenseEditorPayment()}));
+$('#editExpenseCancel').addEventListener('click',()=>$('#editExpenseDlg').close());
+$('#editExpenseSave').addEventListener('click',()=>{
+  if(!editingExpense)return;
+  const amount=Number($('#editExpenseAmount').value)||0;
+  if(amount<=0){alert('請輸入支出金額');return}
+  const selectedDate=$('#editExpenseDate').value;
+  const dm=selectedDate.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if(!dm){alert('請選擇正確日期');return}
+  const targetY=+dm[1],targetM=+dm[2],targetD=+dm[3];
+  const category=$('#editExpenseCategory').value||'其他',note=$('#editExpenseNote').value.trim();
+  const old=editingExpense.x,oldAmount=+old.amount||0;
+  const availablePocket=(+loans.cash||0)+(old.fundingSource==='pocket'?oldAmount:0);
+  const availableLinePay=(+loans.linepayMoney||0)+(old.fundingSource==='linepay'?oldAmount:0);
+  if(editPayMethod==='cash'&&editCashSource==='pocket'&&amount>availablePocket){alert(`手頭上現金目前可用 ${fmt(availablePocket)}，不足以支付修改後金額。`);return}
+  if(editPayMethod==='cash'&&editCashSource==='linepay'&&amount>availableLinePay){alert(`LINE Pay Money 目前可用 ${fmt(availableLinePay)}，不足以支付修改後金額。`);return}
+
+  const sourceData=(editingExpense.sourceY===cur.y&&editingExpense.sourceM===cur.m)?data:loadMonth(editingExpense.sourceY,editingExpense.sourceM);
+  const actualIndex=sourceData.ledger.findIndex(z=>z===old);
+  const idx=actualIndex>=0?actualIndex:editingExpense.index;
+
+  if(old.fundingSource==='pocket')loans.cash=(+loans.cash||0)+oldAmount;
+  else if(old.fundingSource==='linepay')loans.linepayMoney=(+loans.linepayMoney||0)+oldAmount;
+
+  let sourceId=old.sourceId||null;
+  if(editPayMethod==='credit'){
+    const card=$('#editExpenseCard').value;
+    let tx=sourceId?cardTxs.find(t=>t.id===sourceId):null;
+    if(tx){const oldPlan=tx.installmentPlanId;if(oldPlan&&card!=='yuanta'){removeYuantaInstallmentSchedule(oldPlan);delete tx.installmentCount;delete tx.installmentPlanId;}tx.date=selectedDate;tx.card=card;tx.amount=amount;tx.category=category;tx.note=note;tx.synced=true;if(tx.card==='yuanta')scheduleYuantaInstallment(tx)}
+    else{tx={id:'cc-'+Date.now()+'-'+Math.random().toString(36).slice(2,7),date:selectedDate,card,amount,category,note,synced:true,created:+old.created||Date.now()};cardTxs.push(tx);sourceId=tx.id}
+  }else if(sourceId){const oldTx=cardTxs.find(t=>t.id===sourceId);if(oldTx?.installmentPlanId)removeYuantaInstallmentSchedule(oldTx.installmentPlanId);cardTxs=cardTxs.filter(t=>t.id!==sourceId);sourceId=null}
+
+  if(editPayMethod==='cash'&&editCashSource==='pocket')loans.cash=Math.max(0,(+loans.cash||0)-amount);
+  else if(editPayMethod==='cash'&&editCashSource==='linepay')loans.linepayMoney=Math.max(0,(+loans.linepayMoney||0)-amount);
+  localStorage.setItem(LOAN_KEY,JSON.stringify(loans));
+  localStorage.setItem(CARD_KEY,JSON.stringify(cardTxs));
+
+  sourceData.ledger.splice(idx,1);
+  sourceData.finished=false;
+  localStorage.setItem(key(editingExpense.sourceY,editingExpense.sourceM),JSON.stringify(sourceData));
+
+  let targetData=(targetY===editingExpense.sourceY&&targetM===editingExpense.sourceM)?sourceData:loadMonth(targetY,targetM);
+  if(!Array.isArray(targetData.ledger))targetData.ledger=[];
+  const displayDate=`${targetY}/${targetM}/${targetD}`;
+  let updated={amount,category,note:note||(editPayMethod==='credit'?'信用卡消費':editCashSource==='linepay'?'LINE Pay Money 開銷':'現金開銷'),date:displayDate,created:+old.created||Date.now()};
+  if(editPayMethod==='credit')updated={...updated,method:CARDS[$('#editExpenseCard').value].name,source:'credit-card',sourceId,budgetImpact:true};
+  else if(editCashSource==='pocket')updated={...updated,method:'現金',fundingSource:'pocket',budgetImpact:false};
+  else if(editCashSource==='linepay')updated={...updated,method:'LINE Pay Money',fundingSource:'linepay',budgetImpact:false};
+  else updated={...updated,method:'現金',fundingSource:'living',budgetImpact:true};
+  targetData.ledger.push(updated);targetData.finished=false;
+  localStorage.setItem(key(targetY,targetM),JSON.stringify(targetData));
+
+  cur={y:targetY,m:targetM};data=targetData;expenseDetailDate=selectedDate;
+  if($('#expenseHistoryDate'))$('#expenseHistoryDate').value=selectedDate;
+  $('#editExpenseDlg').close();editingExpense=null;render();showView('quick');
+});
+
+// ----- 信用卡 -----
+const CARD_KEY='liyunjia-creditcards-v1';
+const CARD_SETTINGS_KEY='liyunjia-creditcard-settings-v5';
+const cardDefaults={ctbcCarry:173114,ctbcApr:15,ctbcMinDue:0,fubonCarry:0,fubonApr:10.88,fubonInst1Amount:4290,fubonInst1Count:2,fubonInst2Amount:1260,fubonInst2Count:1,yuniFubonCloseDay:8,cathayCloseDay:17,fubonActualDue:20939,fubonActualDueYM:'2026-10'};
+function loadCardSettings(){let old={};for(const k of ['liyunjia-creditcard-settings-v2','liyunjia-creditcard-settings-v3','liyunjia-creditcard-settings-v4']){try{old={...old,...(JSON.parse(localStorage.getItem(k)||'null')||{})}}catch(e){}}try{let x=JSON.parse(localStorage.getItem(CARD_SETTINGS_KEY)||'null');if(x)return {...cardDefaults,...old,...x}}catch(e){}return {...cardDefaults,...old}}
+let cardSettings=loadCardSettings();
+function saveCardSettings(){localStorage.setItem(CARD_SETTINGS_KEY,JSON.stringify(cardSettings));renderCards()}
+function fubonInstallmentDue(){return (cardSettings.fubonInst1Count>0?+cardSettings.fubonInst1Amount||0:0)+(cardSettings.fubonInst2Count>0?+cardSettings.fubonInst2Amount||0:0)}
+function est30DayInterest(balance,apr){return Math.max(0,Math.round((+balance||0)*(+apr||0)/100*30/365))}
+const CARDS={ctbc:{name:'中國信託',closeDay:()=>25},fubon:{name:'台北富邦',closeDay:()=>24},yuni_fubon:{name:'芋泥台北富邦',closeDay:()=>+cardSettings.yuniFubonCloseDay||0},cathay:{name:'國泰世華',closeDay:()=>+cardSettings.cathayCloseDay||0},yuanta:{name:'元大信用卡',closeDay:()=>26}};
+let cardTxs=loadCards(),cardFilter='all';
+function loadCards(){try{let x=JSON.parse(localStorage.getItem(CARD_KEY)||'[]');return Array.isArray(x)?x:[]}catch(e){return []}}
+const pad=n=>String(n).padStart(2,'0');
+const iso=(y,m,d)=>`${y}-${pad(m)}-${pad(d)}`;
+function prevMonth(y,m){return m===1?[y-1,12]:[y,m-1]}
+function daysInMonth(y,m){return new Date(y,m,0).getDate()}
+function statementCycle(y,m,closeDay){let [py,pm]=prevMonth(y,m);let startDay=Math.min(closeDay+1,daysInMonth(py,pm));let endDay=Math.min(closeDay,daysInMonth(y,m));return {start:iso(py,pm,startDay),end:iso(y,m,endDay)}}
+function inRange(date,start,end){return date>=start&&date<=end}
+function txSum(items){return items.reduce((s,x)=>s+(+x.amount||0),0)}
+function selectedMonthTxs(){let prefix=`${cur.y}-${pad(cur.m)}-`;return cardTxs.filter(x=>(x.date||'').startsWith(prefix))}
+function cardMonthTxs(cardId){return selectedMonthTxs().filter(x=>x.card===cardId)}
+function statementTxs(cardId){let day=CARDS[cardId].closeDay();if(!day)return cardMonthTxs(cardId);let cyc=statementCycle(cur.y,cur.m,day);return cardTxs.filter(x=>x.card===cardId&&inRange(x.date,cyc.start,cyc.end))}
+function nextMonthPair(y,m){return m===12?[y+1,1]:[y,m+1]}
+function addMonthsYM(y,m,n){let z=(y*12+(m-1))+n;return [Math.floor(z/12),z%12+1]}
+function yuantaFirstDueMonth(date){const m=String(date||'').match(/^(\d{4})-(\d{2})-(\d{2})$/);if(!m)return nextMonthPair(cur.y,cur.m);const y=+m[1],mo=+m[2],d=+m[3];return addMonthsYM(y,mo,d<=26?1:2)}
+function removeYuantaInstallmentSchedule(planId){if(!planId)return;for(let i=0;i<8;i++){for(let y=2025;y<=2030;y++){for(let m=1;m<=12;m++){const raw=localStorage.getItem(key(y,m));if(!raw)continue;let x;try{x=JSON.parse(raw)}catch(e){continue}if(!Array.isArray(x.expenses))continue;const before=x.expenses.length;x.expenses=x.expenses.filter(e=>e.yuantaInstallmentPlanId!==planId);if(x.expenses.length!==before)localStorage.setItem(key(y,m),JSON.stringify(x));}}}}
+function refreshYuantaFixedExpenses(){
+  const months=new Set(['2026-10','2026-11','2026-12','2027-1']);
+  let txs=[];try{const z=JSON.parse(localStorage.getItem('liyunjia-creditcards-v1')||'[]');if(Array.isArray(z))txs=z}catch(e){}
+  for(const tx of txs){if(tx.card!=='yuanta'||+tx.installmentCount!==8)continue;const [fy,fm]=yuantaFirstDueMonth(tx.date);for(let i=0;i<8;i++){const [y,m]=addMonthsYM(fy,fm,i);months.add(`${y}-${m}`)}}
+  for(const ym of months){const [y,m]=ym.split('-').map(Number);const md=loadMonth(y,m);md.finished=false;localStorage.setItem(key(y,m),JSON.stringify(md))}
+}
+function scheduleYuantaInstallment(tx){
+  if(!tx||tx.card!=='yuanta'||+tx.installmentCount!==8)return;
+  tx.installmentPlanId=tx.installmentPlanId||('yuanta-plan-'+tx.id);
+  // 先存卡片交易，再讓固定支出依 8 期排程重新計算。
+  localStorage.setItem('liyunjia-creditcards-v1',JSON.stringify(cardTxs));
+  refreshYuantaFixedExpenses();
+}
+function yuantaInstallmentDueForMonth(y,m){let total=0;for(const tx of cardTxs){if(tx.card!=='yuanta')continue;const count=+tx.installmentCount===8?8:1;const [fy,fm]=yuantaFirstDueMonth(tx.date);for(let i=0;i<count;i++){const [yy,mm]=addMonthsYM(fy,fm,i);if(yy===y&&mm===m){const t=Math.round(+tx.amount||0),base=Math.floor(t/count);total+=i===count-1?t-base*(count-1):base;}}}return total}
+
+function cycleForEndMonth(y,m,closeDay){return statementCycle(y,m,closeDay)}
+function cardCycleView(cardId){
+  const day=CARDS[cardId].closeDay();
+  if(!day)return {current:null,closed:null};
+  const now=new Date(), isCurrent=now.getFullYear()===cur.y&&now.getMonth()+1===cur.m;
+  if(!isCurrent){const current=cycleForEndMonth(cur.y,cur.m,day);return {current,closed:null}}
+  const today=now.getDate();
+  if(today>day){
+    const closed=cycleForEndMonth(cur.y,cur.m,day),[ny,nm]=nextMonthPair(cur.y,cur.m),current=cycleForEndMonth(ny,nm,day);
+    return {current,closed};
+  }
+  const current=cycleForEndMonth(cur.y,cur.m,day),[py,pm]=prevMonth(cur.y,cur.m),closed=cycleForEndMonth(py,pm,day);
+  return {current,closed};
+}
+function cycleTxs(cardId,cyc){return cyc?cardTxs.filter(x=>x.card===cardId&&inRange(x.date,cyc.start,cyc.end)):[]}
+function activeStatementTxs(cardId){let v=cardCycleView(cardId);return v.current?cycleTxs(cardId,v.current):cardMonthTxs(cardId)}
+function shortDate(s){let [y,m,d]=s.split('-').map(Number);return `${m}/${d}`}
+function statementStatus(end){let today=new Date();let t=iso(today.getFullYear(),today.getMonth()+1,today.getDate());if(t>end)return ['已結帳','closed'];return ['累計中','']}
+function nextMonthYM(y=cur.y,m=cur.m){return m===12?[y+1,1]:[y,m+1]}
+function cardEstimate(cardId){
+  if(cardId==='yuanta'){const [ny,nm]=nextMonthYM();return yuantaInstallmentDueForMonth(ny,nm);}
+  const newSpend=txSum(activeStatementTxs(cardId));
+  const ctbcInterest=est30DayInterest(cardSettings.ctbcCarry,cardSettings.ctbcApr);
+  const fubonInterest=est30DayInterest(cardSettings.fubonCarry,cardSettings.fubonApr);
+  const extra=cardId==='ctbc'?(+cardSettings.ctbcCarry||0)+ctbcInterest:cardId==='fubon'?(+cardSettings.fubonCarry||0)+fubonInterest+fubonInstallmentDue():0;
+  return Math.max(0,newSpend+extra);
+}
+function ceil100(n){return Math.ceil(Math.max(0,n)/100)*100}
+function ctbcAutoMinDue(){
+  const newSpend=txSum(activeStatementTxs('ctbc'));
+  const carry=Math.max(0,+cardSettings.ctbcCarry||0);
+  const interest=est30DayInterest(carry,cardSettings.ctbcApr);
+  const total=carry+newSpend+interest;
+  if(total<=0)return 0;
+  // 預估：當期新增一般消費 10% + 其餘未繳餘額 5% + 預估循環利息，百元進位。
+  // 實際帳單仍可能因入帳日、費用、逾期款、超額、分期等不同。
+  let due=ceil100(newSpend*0.10+carry*0.05+interest);
+  if(total<1000)return Math.round(total);
+  return Math.min(total,Math.max(1000,due));
+}
+function ctbcDueForNextFixed(){
+  // 若使用者有手動修正，以手動值優先；0 / 空白則使用自動預估。
+  const manual=Math.max(0,+cardSettings.ctbcMinDue||0);
+  return manual>0?manual:ctbcAutoMinDue();
+}
+function cardDueForNextFixed(cardId){
+  if(cardId==='ctbc')return ctbcDueForNextFixed();
+  if(cardId==='fubon'){
+    const [ny,nm]=nextMonthYM();
+    const ym=`${ny}-${pad(nm)}`;
+    const actual=Math.max(0,+cardSettings.fubonActualDue||0);
+    if(actual>0 && cardSettings.fubonActualDueYM===ym)return actual;
+  }
+  return cardEstimate(cardId);
+}
+function syncCardsToNextMonth(){
+  const [ny,nm]=nextMonthYM();
+  const target=loadMonth(ny,nm);
+  // 第一次由分卡自動同步時，移除舊版預設的籠統「分期／卡費」，避免重複計算。
+  const hasAuto=target.expenses.some(e=>e.autoCardId);
+  if(!hasAuto){
+    target.expenses=target.expenses.filter(e=>!(e.name==='分期／卡費' && (+e.amount||0)===9390));
+  }
+  const labels={ctbc:'信用卡｜中國信託',fubon:'信用卡｜台北富邦',yuni_fubon:'信用卡｜芋泥台北富邦',cathay:'信用卡｜國泰世華',yuanta:'信用卡｜元大'};
+  for(const id of Object.keys(CARDS)){
+    if(id==='yuanta')continue;
+    const amount=cardDueForNextFixed(id);
+    const idx=target.expenses.findIndex(e=>e.autoCardId===id);
+    const row={name:labels[id],amount,category:'債務',autoCardId:id,autoSourceMonth:`${cur.y}-${pad(cur.m)}`};
+    if(idx>=0)target.expenses[idx]={...target.expenses[idx],...row}; else target.expenses.push(row);
+  }
+  target.finished=false;
+  localStorage.setItem(key(ny,nm),JSON.stringify(target));
+}
+function renderCards(){
+  let monthItems=selectedMonthTxs(),mt=txSum(monthItems);$('#ccMonthTotal').textContent=fmt(mt);$('#ccListTotal').textContent=fmt(mt);$('#ccListTitle').textContent=`${cur.y}/${cur.m} 刷卡紀錄`;
+  const ctbcInterest=est30DayInterest(cardSettings.ctbcCarry,cardSettings.ctbcApr),fubonInterest=est30DayInterest(cardSettings.fubonCarry,cardSettings.fubonApr);
+  const estimates={};
+  for(const id of Object.keys(CARDS)){
+    let card=CARDS[id],day=card.closeDay(),estimate=cardEstimate(id);estimates[id]=estimate;
+    let status=['待設定','future'],cycle='請設定結帳日',currentSpend=0,closedSpend=0,closedCycle='—';
+    if(day){let view=cardCycleView(id);if(view.current){cycle=`${shortDate(view.current.start)}～${shortDate(view.current.end)}`;currentSpend=txSum(cycleTxs(id,view.current));status=['本期累積','']}if(view.closed){closedCycle=`${shortDate(view.closed.start)}～${shortDate(view.closed.end)}`;closedSpend=txSum(cycleTxs(id,view.closed))}}
+    if(id==='yuanta')currentSpend=estimate;
+    $(`#${id}Bill`).textContent=fmt(currentSpend);$(`#${id}Estimate`).textContent=fmt(estimate);$(`#${id}Cycle`).textContent=cycle;
+    let cv=$(`#${id}ClosedValue`),cc=$(`#${id}ClosedCycle`);if(cv)cv.textContent=fmt(closedSpend);if(cc)cc.textContent=closedCycle;
+    let st=$(`#${id}Status`);st.textContent=status[0];st.className='ccStatus'+(status[1]?' '+status[1]:'')
+  }
+  $('#ctbcCarry').value=cardSettings.ctbcCarry;$('#ctbcMinDue').value=cardSettings.ctbcMinDue||'';$('#fubonCarry').value=cardSettings.fubonCarry||0;$('#fubonActualDue').value=cardSettings.fubonActualDue||'';$('#fubonActualDueYM').value=cardSettings.fubonActualDueYM||'';$('#fubonInst1Amount').value=cardSettings.fubonInst1Amount;$('#fubonInst1Count').value=cardSettings.fubonInst1Count;$('#fubonInst2Amount').value=cardSettings.fubonInst2Amount;$('#fubonInst2Count').value=cardSettings.fubonInst2Count;$('#ctbcCarryView').textContent=fmt(cardSettings.ctbcCarry);$('#ctbcInterestView').textContent=fmt(ctbcInterest);$('#ctbcInterestSummary').textContent=fmt(ctbcInterest);$('#fubonCarryView').textContent=fmt(cardSettings.fubonCarry||0);$('#fubonInterestView').textContent=fmt(fubonInterest);$('#fubonInstallmentDue').textContent=fmt(fubonInstallmentDue());$('#yuniFubonCloseDay').value=cardSettings.yuniFubonCloseDay||'';$('#cathayCloseDay').value=cardSettings.cathayCloseDay||'';
+  const [ny,nm]=nextMonthYM();
+  $('#ccSyncMonth').textContent=`${ny}/${nm}`;
+  $('#syncCtbc').textContent=fmt(ctbcDueForNextFixed());
+  const autoMin=ctbcAutoMinDue();
+  const autoMinEl=$('#ctbcAutoMinDue'); if(autoMinEl)autoMinEl.textContent=fmt(autoMin);
+  const cardMinEl=$('#ctbcCardMinDue'); if(cardMinEl)cardMinEl.textContent=fmt(ctbcDueForNextFixed());
+  const fubonInstCard=$('#fubonCardInstallment'); if(fubonInstCard)fubonInstCard.textContent=fmt(fubonInstallmentDue());
+  const totalEstEl=$('#ctbcTotalEstimate'); if(totalEstEl)totalEstEl.textContent=fmt(estimates.ctbc);
+  $('#syncFubon').textContent=fmt(cardDueForNextFixed('fubon'));$('#syncYuniFubon').textContent=fmt(estimates.yuni_fubon);$('#syncCathay').textContent=fmt(estimates.cathay);
+  syncCardsToNextMonth();
+  let filtered=monthItems.filter(x=>cardFilter==='all'||x.card===cardFilter).sort((a,b)=>dateSortValue(b.date)-dateSortValue(a.date)||(+b.created||0)-(+a.created||0));let el=$('#ccLedger');if(!filtered.length){el.innerHTML='<div class="ccEmpty">這個月還沒有信用卡消費；請從「今日開銷」新增。</div>';return}el.innerHTML=filtered.map(x=>`<div class="ccTx readOnly"><div class="ccTxDate">${shortDate(x.date)}</div><div class="ccTxInfo"><b>${escapeHtml(x.note||x.category||'刷卡')}</b><small>${escapeHtml(CARDS[x.card]?.name||'信用卡')}・${escapeHtml(x.category||'其他')}${+x.installmentCount===8?'・分8期':''}</small></div><div class="ccTxAmount">${fmt(x.amount)}</div></div>`).join('')
+}
+function escapeHtml(s){return String(s??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
+function defaultCardDate(){let now=new Date(),same=now.getFullYear()===cur.y&&now.getMonth()+1===cur.m;return same?iso(cur.y,cur.m,now.getDate()):iso(cur.y,cur.m,1)}
+
+
+// 信用卡設定：輸入後立即保存，並重新同步下月固定支出。
+const cardSettingInputs={
+  ctbcCarry:'ctbcCarry',ctbcMinDue:'ctbcMinDue',fubonCarry:'fubonCarry',
+  fubonInst1Amount:'fubonInst1Amount',fubonInst1Count:'fubonInst1Count',
+  fubonInst2Amount:'fubonInst2Amount',fubonInst2Count:'fubonInst2Count',
+  yuniFubonCloseDay:'yuniFubonCloseDay',cathayCloseDay:'cathayCloseDay',
+  fubonActualDue:'fubonActualDue'
+};
+for(const [id,k] of Object.entries(cardSettingInputs)){
+  const el=$('#'+id);if(el)el.addEventListener('change',()=>{cardSettings[k]=Math.max(0,+el.value||0);localStorage.setItem(CARD_SETTINGS_KEY,JSON.stringify(cardSettings));renderCards()});
+}
+const fubonDueYM=$('#fubonActualDueYM');if(fubonDueYM)fubonDueYM.addEventListener('change',()=>{cardSettings.fubonActualDueYM=fubonDueYM.value;localStorage.setItem(CARD_SETTINGS_KEY,JSON.stringify(cardSettings));renderCards()});
+
+// ----- 借款 / 手頭現金 -----
+const LOAN_KEY='liyunjia-loans-v1';
+const loanFresh=()=>({cash:0,linepayMoney:0,funds:{大寶:0,二寶:0,三寶:0},owed:{姐姐:32000,大寶:0,二寶:0,三寶:0},txs:[]});
+function loadLoans(){let x=null;try{x=JSON.parse(localStorage.getItem(LOAN_KEY)||'null')}catch(e){};let d=loanFresh();if(!x)return d;x.cash=+x.cash||0;x.linepayMoney=+x.linepayMoney||0;x.funds={...d.funds,...(x.funds||{})};x.owed={...d.owed,...(x.owed||{})};x.txs=Array.isArray(x.txs)?x.txs:[];return x}
+let loans=loadLoans();
+function saveLoans(){localStorage.setItem(LOAN_KEY,JSON.stringify(loans));renderLoans()}
+const childMap={大寶:'大寶',二寶:'二寶',三寶:'三寶'};
+function totalOwed(){return Object.values(loans.owed).reduce((s,v)=>s+(+v||0),0)}
+function renderLoans(){
+  $('#loanTotal').textContent=fmt(totalOwed());
+  $('#fundBig').value=loans.funds.大寶;$('#fundSecond').value=loans.funds.二寶;$('#fundThird').value=loans.funds.三寶;
+  $('#oweSister').value=loans.owed.姐姐;$('#oweBig').value=loans.owed.大寶;$('#oweSecond').value=loans.owed.二寶;$('#oweThird').value=loans.owed.三寶;
+  let el=$('#loanLedger');if(!loans.txs.length){el.innerHTML='<div class="loanEmpty">目前還沒有新增借款明細；姐姐既有欠款 $32,000 已列在上方。</div>';return}
+  el.innerHTML=[...loans.txs].reverse().map(x=>`<div class="loanTx"><div class="loanTxIcon ${x.type}">${x.type==='borrow'?'借':'還'}</div><div class="loanTxInfo"><b>${escapeHtml(x.person)}・${x.type==='borrow'?'借入':'還款'}</b><small>${escapeHtml(x.note||'—')}・${escapeHtml(x.date||'')}</small></div><div class="loanTxAmount ${x.type}">${x.type==='borrow'?'+':'-'}${fmt(x.amount)}</div><button data-loanid="${x.id}">刪除</button></div>`).join('');
+  $$('[data-loanid]').forEach(b=>b.onclick=()=>deleteLoanTx(b.dataset.loanid));
+}
+function addLoanTx(){let type=$('#loanType').value,person=$('#loanPerson').value,amount=+$('#loanAmount').value||0,note=$('#loanNote').value.trim(),sync=$('#loanSyncCash').checked;if(amount<=0){alert('請輸入借款或還款金額');return}let before={cash:loans.cash,fund:loans.funds[person]??null,owed:loans.owed[person]||0};if(type==='borrow'){loans.owed[person]=(loans.owed[person]||0)+amount;if(childMap[person])loans.funds[person]=Math.max(0,(+loans.funds[person]||0)-amount);if(sync)loans.cash=(+loans.cash||0)+amount}else{let actual=Math.min(amount,+loans.owed[person]||0);if(actual<=0){alert('這個對象目前沒有尚欠借款');return}amount=actual;loans.owed[person]=Math.max(0,(+loans.owed[person]||0)-amount);if(childMap[person])loans.funds[person]=(+loans.funds[person]||0)+amount;if(sync)loans.cash=Math.max(0,(+loans.cash||0)-amount)}let now=new Date();loans.txs.push({id:'loan-'+Date.now()+'-'+Math.random().toString(36).slice(2,6),type,person,amount,note,sync,date:now.toLocaleDateString('zh-TW',{year:'numeric',month:'numeric',day:'numeric'}),before});$('#loanAmount').value='';$('#loanNote').value='';saveLoans()}
+function deleteLoanTx(id){
+  let i=loans.txs.findIndex(x=>x.id===id);if(i<0)return;
+  let x=loans.txs[i],amount=+x.amount||0;
+  if(!confirm('刪除這筆借款明細？\n系統會只反向沖銷這一筆造成的借款、孩子可借餘額與手頭現金，不會覆蓋之後的現金異動。'))return;
+  // 不能用新增當下的 before 快照直接覆蓋目前現金，否則這筆之後發生的支出、收入、其他借還款都會被一起洗掉。
+  // 改成針對「這一筆交易」做反向沖銷，讓目前餘額維持正確。
+  if(x.type==='borrow'){
+    loans.owed[x.person]=Math.max(0,(+loans.owed[x.person]||0)-amount);
+    if(childMap[x.person])loans.funds[x.person]=(+loans.funds[x.person]||0)+amount;
+    if(x.sync)loans.cash=Math.max(0,(+loans.cash||0)-amount);
+  }else{
+    loans.owed[x.person]=(+loans.owed[x.person]||0)+amount;
+    if(childMap[x.person])loans.funds[x.person]=Math.max(0,(+loans.funds[x.person]||0)-amount);
+    if(x.sync)loans.cash=(+loans.cash||0)+amount;
+  }
+  loans.txs.splice(i,1);saveLoans();
 }
 
-const offlineBadge = document.createElement("div");
-offlineBadge.className = "offline-badge";
-offlineBadge.textContent = "目前離線模式";
-document.body.appendChild(offlineBadge);
-function updateOnlineState(){ offlineBadge.classList.toggle("show", !navigator.onLine); }
-window.addEventListener("online", updateOnlineState);
-window.addEventListener("offline", updateOnlineState);
-updateOnlineState();
 
-if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./sw.js").catch(()=>{});
+function renderDiagnosis(){
+  const total=allSpent();
+  const totals={};
+  data.ledger.forEach(x=>{const c=x.category||'其他';totals[c]=(totals[c]||0)+(+x.amount||0)});
+  const rows=Object.entries(totals).filter(([,v])=>v>0).sort((a,b)=>b[1]-a[1]);
+  const list=$('#diagCategoryList'), advice=$('#diagAdvice');
+  if(!list||!advice)return;
+  if(!rows.length){
+    list.innerHTML='<div class="diagEmpty">本月還沒有開銷紀錄。從「今日開銷」開始記帳後，這裡會自動分析。</div>';
+    advice.innerHTML='<div class="diagAdviceItem neutral"><b>先記錄幾筆開銷</b><p>有實際資料後，我會依照餐飲、購物、交通、生活等分類，找出比較有機會調整的項目。</p></div>';
+    return;
+  }
+  list.innerHTML=rows.map(([c,v],i)=>{const pct=total?Math.round(v/total*100):0;return `<div class="diagCatRow"><div><b>${i+1}. ${escapeHtml(c)}</b><small>${pct}%</small></div><strong>${fmt(v)}</strong><span><i style="width:${Math.min(100,pct)}%"></i></span></div>`}).join('');
+  const flexible=['購物','餐飲','其他','生活','交通'];
+  const messages=[];
+  rows.filter(([c])=>flexible.includes(c)).slice(0,3).forEach(([c,v])=>{
+    const pct=total?Math.round(v/total*100):0;
+    let text='';
+    if(c==='購物') text=`本月購物 ${fmt(v)}，占生活開銷 ${pct}%。可以先看看是否有非急需、重複購買或可以延到下個月的項目。`;
+    else if(c==='餐飲') text=`本月餐飲 ${fmt(v)}，占生活開銷 ${pct}%。若外食、飲料或臨時加買較多，可以從其中挑一小部分減少，不必把正常吃飯預算壓得太低。`;
+    else if(c==='交通') text=`本月交通 ${fmt(v)}，占生活開銷 ${pct}%。可以檢查是否有可合併的行程、停車費或非必要往返；固定通勤則不列為優先刪減。`;
+    else if(c==='生活') text=`本月生活類 ${fmt(v)}，占生活開銷 ${pct}%。可以打開明細找一次性或可延後採買的項目。`;
+    else text=`本月其他類 ${fmt(v)}，占生活開銷 ${pct}%。「其他」通常最容易藏著零碎支出，建議先檢查明細，看哪些其實可以少買或重新分類。`;
+    messages.push({c,v,text});
   });
+  const adjustable=data.expenses.filter(x=>x.category==='可調整'&&(+x.amount||0)>0).sort((a,b)=>b.amount-a.amount);
+  if(adjustable.length){const x=adjustable[0];messages.push({c:'固定支出',v:+x.amount,text:`固定支出中「${escapeHtml(x.name)}」被標成可調整，目前 ${fmt(x.amount)}。如果這筆不是必要支出，可以再評估是否要降低。`})}
+  if(!messages.length) messages.push({c:'本月狀況',v:0,text:'目前記錄多集中在必要、醫療或孩子相關項目，暫時沒有很明顯適合直接刪減的支出。可以繼續記帳，資料越完整判斷越準。'});
+  advice.innerHTML=messages.slice(0,4).map((x,i)=>`<div class="diagAdviceItem ${i===0?'priority':''}"><span>${i===0?'優先看看':'再檢查'}</span><b>${escapeHtml(x.c)}</b><p>${x.text}</p></div>`).join('');
 }
+function render(){let r=remain(),rate=inc()>0?fixed()/inc()*100:0,a=avail(),db=dailyBudget(),sv=saved(),pct=db>0?Math.min(100,Math.max(0,spent()/db*100)):0;
+ $('#month').textContent=`${cur.y}/${cur.m}`;$('#husband').value=data.income.husband;$('#wife').value=data.income.wife;$('#other').value=data.income.other;
+ $('#heroAvail').textContent=fmt(Math.max(0,a));$('#heroSub').textContent=`收入 ${fmt(inc())}・固定支出 ${fmt(fixed())}・已花 ${fmt(spent())}`;$('#meterFill').style.width=pct+'%';
+ $('#dailyPageAvail').textContent=fmt(Math.max(0,a));$('#dailyPageSpent').textContent=fmt(allSpent());$('#quickCashView').textContent=fmt(loans.cash);$('#quickCashOnHand').value=loans.cash;$('#quickLinePayView').textContent=fmt(loans.linepayMoney);$('#quickLinePayMoney').value=loans.linepayMoney;$('#dailyToday').textContent=new Date().toLocaleDateString('zh-TW',{month:'numeric',day:'numeric',weekday:'short'});$('#dailyBudget').textContent=fmt(db);$('#dailySpent').textContent=fmt(spent());$('#pocketSpent').textContent=fmt(pocketSpent());$('#dailyAvailable').textContent=fmt(Math.max(0,a));$('#dailyMeterFill').style.width=pct+'%';ledger();
+ $('#sIncome').textContent=fmt(inc());$('#sRemain').textContent=fmt(Math.max(0,r));$('#sFixed').textContent=fmt(fixed());$('#sDone').textContent=data.finished?'✓ 確認':'待確認';
+ $('#incomeTotal').textContent=fmt(inc());$('#remainSummary').textContent=fmt(baseAvailable());$('#fixedTotal').textContent=fmt(fixed());$('#doneSummary').textContent=data.finished?'✓ 確認':'待確認';$('#availIncome').textContent=fmt(inc());$('#availFixed').textContent=fmt(fixed());$('#suggestedSavings').textContent=fmt(suggestedSavings());$('#availSaved').textContent=fmt(sv);$('#availSpend').textContent=fmt(baseAvailable());
+ 
+ $('#miniIncome').textContent=fmt(inc());$('#miniFixed').textContent=fmt(fixed());$('#miniRemain').textContent=fmt(Math.max(0,r));$('#fIncome').textContent=fmt(inc());$('#fFixed').textContent=fmt(fixed());$('#fSpend').textContent=fmt(db);$('#fSaved').textContent=fmt(sv);$('#savedAmount').value=sv;
+ $('#diagIncome').textContent=fmt(inc());$('#diagFixed').textContent=fmt(fixed());$('#diagSpent').textContent=fmt(allSpent());$('#diagAvail').textContent=fmt(Math.max(0,a));$('#diagMsg').innerHTML=a>=0?`扣除固定支出、已存入儲蓄與本月生活開銷後，目前還有 <b>${fmt(a)}</b> 可以使用。`:`本月生活開銷已超過設定額度 <b>${fmt(Math.abs(a))}</b>。`;renderDiagnosis();
+ expenses();setStep(data.step||1);renderCards();renderLoans();updateSavingsProgress();renderArchive()}
+
+['husband','wife','other'].forEach(id=>$('#'+id).onchange=()=>{data.income.husband=+$('#husband').value||0;data.income.wife=+$('#wife').value||0;data.income.other=+$('#other').value||0;data.finished=false;save()});
+$$('#steps button').forEach(b=>b.onclick=()=>setStep(+b.dataset.step));$$('.nextStep').forEach(b=>b.onclick=()=>setStep(+b.dataset.next));
+$('#savedAmount').onchange=()=>{data.savedAmount=Math.max(0,+$('#savedAmount').value||0);data.finished=false;save()};
+// v28: 修正「新增固定支出」按鈕。開啟輸入視窗，新增後立即存入當月 localStorage。
+$('#addExpense').addEventListener('click',()=>{
+  $('#eName').value='';
+  $('#eAmount').value='';
+  $('#eCategory').value='必要';
+  $('#dlg').showModal();
+  setTimeout(()=>$('#eName').focus(),0);
+});
+$('#eSave').addEventListener('click',(ev)=>{
+  ev.preventDefault();
+  const name=$('#eName').value.trim();
+  const amount=Math.max(0,Number($('#eAmount').value)||0);
+  const category=$('#eCategory').value||'必要';
+  if(!name){alert('請輸入固定支出名稱');$('#eName').focus();return}
+  if(amount<=0){alert('請輸入固定支出金額');$('#eAmount').focus();return}
+  data.expenses.push({name,amount,category});
+  data.finished=false;
+  $('#dlg').close();
+  save();
+});
+let quickPayMethod='cash',quickCashSource='living';
+function renderQuickPayChoice(){$$('#payMethodTabs button').forEach(x=>x.classList.toggle('active',x.dataset.method===quickPayMethod));$('#qCardWrap').classList.toggle('hidden',quickPayMethod!=='credit');$('#qCashSourceWrap').classList.toggle('hidden',quickPayMethod!=='cash');const yw=$('#qYuantaInstallWrap');if(yw)yw.classList.toggle('hidden',quickPayMethod!=='credit'||$('#qCard').value!=='yuanta')}
+$$('#payMethodTabs button').forEach(b=>b.onclick=()=>{quickPayMethod=b.dataset.method;renderQuickPayChoice()});$('#qCard').addEventListener('change',renderQuickPayChoice);
+$$('#cashSourceTabs button').forEach(b=>b.onclick=()=>{quickCashSource=b.dataset.source;$$('#cashSourceTabs button').forEach(x=>x.classList.toggle('active',x===b));$('#cashSourceHint').textContent=quickCashSource==='pocket'?`這筆會從手頭上現金 ${fmt(loans.cash)} 扣除，不重複扣當月生活費。`:quickCashSource==='linepay'?`這筆會從 LINE Pay Money ${fmt(loans.linepayMoney)} 扣除，不重複扣當月生活費。`:'這筆會從「本月目前可用」扣除。'});
+let quickEntryType='expense';
+const expenseCategories=['餐飲','購物','交通','小孩','生活','醫療','其他'];
+const incomeCategories=['薪資','補貼','退款','獎金','現金回饋','其他收入'];
+function setQuickCategories(list){const sel=$('#qCategory');const keep=sel.value;sel.innerHTML=list.map(x=>`<option>${x}</option>`).join('');if(list.includes(keep))sel.value=keep}
+function renderEntryType(){
+  const income=quickEntryType==='income';
+  $$('#entryTypeTabs button').forEach(x=>x.classList.toggle('active',x.dataset.entry===quickEntryType));
+  $('#saveQ').textContent=income?'＋ 加入收入':'＋ 加入支出';
+  $('#payMethodTabs').style.display=income?'none':'';
+  $('#qCardWrap').classList.add('hidden');if($('#qYuantaInstallWrap'))$('#qYuantaInstallWrap').classList.add('hidden');
+  $('#qCashSourceWrap').classList.remove('hidden');
+  $('#qCashSourceWrap .fieldTitle').textContent=income?'收入放到哪裡？':'現金從哪裡扣？';
+  setQuickCategories(income?incomeCategories:expenseCategories);
+  $('#qNote').placeholder=income?'例如：退款、獎金':'例如：午餐';
+  $('#cashSourceHint').textContent=income
+    ?(quickCashSource==='pocket'?'這筆收入會增加「手頭上現金」。':quickCashSource==='linepay'?'這筆收入會增加「LINE Pay Money」。':'這筆收入會增加「本月目前可用」。')
+    :(quickCashSource==='pocket'?'這筆會從「手頭上現金」扣除。':quickCashSource==='linepay'?'這筆會從「LINE Pay Money」扣除。':'這筆會從「本月目前可用」扣除。');
+}
+$$('#entryTypeTabs button').forEach(b=>b.addEventListener('click',()=>{quickEntryType=b.dataset.entry;renderEntryType();ledger()}));
+$('#saveQ').addEventListener('click',()=>{
+  const amount=Number($('#qAmount').value)||0;
+  if(amount<=0){alert(quickEntryType==='income'?'請輸入收入金額':'請輸入開銷金額');$('#qAmount').focus();return}
+  const category=$('#qCategory').value;
+  const note=$('#qNote').value.trim();
+  const selectedDate=$('#qDate').value||localISODate();
+  const dm=selectedDate.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if(!dm){alert('請選擇正確日期');return}
+  const entryY=+dm[1],entryM=+dm[2],entryD=+dm[3];
+  const displayDate=`${entryY}/${entryM}/${entryD}`;
+  const sameMonth=entryY===cur.y&&entryM===cur.m;
+  const targetData=sameMonth?data:loadMonth(entryY,entryM);
+  if(!Array.isArray(targetData.incomeLedger))targetData.incomeLedger=[];
+  if(!Array.isArray(targetData.ledger))targetData.ledger=[];
+  if(quickEntryType==='income'){
+    const destination=quickCashSource==='pocket'?'pocket':quickCashSource==='linepay'?'linepay':'living';
+    if(destination==='pocket'){
+      loans.cash=(+loans.cash||0)+amount;
+      localStorage.setItem(LOAN_KEY,JSON.stringify(loans));
+    }else if(destination==='linepay'){
+      loans.linepayMoney=(+loans.linepayMoney||0)+amount;
+      localStorage.setItem(LOAN_KEY,JSON.stringify(loans));
+    }
+    targetData.incomeLedger.push({id:'inc-'+Date.now(),amount,category,note:note||category||'收入',destination,date:displayDate,created:Date.now()});
+  }else if(quickPayMethod==='credit'){
+    const card=$('#qCard').value,date=selectedDate,tx={id:'cc-'+Date.now()+'-'+Math.random().toString(36).slice(2,7),date,card,amount,category,note,synced:true,created:Date.now()};
+    if(card==='yuanta'){tx.installmentCount=+$('#qYuantaInstall').value===8?8:1;tx.installmentPlanId='yuanta-plan-'+tx.id;}
+    cardTxs.push(tx);localStorage.setItem(CARD_KEY,JSON.stringify(cardTxs));if(card==='yuanta')scheduleYuantaInstallment(tx);
+    targetData.ledger.push({amount,category,method:CARDS[card].name,note:note||(card==='yuanta'&&tx.installmentCount===8?'元大分8期':'信用卡消費'),date:displayDate,source:'credit-card',sourceId:tx.id,budgetImpact:true,created:Date.now()});
+  }else if(quickCashSource==='pocket'){
+    if(amount>(+loans.cash||0)){alert(`手頭上現金目前只有 ${fmt(loans.cash)}，不足以支付這筆開銷。`);return}
+    loans.cash=Math.max(0,(+loans.cash||0)-amount);localStorage.setItem(LOAN_KEY,JSON.stringify(loans));
+    targetData.ledger.push({amount,category,method:'現金',fundingSource:'pocket',budgetImpact:false,note:note||'現金開銷',date:displayDate,created:Date.now()});
+  }else if(quickCashSource==='linepay'){
+    if(amount>(+loans.linepayMoney||0)){alert(`LINE Pay Money 目前只有 ${fmt(loans.linepayMoney)}，不足以支付這筆開銷。`);return}
+    loans.linepayMoney=Math.max(0,(+loans.linepayMoney||0)-amount);localStorage.setItem(LOAN_KEY,JSON.stringify(loans));
+    targetData.ledger.push({amount,category,method:'LINE Pay Money',fundingSource:'linepay',budgetImpact:false,note:note||'LINE Pay Money 開銷',date:displayDate,created:Date.now()});
+  }else{
+    targetData.ledger.push({amount,category,method:'現金',fundingSource:'living',budgetImpact:true,note:note||'現金開銷',date:displayDate,created:Date.now()});
+  }
+  targetData.finished=false;
+  localStorage.setItem(key(entryY,entryM),JSON.stringify(targetData));
+  $('#qAmount').value='';$('#qNote').value='';
+  if(!sameMonth){cur={y:entryY,m:entryM};data=targetData;}
+  expenseDetailDate=selectedDate;if($('#expenseHistoryDate'))$('#expenseHistoryDate').value=expenseDetailDate;
+  render();
+});
+const historyBtn=$('#showExpenseHistory'),historyPicker=$('#expenseHistoryPicker'),historyDate=$('#expenseHistoryDate'),todayBtn=$('#backToTodayExpenses');
+if(historyDate)historyDate.value=expenseDetailDate;
+if(historyBtn)historyBtn.addEventListener('click',()=>{historyPicker.hidden=!historyPicker.hidden;if(!historyPicker.hidden){historyDate.value=expenseDetailDate;historyDate.focus()}});
+if(historyDate)historyDate.addEventListener('change',()=>{if(!historyDate.value)return;expenseDetailDate=historyDate.value;ledger()});
+if(todayBtn)todayBtn.addEventListener('click',()=>{expenseDetailDate=localISODate();historyDate.value=expenseDetailDate;historyPicker.hidden=true;ledger()});
+renderEntryType();
+if($('#qDate'))$('#qDate').value=localISODate();
+$('#quickCashOnHand').onchange=()=>{loans.cash=Math.max(0,+$('#quickCashOnHand').value||0);saveLoans();render()};
+$('#quickLinePayMoney').onchange=()=>{loans.linepayMoney=Math.max(0,+$('#quickLinePayMoney').value||0);saveLoans();render()};
+// v42：孩子戶頭「可週轉餘額」是使用者可手動校正的實際餘額。
+// 原本欄位沒有把手動輸入寫回 localStorage，畫面一重繪就會跳回舊金額；現在包含輸入 0 都會確實保存。
+[['fundBig','大寶'],['fundSecond','二寶'],['fundThird','三寶']].forEach(([id,person])=>{
+  const el=$('#'+id); if(!el)return;
+  el.onchange=()=>{loans.funds[person]=Math.max(0,Number(el.value)||0);saveLoans()};
+});
+// 欠款餘額也維持可手動校正，輸入 0 必須視為有效值而不是回填舊資料。
+[['oweSister','姐姐'],['oweBig','大寶'],['oweSecond','二寶'],['oweThird','三寶']].forEach(([id,person])=>{
+  const el=$('#'+id); if(!el)return;
+  el.onchange=()=>{loans.owed[person]=Math.max(0,Number(el.value)||0);saveLoans()};
+});
+$('#saveLoan').onclick=addLoanTx;
+function move(n){cur.m+=n;if(cur.m<1){cur.m=12;cur.y--}if(cur.m>12){cur.m=1;cur.y++}data=loadMonth();const now=new Date();expenseDetailDate=(now.getFullYear()===cur.y&&now.getMonth()+1===cur.m)?localISODate():`${cur.y}-${pad(cur.m)}-01`;if($('#expenseHistoryDate'))$('#expenseHistoryDate').value=expenseDetailDate;render()};$('#prev').onclick=()=>move(-1);$('#next').onclick=()=>move(1);
+
+
+// ----- 銀行貸款 / 大額還款試算 -----
+const BANK_LOAN_KEY='family-five-bank-loans-v1';
+const bankLoanDefaults=[
+  {id:'loan1',name:'貸款(一)',principal:422574,start:'2025-10-01',end:'2032-10-01',payment:7496,extra:0},
+  {id:'loan2',name:'貸款(二)',principal:298073,start:'2024-04-12',end:'2031-04-12',payment:6100,extra:0},
+  {id:'loan3',name:'貸款(三)',principal:219138,start:'2022-07-14',end:'2029-07-14',payment:6844,extra:0}
+];
+function loadBankLoans(){try{let x=JSON.parse(localStorage.getItem(BANK_LOAN_KEY)||'null');if(Array.isArray(x)&&x.length)return bankLoanDefaults.map((d,i)=>{let saved=x.find(v=>v.id===d.id)||x[i]||{};return {...d,...saved,payment:d.payment}})}catch(e){}return bankLoanDefaults.map(x=>({...x}))}
+let bankLoans=loadBankLoans();
+function saveBankLoans(){localStorage.setItem(BANK_LOAN_KEY,JSON.stringify(bankLoans));renderBankLoans()}
+function monthDiffTo(dateStr){let d=new Date(dateStr+'T00:00:00'),n=new Date();let m=(d.getFullYear()-n.getFullYear())*12+(d.getMonth()-n.getMonth());if(d.getDate()>n.getDate())m++;return Math.max(0,m)}
+function elapsedPercent(start,end){let s=new Date(start+'T00:00:00').getTime(),e=new Date(end+'T00:00:00').getTime(),n=Date.now();if(e<=s)return 100;return Math.max(0,Math.min(100,((n-s)/(e-s))*100))}
+function zhDate(s){let [y,m,d]=s.split('-');return `${y}/${m}/${d}`}
+function loanBalanceAtRate(rate,n,payment){if(n<=0)return 0;if(Math.abs(rate)<1e-10)return payment*n;return payment*(1-Math.pow(1+rate,-n))/rate}
+function impliedMonthlyRate(principal,payment,n){principal=+principal||0;payment=+payment||0;if(principal<=0||payment<=0||n<=0)return 0;if(payment*n<=principal)return 0;let lo=0,hi=.1;for(let i=0;i<100;i++){let mid=(lo+hi)/2,b=loanBalanceAtRate(mid,n,payment);if(b>principal)lo=mid;else hi=mid}return (lo+hi)/2}
+function paymentFor(principal,rate,n){if(principal<=0||n<=0)return 0;if(rate<=0)return Math.round(principal/n);return Math.round(principal*rate/(1-Math.pow(1+rate,-n)))}
+function renderBankLoans(){
+  const wrap=$('#bankLoanCards');if(!wrap)return;
+  const total=bankLoans.reduce((s,x)=>s+(+x.principal||0),0);
+  const monthly=bankLoans.reduce((s,x)=>s+(+x.payment||0),0);
+  $('#bankLoanTotal').textContent=fmt(total);$('#bankLoanMonthly').textContent=fmt(monthly);
+  wrap.innerHTML=bankLoans.map((x,i)=>{
+    const p=Math.max(0,+x.principal||0),extra=Math.max(0,Math.min(p,+x.extra||0)),after=Math.max(0,p-extra),months=monthDiffTo(x.end),pay=Math.max(0,+x.payment||0);
+    const monthlyRate=impliedMonthlyRate(p,pay,months),annualRate=monthlyRate*12*100;
+    const recast=paymentFor(after,monthlyRate,months);
+    const elapsed=Math.round(elapsedPercent(x.start,x.end));
+    const status=after===0?'這筆已可清償 🎉':months>0?`距離到期約 ${months} 個月`:'已到到期日';
+    return `<section class="bankLoanCard" data-bankloan="${i}">
+      <div class="bankLoanTop"><div><small>${x.name}</small><strong>${fmt(p)}</strong><span>剩餘本金</span></div><div class="bankLoanStatus"><b>${status}</b><small>${zhDate(x.start)} → ${zhDate(x.end)}</small></div></div>
+      <div class="termTrack"><div style="width:${elapsed}%"></div></div><div class="termLabels"><span>貸款日</span><b>時間進度 ${elapsed}%</b><span>到期日</span></div>
+      <div class="bankLoanEditGrid"><label>剩餘本金<input data-bl="principal" type="number" min="0" inputmode="numeric" value="${p}"></label><label>目前每期應繳<input data-bl="payment" type="number" min="0" inputmode="numeric" value="${pay}"></label></div>
+      <div class="loanRateRow"><div><small>依目前資料反推年利率</small><b>${annualRate>0?annualRate.toFixed(2)+'%':'無法反推'}</b></div><span>依剩餘本金＋每期金額＋到期日估算</span></div>
+      <div class="extraPayBox"><div class="extraPayTitle"><div><small>大額還款試算</small><b>這次想多還多少本金？</b></div><input data-bl="extra" type="number" min="0" max="${p}" inputmode="numeric" value="${extra}" placeholder="例如 50000"></div>
+        <div class="extraResults"><div><small>還款後剩餘本金</small><b>${fmt(after)}</b></div><div><small>剩餘期數</small><b>${months} 期左右</b></div><div class="accent"><small>重新攤還每期約</small><b>${fmt(recast)}</b></div></div>
+        <p>試算假設剩餘期數不變、利率與原貸款條件不變，銀行願意按新本金重新攤還。實際每期金額請以銀行核算為準。</p>
+      </div>
+    </section>`
+  }).join('');
+  $$('#bankLoanCards [data-bankloan]').forEach(card=>{let i=+card.dataset.bankloan;card.querySelectorAll('[data-bl]').forEach(inp=>inp.addEventListener('change',()=>{let k=inp.dataset.bl,v=Math.max(0,+inp.value||0);if(k==='extra')v=Math.min(v,+bankLoans[i].principal||0);bankLoans[i][k]=v;saveBankLoans()}))})
+}
+
+
+
+// ----- v27 正式使用：完整備份 / 每月封存 / 儲蓄進度 -----
+const ARCHIVE_KEY='family-five-month-archives-v1';
+function loadArchives(){try{return JSON.parse(localStorage.getItem(ARCHIVE_KEY)||'{}')||{}}catch(e){return {}}}
+let monthArchives=loadArchives();
+function allAppStorage(){let out={};for(let i=0;i<localStorage.length;i++){let k=localStorage.key(i);if(k&&(k.startsWith('liyunjia-')||k.startsWith('family-five-')))out[k]=localStorage.getItem(k)}return out}
+function exportBackup(){const payload={app:'一家五口每月開銷明細',version:27,exportedAt:new Date().toISOString(),storage:allAppStorage()};const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`一家五口開銷備份_${new Date().toISOString().slice(0,10)}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
+async function importBackupFile(file){if(!file)return;try{const x=JSON.parse(await file.text());if(!x||!x.storage||typeof x.storage!=='object')throw new Error('格式錯誤');if(!confirm('匯入會以備份內容覆蓋目前記帳資料，確定繼續？'))return;Object.keys(localStorage).forEach(k=>{if(k.startsWith('liyunjia-')||k.startsWith('family-five-'))localStorage.removeItem(k)});Object.entries(x.storage).forEach(([k,v])=>localStorage.setItem(k,String(v)));alert('備份已還原，網頁將重新載入。');location.reload()}catch(e){alert('無法匯入：這不是有效的「一家五口每月開銷」備份檔。')}}
+function monthTop3(){let t={};data.ledger.forEach(x=>{let c=x.category||'其他';t[c]=(t[c]||0)+(+x.amount||0)});return Object.entries(t).sort((a,b)=>b[1]-a[1]).slice(0,3)}
+function renderArchive(){const box=$('#archiveSummary'),hist=$('#archiveHistory');if(!box||!hist)return;let a=Math.max(0,avail());box.innerHTML=`<div><small>本月收入</small><b>${fmt(inc()+livingExtraIncome()+pocketExtraIncome()+linepayExtraIncome())}</b></div><div><small>固定支出</small><b>${fmt(fixed())}</b></div><div><small>生活開銷</small><b>${fmt(allSpent())}</b></div><div><small>月底目前結餘</small><b>${fmt(a)}</b></div>`;let rows=Object.values(monthArchives).sort((a,b)=>b.key.localeCompare(a.key));hist.innerHTML=rows.length?rows.slice(0,12).map(x=>`<div class="archiveRow"><div><b>${x.key} 月報</b><small>支出 ${fmt(x.spent)}・儲蓄 ${fmt(x.saved)}</small></div><b>剩 ${fmt(x.available)}</b></div>`).join(''):'<p class="hint">還沒有封存過月份。</p>'}
+function archiveCurrentMonth(){let k=`${cur.y}-${String(cur.m).padStart(2,'0')}`,available=Math.max(0,avail()),action=$('#monthEndAction')?.value||'none';if(monthArchives[k]&&!confirm(`${k} 已封存過，要更新這份月報嗎？`))return;monthArchives[k]={key:k,income:inc()+livingExtraIncome()+pocketExtraIncome()+linepayExtraIncome(),fixed:fixed(),spent:allSpent(),saved:saved(),available,top3:monthTop3(),action,archivedAt:new Date().toISOString()};localStorage.setItem(ARCHIVE_KEY,JSON.stringify(monthArchives));if(action==='savings'&&available>0){data.savedAmount=saved()+available;save()}else if(action==='next'&&available>0){let nm=cur.m+1,ny=cur.y;if(nm>12){nm=1;ny++}let nk=`liyunjia-${ny}-${String(nm).padStart(2,'0')}`;let nx;try{nx=JSON.parse(localStorage.getItem(nk)||'null')}catch(e){}if(!nx)nx=fresh(ny,nm);nx.incomeLedger=Array.isArray(nx.incomeLedger)?nx.incomeLedger:[];nx.incomeLedger.push({amount:available,category:'其他收入',destination:'living',note:'上月結餘轉入',date:`${ny}/${nm}/1`,created:Date.now()});localStorage.setItem(nk,JSON.stringify(nx))}else if(action.startsWith('loan')&&available>0){let bl=bankLoans.find(x=>x.id===action);if(bl){bl.principal=Math.max(0,(+bl.principal||0)-available);localStorage.setItem(BANK_LOAN_KEY,JSON.stringify(bankLoans))}}localStorage.setItem(ARCHIVE_KEY,JSON.stringify(monthArchives));renderArchive();renderBankLoans();alert('本月報表已封存。')}
+function pocketExtraIncome(){return data.incomeLedger.filter(x=>x.destination==='pocket').reduce((s,x)=>s+(+x.amount||0),0)}
+function linepayExtraIncome(){return data.incomeLedger.filter(x=>x.destination==='linepay').reduce((s,x)=>s+(+x.amount||0),0)}
+function updateSavingsProgress(){let target=suggestedSavings(),sv=saved(),pct=target>0?Math.min(100,Math.round(sv/target*100)):0;let t=$('#savingsProgressText'),f=$('#savingsProgressFill');if(t)t.textContent=`${fmt(sv)} / ${fmt(target)}（${pct}%）`;if(f)f.style.width=pct+'%'}
+
+function resetAllAppData(){
+  const ok=window.confirm('確定要清除所有紀錄並恢復初始狀態嗎？\n\n會清除：今日開銷、今日收入、信用卡消費紀錄、借款紀錄、手頭現金，以及你自行修改過的資料。\n\n目前版本設定好的家庭固定支出、貸款基本資料與排程會恢復成乾淨預設值。');
+  if(!ok)return;
+  const ok2=window.confirm('最後確認：清除後無法復原。確定要重新開始記帳嗎？');
+  if(!ok2)return;
+  const appPrefixes=['liyunjia-'];
+  const appKeys=new Set([CARD_KEY,CARD_SETTINGS_KEY,LOAN_KEY,BANK_LOAN_KEY,'liyunjia-creditcard-settings-v2','liyunjia-creditcard-settings-v3','liyunjia-creditcard-settings-v4']);
+  Object.keys(localStorage).forEach(k=>{if(appPrefixes.some(p=>k.startsWith(p))||appKeys.has(k))localStorage.removeItem(k)});
+  sessionStorage.clear();
+  alert('已清除所有記帳紀錄，現在會以乾淨的初始狀態重新開啟。');
+  location.reload();
+}
+const resetAllDataBtn=$('#resetAllData');if(resetAllDataBtn)resetAllDataBtn.addEventListener('click',resetAllAppData);
+
+
+const exportBackupBtn=$('#exportBackup');if(exportBackupBtn)exportBackupBtn.addEventListener('click',exportBackup);
+const importBackupInput=$('#importBackup');if(importBackupInput)importBackupInput.addEventListener('change',e=>importBackupFile(e.target.files?.[0]));
+const archiveMonthBtn=$('#archiveMonth');if(archiveMonthBtn)archiveMonthBtn.addEventListener('click',archiveCurrentMonth);
+
+function showView(v){const target=document.getElementById(v);if(!target)return;$$('.view').forEach(x=>x.classList.remove('active'));$$('nav button[data-v]').forEach(x=>x.classList.remove('active'));target.classList.add('active');const btn=$$('nav button[data-v]').find(x=>x.dataset.v===v);if(btn)btn.classList.add('active');window.scrollTo({top:0,behavior:'instant'});if(v==='cards')renderCards();if(v==='quick'){ledger();$('#quickCashView').textContent=fmt(loans.cash);$('#quickCashOnHand').value=loans.cash;$('#quickLinePayView').textContent=fmt(loans.linepayMoney);$('#quickLinePayMoney').value=loans.linepayMoney}if(v==='loans')renderLoans();if(v==='bankloans')renderBankLoans()}
+$$('nav button[data-v]').forEach(b=>{b.type='button';b.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();showView(b.dataset.v)})});
+const finishBtn=$('#finish');if(finishBtn)finishBtn.addEventListener('click',()=>{data.finished=true;data.step=4;save();});
+renderBankLoans();
+if('serviceWorker' in navigator){window.addEventListener('load',async()=>{try{const regs=await navigator.serviceWorker.getRegistrations();for(const r of regs){if(!String(r.active?.scriptURL||'').includes('service-worker.js?v=44.0.0'))await r.unregister()}}catch(e){}try{await navigator.serviceWorker.register('./service-worker.js?v=44.0.0',{updateViaCache:'none'})}catch(e){}})}
+render();
