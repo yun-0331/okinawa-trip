@@ -4053,5 +4053,16 @@ document.addEventListener("click", function(e){
 })();
 </script>
 
+
+<!-- day3-junglia-leave-1600-v65 -->
+<script id="day3-junglia-leave-1600-v65">
+(function(){
+ function sync(){
+  const w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT), a=[]; while(w.nextNode())a.push(w.currentNode);
+  a.forEach(n=>{if(n.nodeValue&&n.nodeValue.includes('JUNGLIA 叢林樂園 → PARCO CITY 車程快要 2 小時')&&!n.nodeValue.includes('預計 16:00 離園')) n.nodeValue=n.nodeValue.replace('JUNGLIA 叢林樂園 → PARCO CITY 車程快要 2 小時，要抓好離園與移動時間。','JUNGLIA 叢林樂園 → PARCO CITY 車程快要 2 小時，要抓好離園與移動時間。 預計 16:00 離園。');});
+ }
+ addEventListener('load',()=>{setTimeout(sync,100);setTimeout(sync,700)}); document.addEventListener('click',()=>setTimeout(sync,120)); setTimeout(sync,0);
+})();
+</script>
 </body>
 </html>

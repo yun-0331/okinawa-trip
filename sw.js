@@ -1,3 +1,4 @@
+// cache: okinawa-trip-v65-junglia-leave-1600
 /* handbook-59-final */
 /* handbook-path-fix-final */
 const CACHE="okinawa-trip-v64-day6-airport-1600";
