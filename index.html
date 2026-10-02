@@ -3914,5 +3914,53 @@ document.addEventListener("click", function(e){
 })();
 </script>
 
+<style id="day5-churasun-reserved-style-v62">
+.churasun-reserved-note{margin-top:8px;padding:10px 12px;border-radius:12px;background:rgba(242,140,154,.12);border:1px solid rgba(242,140,154,.38);line-height:1.7}
+.churasun-reserved-note .warn{font-weight:800;color:#b44d61}
+.churasun-klook-link{display:inline-flex;margin-top:8px;padding:7px 11px;border-radius:999px;text-decoration:none;font-weight:800;background:#fff;border:1px solid rgba(242,140,154,.45);color:#8d4960}
+</style>
+<script id="day5-churasun-reserved-sync-v62">
+(function(){
+  const KLOOK='https://click.klook.com/ls/click?upn=u001.QPstsPdrjwzo-2FzalvlwHUXh-2FHduqvda4buVNBGEL0nHEI9XfE30iVmdVnrnbqnj5rxpr8-2BAC1cz6MUZ29rVN0TVIiGu4FB7B7yc-2FlDd2nQgOMcJ7j0dr5cMN0FiLRprhivIlddYujMqQD6qGVe6XuvjcASdM9WmnDtJrxVtwzzIVoKGh07EDyu0ee06A07ysECUrRumTket317iy9Z06judkDt4KP7pFVpuE8-2FexL-2Ffs8Td9mpt9nKmCj52JiQbBaEDIbXpSYIRp2WOJiL6EXNq78ktolqUySX7x5Jxi4iPulosZpEaIF7rRdumJ7ALaLJxn3H9wMp-2BsqPQuBm2a7TZcztyFyf8pYuUncEaWyHpYV9o6aENICvEgqE5HDjqNLhUlgdLQnJlfCK8mZF5KLh9Ix9lUDx77aOv764V1F8Sj5dJsAtwjjJNBns4ozxhwOt3wV2R1MGXb-2Fx13N3K6FG4WSMF6myGBGkqhbtT4m4xtU5-2FEU-2FvYw-2Fn197ZcOJer4TKglY8UhfZ3aDjLqPkTy6C-2BX4FPLmZGaS8z5J1pGSI-2F1ALEg8k-2BUOethGCBqY8Q8ELaJzhyivjMGZsEMaYudN4RNdvhnvVi28axTw2buJ0-3Daq_0_wT-2FxCCYzdHaxNRRLiasZCOvFiGy7LLRdG7TNTH-2Fyw5-2FbYpbyb83JyyT10QoXzNWLFWs0H6lfUhhPmte8ERFKrbrH5-2BitJMkqW1VwuuJ-2By7Swe9QdKyhpzpGfYO77lCAKLPSgxurZRPYntpPaSfmIUBHilX8fJ3Xc45STK504WMCFzgTqfktXRVMQ55Zo582dxLwpkS5U9ACzoolO-2BRXkEQ-3D-3D';
+  function fixDay5(){
+    try{
+      if(typeof days!=="undefined"){
+        const d5=days.find(d=>d.day===5);
+        if(d5){
+          d5.stops=d5.stops.filter(s=>!/ちゅらさん ?6|Churasun ?6/i.test((s.name||"")+" "+(s.desc||"")));
+          const stop={
+            time:"20:30",
+            name:"✓ 已預約｜沖繩 ちゅらさん 6（Churasun 6）",
+            desc:'<div class="churasun-reserved-note">🎭 <b>沖縄大型 Show CLUB</b><br>🎫 <b>震撼座位 × 2</b>｜每席含 10 張小費券<br>🕗 營業時間：20:00～01:00<br>📍 沖繩縣那霸市松山1丁目5-1 Namura Plaza 大樓 2樓<br><span class="warn">⚠️ 第一場 20:30 開演｜最晚 20:20 前入場；建議 20:10～20:15 抵達。遲到或未出席恕不退款。</span><br><a class="churasun-klook-link" href="'+KLOOK+'" target="_blank" rel="noopener noreferrer">🎫 查看 Klook 憑證</a></div>',
+            map:"沖縄県那覇市松山1丁目5-1 Namura Plaza",
+            type:"spot"
+          };
+          const hotel=d5.stops.findIndex(s=>/HOTEL GRACERY NAHA/i.test((s.name||"")+" "+(s.desc||"")));
+          if(hotel>=0) d5.stops.splice(hotel,0,stop); else d5.stops.push(stop);
+          d5.summary="達摩寺 → 泊港漁市場 → 波上宮 → 奧武山公園 → 沖宮 → 20:30 沖繩ちゅらさん6（已預約）→ HOTEL GRACERY NAHA";
+        }
+      }
+      if(typeof ROUTES!=="undefined" && ROUTES[5]){
+        ROUTES[5].stops=ROUTES[5].stops.filter(s=>!/ちゅらさん ?6|Churasun ?6/i.test((s[1]||"")));
+        const h=ROUTES[5].stops.findIndex(s=>/HOTEL GRACERY NAHA/i.test(s[1]||""));
+        const r=["20:30","✓ 已預約｜沖繩 ちゅらさん6｜20:20 前務必入場","沖縄県那覇市松山1丁目5-1 Namura Plaza"];
+        if(h>=0) ROUTES[5].stops.splice(h,0,r); else ROUTES[5].stops.push(r);
+      }
+    }catch(e){}
+  }
+  function refresh(){
+    fixDay5();
+    try{
+      const active=document.querySelector('#dayTabs [data-day].active');
+      if(active && Number(active.dataset.day)===5) active.click();
+      const routeBtn=document.querySelector('#todayRoute [data-route-day="5"], #todayRoute [data-day="5"]');
+      if(routeBtn && routeBtn.classList.contains('active')) routeBtn.click();
+    }catch(e){}
+  }
+  fixDay5();
+  window.addEventListener("load",()=>setTimeout(refresh,300));
+})();
+</script>
+
 </body>
 </html>
