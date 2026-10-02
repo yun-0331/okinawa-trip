@@ -3844,7 +3844,7 @@ document.addEventListener("click", function(e){
         {
           time:"",
           name:"AEON Mall 沖繩 Rycom",
-          desc:"🛍️ Pokémon Center OKINAWA／Owala／30週年四表情皮卡丘／On 等購物目標。<br><b>※ 不顯示固定時間，依當天實際進度前往。</b>",
+          desc:'🛍️ <b>AEON Mall 沖繩 Rycom 必逛清單</b><br>⭐ <b>1F Pokémon Center Okinawa</b>：皮卡丘、寶可夢限定商品、玩偶、吊飾、文具。<br>⭐ <b>1F Loft</b>：文具、美妝、生活雜貨、角色聯名。<br>⭐ <b>1F 3COINS+plus</b>：生活雜貨、收納、廚房用品、偶爾角色聯名。<br>🥤 <b>2F MURASAKI SPORTS</b>：找 Owala，重點 FreeSip／FreeSip Twist。<br>⭐ <b>3F Flying Tiger Copenhagen［334］</b>：可愛雜貨、文具、居家用品。<br>⭐ <b>4F Village Vanguard</b>：排球少年、動漫、角色周邊；找月島螢要逛。<br>⭐ <b>4F Dream Capsule［437］</b>：扭蛋專門店。<br>⭐ <b>4F THANK YOU MART</b>：¥390 系列、角色聯名、可愛小物。<br>⭐ <b>4F Sanrio［423］</b>：酷洛米、Kitty、美樂蒂、Cinnamoroll。<br>⚡ <b>4F Toys“R”Us／Babies“R”Us</b>：找「30週年四表情皮卡丘」。<br>👟 <b>On</b>：列入購物目標，現場確認販售櫃位。<br><small>※ 不顯示固定時間，依 Day 1 實際進度前往；商品與庫存以現場為準。</small>',
           map:"AEON MALL Okinawa Rycom",
           type:"shop"
         },
@@ -4062,6 +4062,16 @@ document.addEventListener("click", function(e){
   a.forEach(n=>{if(n.nodeValue&&n.nodeValue.includes('JUNGLIA 叢林樂園 → PARCO CITY 車程快要 2 小時')&&!n.nodeValue.includes('預計 16:00 離園')) n.nodeValue=n.nodeValue.replace('JUNGLIA 叢林樂園 → PARCO CITY 車程快要 2 小時，要抓好離園與移動時間。','JUNGLIA 叢林樂園 → PARCO CITY 車程快要 2 小時，要抓好離園與移動時間。 預計 16:00 離園。');});
  }
  addEventListener('load',()=>{setTimeout(sync,100);setTimeout(sync,700)}); document.addEventListener('click',()=>setTimeout(sync,120)); setTimeout(sync,0);
+})();
+</script>
+
+<!-- day1-rycom-shopping-list-v66 -->
+<script id="day1-rycom-shopping-list-v66">
+(function(){
+ const rycomDesc=`🛍️ <b>AEON Mall 沖繩 Rycom 必逛清單</b><br>⭐ <b>1F Pokémon Center Okinawa</b>：皮卡丘、寶可夢限定商品、玩偶、吊飾、文具。<br>⭐ <b>1F Loft</b>：文具、美妝、生活雜貨、角色聯名。<br>⭐ <b>1F 3COINS+plus</b>：生活雜貨、收納、廚房用品、偶爾角色聯名。<br>🥤 <b>2F MURASAKI SPORTS</b>：找 Owala，重點 FreeSip／FreeSip Twist。<br>⭐ <b>3F Flying Tiger Copenhagen［334］</b>：可愛雜貨、文具、居家用品。<br>⭐ <b>4F Village Vanguard</b>：排球少年、動漫、角色周邊；找月島螢要逛。<br>⭐ <b>4F Dream Capsule［437］</b>：扭蛋專門店。<br>⭐ <b>4F THANK YOU MART</b>：¥390 系列、角色聯名、可愛小物。<br>⭐ <b>4F Sanrio［423］</b>：酷洛米、Kitty、美樂蒂、Cinnamoroll。<br>⚡ <b>4F Toys“R”Us／Babies“R”Us</b>：找「30週年四表情皮卡丘」。<br>👟 <b>On</b>：列入購物目標，現場確認販售櫃位。<br><small>※ 不顯示固定時間，依 Day 1 實際進度前往；商品與庫存以現場為準。</small>`;
+ function sync(){try{if(typeof days!=="undefined"&&days&&days[0]&&Array.isArray(days[0].stops)){const r=days[0].stops.find(s=>/AEON|Rycom|ライカム/i.test((s.name||"")+" "+(s.map||"")));if(r)r.desc=rycomDesc;}}catch(e){}}
+ window.addEventListener("load",()=>{sync();setTimeout(sync,300);});
+ document.addEventListener("click",()=>setTimeout(sync,80)); sync();
 })();
 </script>
 </body>
