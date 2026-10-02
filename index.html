@@ -4019,5 +4019,39 @@ document.addEventListener("click", function(e){
 })();
 </script>
 
+
+<!-- day6-airport-1600-sync-v64 -->
+<script id="day6-airport-1600-sync-v64">
+(function(){
+  const finalSummary='退房 → 國際通 → 16:00 出發前往那霸機場 → CI123 回台北';
+
+  function sync(){
+    const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
+    const nodes=[]; while(walker.nextNode()) nodes.push(walker.currentNode);
+    nodes.forEach(n=>{
+      if(!n.nodeValue) return;
+      n.nodeValue=n.nodeValue
+        .replace(/退房 → 國際通 → 那霸機場 → CI123 回台北/g, finalSummary)
+        .replace(/退房 → 國際通 → Animate → 那霸機場 → CI123/g, '退房 → 國際通 → Animate → 16:00 出發前往那霸機場 → CI123');
+    });
+
+    [...document.querySelectorAll('body *')].forEach(el=>{
+      if(el.children.length===0){
+        const t=el.textContent.trim();
+        if(t==='那霸機場' || t==='那霸機場／返台' || t==='那霸機場 / 返台'){
+          const card=el.closest('.timeline-item,.route-card,.card,.spot-card,.itinerary-item,.route-item') || el.parentElement;
+          if(card && /DAY\s*6|10\/31|CI123|那霸機場|返台/i.test(card.textContent)){
+            el.textContent='16:00 出發前往那霸機場';
+          }
+        }
+      }
+    });
+  }
+  window.addEventListener('load',()=>{setTimeout(sync,100);setTimeout(sync,700);});
+  document.addEventListener('click',()=>setTimeout(sync,120));
+  setTimeout(sync,0);
+})();
+</script>
+
 </body>
 </html>
