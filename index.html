@@ -3962,5 +3962,62 @@ document.addEventListener("click", function(e){
 })();
 </script>
 
+
+<!-- day5-market-choice-sync-v63 -->
+<style id="day5-market-choice-style-v63">
+  .day5-market-choice-note{margin-top:8px;padding:9px 11px;border-radius:12px;background:#fff8fb;border:1px solid #f4d3df;font-size:.92em;line-height:1.55}
+  .day5-market-choice-note strong{font-weight:800}
+</style>
+<script id="day5-market-choice-sync-v63">
+(function(){
+  const summaryText = '達摩寺 → 泊港漁市場／志牧市場（帝王蟹）二選一 → 波上宮 → 奧武山公園 → 沖宮 → 20:30 沖繩ちゅらさん6（已預約）→ HOTEL GRACERY NAHA';
+
+  function replaceTextNodes(root){
+    if(!root) return;
+    const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);
+    const nodes=[]; while(walker.nextNode()) nodes.push(walker.currentNode);
+    nodes.forEach(n=>{
+      if(n.nodeValue && n.nodeValue.includes('達摩寺 → 泊港漁市場 → 波上宮 → 奧武山公園 → 沖宮')){
+        n.nodeValue=n.nodeValue.replace(/達摩寺 → 泊港漁市場 → 波上宮 → 奧武山公園 → 沖宮(?: → 20:30 沖繩ちゅらさん6（已預約）)?(?: → HOTEL GRACERY NAHA)?/g, summaryText);
+      }
+    });
+  }
+
+  function updateMarketCards(){
+    const all=[...document.querySelectorAll('body *')];
+    all.forEach(el=>{
+      if(el.children.length===0 && el.textContent.trim()==='泊港漁市場'){
+        el.textContent='市場二選一｜泊港漁市場／志牧市場（帝王蟹）';
+        const card=el.closest('.timeline-item,.route-card,.card,.spot-card,.itinerary-item,.route-item') || el.parentElement;
+        if(card && !card.querySelector('.day5-market-choice-note')){
+          const note=document.createElement('div');
+          note.className='day5-market-choice-note';
+          note.innerHTML='<strong>🐟 市場二選一</strong><br>泊港漁市場<br><strong>或</strong><br>🦀 志牧市場｜目標：帝王蟹<br><span>當天依想吃的東西、時間再決定去哪一個。</span>';
+          card.appendChild(note);
+        }
+      }
+    });
+  }
+
+  function updateTodayRoute(){
+    // Handles already-rendered Day 5 route text without altering other days.
+    [...document.querySelectorAll('body *')].forEach(el=>{
+      if(el.children.length===0 && el.textContent.trim()==='泊港漁市場'){
+        el.textContent='泊港漁市場／志牧市場（二選一）';
+      }
+    });
+  }
+
+  function sync(){
+    replaceTextNodes(document.body);
+    updateMarketCards();
+    updateTodayRoute();
+  }
+  window.addEventListener('load',()=>{setTimeout(sync,100);setTimeout(sync,700);});
+  document.addEventListener('click',()=>setTimeout(sync,120));
+  setTimeout(sync,0);
+})();
+</script>
+
 </body>
 </html>
